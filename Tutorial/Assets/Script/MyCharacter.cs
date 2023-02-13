@@ -42,6 +42,8 @@ public class Parameter
   public float atk;
   public float def;
   public float spd;
+
+  public SkillAbility[] skills;
 }
 
 public class BattleStatus
@@ -61,8 +63,10 @@ public class BattleStatus
   public float maxSpd;
   public float curSpd;
 
-  public SkillAbility[] skills;
+  public int[] skillsCoolDown;
   public ArrayList buff;
+
+  public float turnPosition;
 }
 
 public class Buff

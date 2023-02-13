@@ -10,6 +10,7 @@ public class Skill : MonoBehaviour
       {
         case 0:
           target.GetComponent<MyCharacter>().status.curHp -= getDamage(100, self, target);
+          //layout.AddText(self.GetComponent<MyCharacter>().parameter.name + " give  " + target.GetComponent().parameter.name + " " + getDamage(100, self, target) + " damage");
           break;
 
         //skill 1
