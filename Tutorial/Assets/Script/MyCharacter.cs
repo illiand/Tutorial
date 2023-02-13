@@ -54,13 +54,8 @@ public class BattleStatus
   public float maxMp;
   public float curMp;
 
-  public float maxAtk;
   public float curAtk;
-
-  public float maxDef;
   public float curDef;
-
-  public float maxSpd;
   public float curSpd;
 
   public int[] skillsCoolDown;

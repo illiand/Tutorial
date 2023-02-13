@@ -87,15 +87,12 @@ public class Controller : MonoBehaviour
 
       characters[id].GetComponent<MyCharacter>().parameter.atk = atk;
       characters[id].GetComponent<MyCharacter>().status.curAtk = atk;
-      characters[id].GetComponent<MyCharacter>().status.maxAtk = atk;
 
       characters[id].GetComponent<MyCharacter>().parameter.def = def;
       characters[id].GetComponent<MyCharacter>().status.curDef = def;
-      characters[id].GetComponent<MyCharacter>().status.maxDef = def;
 
       characters[id].GetComponent<MyCharacter>().parameter.spd = spd;
       characters[id].GetComponent<MyCharacter>().status.curSpd = spd;
-      characters[id].GetComponent<MyCharacter>().status.maxSpd = spd;
 
       characters[id].GetComponent<MyCharacter>().status.buff = new ArrayList();
     }
@@ -144,7 +141,7 @@ public class Controller : MonoBehaviour
       if(minIndex < 5)
       {
         //TODO Player movement
-        
+
       }
       else
       {
@@ -156,6 +153,15 @@ public class Controller : MonoBehaviour
     private void monsterMovement()
     {
       //AI for monster movement
+      if(inControl(characters[curCharacterID]))
+      {
+        parseStartTurnBuff(characters[curCharacterID]);
+
+        return;
+      }
+
+      parseStartTurnBuff(characters[curCharacterID]);
+
       int[] skillsCoolDown = characters[curCharacterID].GetComponent<MyCharacter>().status.skillsCoolDown;
       for(int i = 0; i < skillsCoolDown.Length; i += 1)
       {
@@ -181,6 +187,90 @@ public class Controller : MonoBehaviour
     private void castSkill()
     {
         characters[curCharacterID].GetComponent<Skill>().castSkill(curSkillID, characters[curCharacterID], characters[curTargetID]);
+    }
+
+    /**
+     *
+     * if the unit is in debuff may skip turn
+     *
+     **/
+    private bool inControl(GameObject target)
+    {
+      for(int i = 0; i < target.GetComponent<MyCharacter>().status.buff.Count; i += 1)
+      {
+        if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id == 8)
+        {
+          //charge skill
+          if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).remainingTurn == 1)
+          {
+            getTarget(2);
+            curSkillID = 11;
+          }
+
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    /**
+     *
+     * after the turn start, Buffs trigger
+     *
+     **/
+    private void parseStartTurnBuff(GameObject target)
+    {
+      for(int i = 0; i < target.GetComponent<MyCharacter>().status.buff.Count; i += 1)
+      {
+        switch(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id)
+        {
+          case 3:
+            target.GetComponent<MyCharacter>().status.curHp += target.GetComponent<MyCharacter>().status.maxHp * 0.05f;
+            target.GetComponent<Skill>().normalizeHPMP();
+
+            break;
+          case 5:
+            target.GetComponent<MyCharacter>().status.curAtk += target.GetComponent<MyCharacter>().parameter.atk * 0.03f;
+            break;
+
+          case 6:
+            target.GetComponent<MyCharacter>().status.curHp += target.GetComponent<MyCharacter>().status.maxHp * 0.05f;
+            target.GetComponent<Skill>().normalizeHPMP();
+            break;
+
+          case 7:
+            target.GetComponent<MyCharacter>().status.curMp += target.GetComponent<MyCharacter>().status.maxMp * 0.05f;
+            target.GetComponent<Skill>().normalizeHPMP();
+            break;
+        }
+
+        ((Buff)target.GetComponent<MyCharacter>().status.buff[i]).remainingTurn -= 1;
+
+        if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).remainingTurn == 0)
+        {
+          //remove parameter increase/decrease effect
+          switch(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id)
+          {
+            case 10:
+              target.GetComponent<MyCharacter>().status.curAtk -= target.GetComponent<MyCharacter>().parameter.atk * 0.1f;
+              break;
+          }
+          target.GetComponent<MyCharacter>().status.buff.RemoveAt(i);
+          i -= 1;
+        }
+
+      }
+    }
+
+    /**
+     *
+     * after the turn end Buffs trigger
+     *
+     **/
+    private void parseEndTurnBuff(GameObject target)
+    {
+
     }
 
     /**
@@ -257,6 +347,12 @@ public class Controller : MonoBehaviour
         case 1: return new SkillAbility(1, "Taunt", 20, 7, 0, false);
         case 2: return new SkillAbility(2, "ATK UP", 15, 10, 0, false);
         case 3: return new SkillAbility(3, "HP Regeneration", 0, 0, 0, true);
+        case 4: return new SkillAbility(4, "Doppelgänger", 50, 10, 0, false);
+        case 5: return new SkillAbility(5, "ATK+", 0, 0, 0, true);
+        case 6: return new SkillAbility(6, "Healing", 30, 2, 1, false);
+        case 7: return new SkillAbility(7, "MP Regeneration", 0, 0, 0, true);
+        case 8: return new SkillAbility(8, "Charge", 0, 0, 0, false);
+        case 9: return new SkillAbility(9, "Bersaka", 0, 0, 0, true);
       }
 
       return null;
