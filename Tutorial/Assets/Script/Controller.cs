@@ -29,16 +29,25 @@ public class Controller : MonoBehaviour
           delegate
           {
             curTargetID = finalI;
+            setUpSkillList(curTargetID);
           }
         );
+       
       }
 
       startLevel1();
     }
 
+
+    private void setUpSkillList(int i)
+    {
+        characters[i].GetComponent<Skill>().skillList(i);
+    }
+
     private void startLevel1()
     {
-      characters[3].SetActive(false);
+        GameObject.Find("SkillSelectionLayout").SetActive(false);
+        characters[3].SetActive(false);
       characters[4].SetActive(false);
       characters[6].SetActive(false);
       characters[7].SetActive(false);
