@@ -6,11 +6,28 @@ using UnityEngine.UI;
 public class Controller : MonoBehaviour
 {
     public GameObject[] characters;
-    private bool[] isActive = new bool[10];
+    public GameObject[] timeLine;
 
+    public Button attackButton;
+    public Button skillButton;
+    public Button defenceButton;
+
+    public bool[] isActive = new bool[10];
+
+    //the unit in movement
     private int curCharacterID;
-    private int curTargetID;
+
+    //the skill player in use
     private int curSkillID;
+
+    private bool inTargeting;
+    private bool isPlayerTurn;
+
+    private bool isWaiting;
+    private float waitingTime;
+
+    private int curTurn = 0;
+    private int maxTurn = 100;
 
     // Start is called before the first frame update
     void Start()
@@ -25,29 +42,74 @@ public class Controller : MonoBehaviour
         characters[i].GetComponent<MyCharacter>().findObject("HP").GetComponent<Image>().material = hpInstance;
         characters[i].GetComponent<MyCharacter>().findObject("MP").GetComponent<Image>().material = mpInstance;
 
+        //player side chara use action goes here
         characters[i].GetComponent<MyCharacter>().findObject("Image").GetComponent<Button>().onClick.AddListener(
           delegate
           {
-            curTargetID = finalI;
-            setUpSkillList(curTargetID);
+            if(!inTargeting)
+            {
+              return;
+            }
+
+            castSkill(curSkillID, curCharacterID, finalI);
+
+            characters[curCharacterID].GetComponent<MyCharacter>().status.curPos = 100;
+            characters[curCharacterID].GetComponent<MyCharacter>().findObject("Background").SetActive(false);
+
+            showCommandLayout(false);
+            updateTurnPosition();
           }
         );
-       
       }
 
+      attackButton.onClick.AddListener(
+        delegate
+        {
+          showCommandLayout(false);
+
+          curSkillID = 0;
+          inTargeting = true;
+        }
+      );
+
       startLevel1();
+      pauseBetweenTurn();
+
+      //run the game
+      updateTurnPosition();
+    }
+
+    void Update()
+    {
+      if(inTargeting && Input.GetMouseButtonDown(1))
+      {
+        inTargeting = false;
+        showCommandLayout(true);
+      }
+
+      //wait between turns
+      if(isWaiting)
+      {
+        if(waitingTime > 2f)
+        {
+          isWaiting = false;
+          updateTurnPosition();
+        }
+
+        waitingTime += Time.deltaTime;
+      }
     }
 
 
     private void setUpSkillList(int i)
     {
-        characters[i].GetComponent<Skill>().skillList(i);
+    //    characters[i].GetComponent<EffectParser>().skillList(i);
     }
 
     private void startLevel1()
     {
-        GameObject.Find("SkillSelectionLayout").SetActive(false);
-        characters[3].SetActive(false);
+        // GameObject.Find("SkillSelectionLayout").SetActive(false);
+      characters[3].SetActive(false);
       characters[4].SetActive(false);
       characters[6].SetActive(false);
       characters[7].SetActive(false);
@@ -59,10 +121,10 @@ public class Controller : MonoBehaviour
       isActive[2] = true;
       isActive[5] = true;
 
-      initParameterInfo(0, "Tank", 2000, 70, 100, 100, 35);
-      initParameterInfo(1, "Dps", 1200, 100, 200, 30, 40);
-      initParameterInfo(2, "Healer", 1200, 150, 125, 50, 35);
-      initParameterInfo(5, "BOSS", 10000, 500, 300, 25, 80);
+      initParameterInfo(0, "Tank", "char_01", 2000, 70, 100, 100, 35);
+      initParameterInfo(1, "Dps", "char_02", 1200, 100, 200, 30, 40);
+      initParameterInfo(2, "Healer", "char_03", 1200, 150, 125, 50, 35);
+      initParameterInfo(5, "BOSS", "char_18", 10000, 500, 300, 25, 80);
 
       characters[0].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(0), getSkillInfo(3)};
       characters[0].GetComponent<MyCharacter>().status.skillsCoolDown = new int[]{0, 0};
@@ -73,18 +135,21 @@ public class Controller : MonoBehaviour
       characters[2].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(0), getSkillInfo(3)};
       characters[2].GetComponent<MyCharacter>().status.skillsCoolDown = new int[]{0, 0};
 
-      characters[5].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(1), getSkillInfo(2)};
+      characters[5].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(8), getSkillInfo(9)};
       characters[5].GetComponent<MyCharacter>().status.skillsCoolDown = new int[]{0, 0};
 
       initTurnPosition();
     }
 
-    private void initParameterInfo(int id, string name, int hp, int mp, int atk, int def, int spd)
+    private void initParameterInfo(int id, string name, string picName, int hp, int mp, int atk, int def, int spd)
     {
       characters[id].GetComponent<MyCharacter>().parameter = new Parameter();
       characters[id].GetComponent<MyCharacter>().status = new BattleStatus();
 
+      characters[id].GetComponent<MyCharacter>().status.index = id;
       characters[id].GetComponent<MyCharacter>().parameter.name = name;
+      characters[id].GetComponent<MyCharacter>().parameter.pic = Resources.Load<Sprite>("[VerArc Stash] Mini_Characters/" + picName);
+      characters[id].GetComponent<MyCharacter>().findObject("Image").GetComponent<Image>().sprite = characters[id].GetComponent<MyCharacter>().parameter.pic;
 
       characters[id].GetComponent<MyCharacter>().parameter.hp = hp;
       characters[id].GetComponent<MyCharacter>().status.curHp = hp;
@@ -112,13 +177,62 @@ public class Controller : MonoBehaviour
       {
         if(isActive[i])
         {
-          characters[i].GetComponent<MyCharacter>().status.turnPosition = Random.Range(20, 90);
+          characters[i].GetComponent<MyCharacter>().status.curPos = Random.Range(20, 90);
         }
+      }
+
+      refreshTimeLine();
+    }
+
+    private void refreshTimeLine()
+    {
+      ArrayList timeLineObj = new ArrayList();
+
+      for(int i = 0; i < characters.Length; i += 1)
+      {
+        if(isActive[i])
+        {
+          TimeLineObject obj = new TimeLineObject();
+          obj.curDis = characters[i].GetComponent<MyCharacter>().status.curPos;
+          obj.speed = characters[i].GetComponent<MyCharacter>().status.curSpd;
+          obj.index = i;
+
+          timeLineObj.Add(obj);
+        }
+      }
+
+      for(int i = 0; i < 7; i += 1)
+      {
+        float min = 8753;
+        int minIndex = -1;
+
+        for(int j = 0; j < timeLineObj.Count; j += 1)
+        {
+          TimeLineObject curObj = (TimeLineObject) timeLineObj[j];
+          float curReqTime = curObj.curDis / curObj.speed;
+
+          if(min > curReqTime)
+          {
+            min = curReqTime;
+            minIndex = j;
+          }
+        }
+
+        timeLine[i].GetComponent<Image>().sprite = characters[((TimeLineObject)timeLineObj[minIndex]).index].GetComponent<MyCharacter>().parameter.pic;
+        ((TimeLineObject)timeLineObj[minIndex]).curDis += 100;
       }
     }
 
     private void updateTurnPosition()
     {
+      //avoid loop
+      curTurn += 1;
+
+      if(curTurn > maxTurn)
+      {
+        return;
+      }
+
       float min = 8753;
       int minIndex = -1;
 
@@ -126,7 +240,7 @@ public class Controller : MonoBehaviour
       {
         if(isActive[i])
         {
-          float time = characters[i].GetComponent<MyCharacter>().status.turnPosition / characters[i].GetComponent<MyCharacter>().status.curSpd;
+          float time = characters[i].GetComponent<MyCharacter>().status.curPos / characters[i].GetComponent<MyCharacter>().status.curSpd;
 
           if(min > time)
           {
@@ -140,146 +254,93 @@ public class Controller : MonoBehaviour
       {
         if(isActive[i])
         {
-          characters[i].GetComponent<MyCharacter>().status.turnPosition -= characters[i].GetComponent<MyCharacter>().status.curSpd * min;
+          characters[i].GetComponent<MyCharacter>().status.curPos -= characters[i].GetComponent<MyCharacter>().status.curSpd * min;
         }
       }
 
-      characters[minIndex].GetComponent<MyCharacter>().status.turnPosition = 0;
+      characters[minIndex].GetComponent<MyCharacter>().status.curPos = 0;
       curCharacterID = minIndex;
+
+      decreaseSkillCoolDown(curCharacterID, 1);
+      refreshTimeLine();
 
       if(minIndex < 5)
       {
-        //TODO Player movement
-
+        showCommandLayout(true);
+        characters[minIndex].GetComponent<MyCharacter>().findObject("Background").SetActive(true);
+        characters[minIndex].GetComponent<MyCharacter>().findObject("Background").GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
       }
       else
       {
         monsterMovement();
-        updateTurnPosition();
+        pauseBetweenTurn();
       }
     }
 
     private void monsterMovement()
     {
+      characters[curCharacterID].GetComponent<MyCharacter>().status.curPos = 100;
+
       //AI for monster movement
-      if(inControl(characters[curCharacterID]))
+      if(GetComponent<EffectParser>().isInControl(characters[curCharacterID]))
       {
-        parseStartTurnBuff(characters[curCharacterID]);
+        GetComponent<EffectParser>().parseStartTurnBuff(characters[curCharacterID]);
 
         return;
       }
 
-      parseStartTurnBuff(characters[curCharacterID]);
+      GetComponent<EffectParser>().parseStartTurnBuff(characters[curCharacterID]);
 
-      int[] skillsCoolDown = characters[curCharacterID].GetComponent<MyCharacter>().status.skillsCoolDown;
-      for(int i = 0; i < skillsCoolDown.Length; i += 1)
+      for(int i = 0; i < characters[curCharacterID].GetComponent<MyCharacter>().status.skillsCoolDown.Length; i += 1)
       {
         //cast the skill whenever the skill is ready
         //need MP
-        if(skillsCoolDown[i] == 0 && characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].mpCost < characters[curCharacterID].GetComponent<MyCharacter>().status.curMp)
+        //not passive
+        if(characters[curCharacterID].GetComponent<MyCharacter>().status.skillsCoolDown[i] == 0 &&
+          characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].mpCost < characters[curCharacterID].GetComponent<MyCharacter>().status.curMp &&
+          !characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].isPassive)
         {
-          getTarget(characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].type);
-          curSkillID = characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].id;
+          //set cool down, decrease current mp
+          characters[curCharacterID].GetComponent<MyCharacter>().status.skillsCoolDown[i] = characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].cooldown;
+          characters[curCharacterID].GetComponent<MyCharacter>().status.curMp -= characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].mpCost;
 
-          castSkill();
+          //use skill
+          castSkill(characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].id, curCharacterID, getTarget(characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].type));
+
           return;
         }
       }
 
       //if no skill is ready, use normal Attack
-      getTarget(2);
-      curSkillID = 0;
-
-      castSkill();
+      castSkill(0, curCharacterID, getTarget(2));
     }
 
-    private void castSkill()
+    private void castSkill(int skillID, int selfIndex, int targetIndex)
     {
-        characters[curCharacterID].GetComponent<Skill>().castSkill(curSkillID, characters[curCharacterID], characters[curTargetID]);
+      Debug.Log(selfIndex + " -> " + targetIndex + " with " + getSkillInfo(skillID).name);
+
+      GetComponent<EffectParser>().castSkill(skillID, characters[selfIndex], characters[targetIndex]);
     }
 
-    /**
-     *
-     * if the unit is in debuff may skip turn
-     *
-     **/
-    private bool inControl(GameObject target)
+    private void decreaseSkillCoolDown(int targetIndex, int amount)
     {
-      for(int i = 0; i < target.GetComponent<MyCharacter>().status.buff.Count; i += 1)
+      for(int i = 0; i < characters[targetIndex].GetComponent<MyCharacter>().status.skillsCoolDown.Length; i += 1)
       {
-        if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id == 8)
-        {
-          //charge skill
-          if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).remainingTurn == 1)
-          {
-            getTarget(2);
-            curSkillID = 11;
-          }
-
-          return true;
-        }
-      }
-
-      return false;
-    }
-
-    /**
-     *
-     * after the turn start, Buffs trigger
-     *
-     **/
-    private void parseStartTurnBuff(GameObject target)
-    {
-      for(int i = 0; i < target.GetComponent<MyCharacter>().status.buff.Count; i += 1)
-      {
-        switch(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id)
-        {
-          case 3:
-            target.GetComponent<MyCharacter>().status.curHp += target.GetComponent<MyCharacter>().status.maxHp * 0.05f;
-            target.GetComponent<Skill>().normalizeHPMP();
-
-            break;
-          case 5:
-            target.GetComponent<MyCharacter>().status.curAtk += target.GetComponent<MyCharacter>().parameter.atk * 0.03f;
-            break;
-
-          case 6:
-            target.GetComponent<MyCharacter>().status.curHp += target.GetComponent<MyCharacter>().status.maxHp * 0.05f;
-            target.GetComponent<Skill>().normalizeHPMP();
-            break;
-
-          case 7:
-            target.GetComponent<MyCharacter>().status.curMp += target.GetComponent<MyCharacter>().status.maxMp * 0.05f;
-            target.GetComponent<Skill>().normalizeHPMP();
-            break;
-        }
-
-        ((Buff)target.GetComponent<MyCharacter>().status.buff[i]).remainingTurn -= 1;
-
-        if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).remainingTurn == 0)
-        {
-          //remove parameter increase/decrease effect
-          switch(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id)
-          {
-            case 10:
-              target.GetComponent<MyCharacter>().status.curAtk -= target.GetComponent<MyCharacter>().parameter.atk * 0.1f;
-              break;
-          }
-          target.GetComponent<MyCharacter>().status.buff.RemoveAt(i);
-          i -= 1;
-        }
-
+        characters[targetIndex].GetComponent<MyCharacter>().status.skillsCoolDown[i] = Mathf.Max(characters[targetIndex].GetComponent<MyCharacter>().status.skillsCoolDown[i] - amount, 0);
       }
     }
 
-    /**
-     *
-     * after the turn end Buffs trigger
-     *
-     **/
-    private void parseEndTurnBuff(GameObject target)
+    private void showCommandLayout(bool isShow)
     {
+      attackButton.gameObject.SetActive(isShow);
+      skillButton.gameObject.SetActive(isShow);
+      defenceButton.gameObject.SetActive(isShow);
+    }
 
+    private void pauseBetweenTurn()
+    {
+      isWaiting = true;
+      waitingTime = 0f;
     }
 
     /**
@@ -287,7 +348,7 @@ public class Controller : MonoBehaviour
      *  choose a target randomly
      *
      **/
-    private void getTarget(int type)
+    public int getTarget(int type)
     {
       ArrayList index = new ArrayList();
 
@@ -345,7 +406,7 @@ public class Controller : MonoBehaviour
         }
       }
 
-      curTargetID = (int) index[Random.Range(0, index.Count)];
+      return (int)index[Random.Range(0, index.Count)];
     }
 
     private SkillAbility getSkillInfo(int id)
@@ -360,10 +421,21 @@ public class Controller : MonoBehaviour
         case 5: return new SkillAbility(5, "ATK+", 0, 0, 0, true);
         case 6: return new SkillAbility(6, "Healing", 30, 2, 1, false);
         case 7: return new SkillAbility(7, "MP Regeneration", 0, 0, 0, true);
-        case 8: return new SkillAbility(8, "Charge", 0, 0, 0, false);
+        case 8: return new SkillAbility(8, "Charge", 80, 5, 0, false);
         case 9: return new SkillAbility(9, "Bersaka", 0, 0, 0, true);
+        case 10: return new SkillAbility(10, "Effect: ATK UP", 0, 0, 0, false);
+        case 11: return new SkillAbility(11, "Effect: Charge", 0, 0, 0, false);
+        case 12: return new SkillAbility(12, "Effect: Bersaka", 0, 0, 0, false);
+        case 13: return new SkillAbility(13, "Effect: IsCharging", 0, 0, 0, false);
       }
 
       return null;
+    }
+
+    private class TimeLineObject
+    {
+      public float curDis;
+      public float speed;
+      public int index;
     }
 }

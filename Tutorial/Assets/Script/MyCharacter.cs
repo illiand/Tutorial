@@ -12,7 +12,16 @@ public class MyCharacter : MonoBehaviour
   {
     if(status != null)
     {
-      Vector3 hpColor = Vector3.Lerp(new Vector3(1, 0, 0), new Vector3(0, 1, 0), status.curHp / status.maxHp);
+      Vector3 hpColor = new Vector3();
+      if(status.curHp / status.maxHp > 0.5f)
+      {
+        hpColor = Vector3.Lerp(new Vector3(1, 1, 0), new Vector3(0, 1, 0), status.curHp / status.maxHp * 2f - 1f);
+      }
+      else
+      {
+        hpColor = Vector3.Lerp(new Vector3(1, 0, 0), new Vector3(1, 1, 0), status.curHp / status.maxHp * 2f);
+      }
+
       findObject("HP").GetComponent<Image>().material.SetColor("_color", new Color(hpColor.x, hpColor.y, hpColor.z, 1f));
       findObject("HP").GetComponent<Image>().material.SetFloat("_percentage", status.curHp / status.maxHp);
       findObject("MP").GetComponent<Image>().material.SetFloat("_percentage", status.curMp / status.maxMp);
@@ -37,6 +46,7 @@ public class MyCharacter : MonoBehaviour
 public class Parameter
 {
   public string name;
+  public Sprite pic;
   public float hp;
   public float mp;
   public float atk;
@@ -48,6 +58,8 @@ public class Parameter
 
 public class BattleStatus
 {
+  //the position in the battlefield
+  public int index;
   public float maxHp;
   public float curHp;
 
@@ -61,7 +73,7 @@ public class BattleStatus
   public int[] skillsCoolDown;
   public ArrayList buff;
 
-  public float turnPosition;
+  public float curPos;
 }
 
 public class Buff
