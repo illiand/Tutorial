@@ -80,11 +80,16 @@ public class Buff
 {
   public int id;
   public int remainingTurn;
+  public int from;
+  public float value;
+  public int[] opt;
 
-  public Buff(int id, int turn)
+  public Buff(int id, int turn, int from = -1, float value = 0)
   {
     this.id = id;
     this.remainingTurn = turn;
+    this.from = from;
+    this.value = value;
   }
 }
 
@@ -92,15 +97,17 @@ public class SkillAbility
 {
   public int id;
   public string name;
+  public string des;
   public int mpCost;
   public int cooldown;
   public int type;
   public bool isPassive;
 
-  public SkillAbility(int id, string name, int mpCost, int cooldown, int type, bool isPassive)
+  public SkillAbility(int id, string name, string des, int mpCost, int cooldown, int type, bool isPassive)
   {
     this.id = id;
     this.name = name;
+    this.des = des;
     this.mpCost = mpCost;
     this.cooldown = cooldown;
     this.type = type;

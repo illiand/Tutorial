@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Controller : MonoBehaviour
 {
@@ -11,6 +12,11 @@ public class Controller : MonoBehaviour
     public Button attackButton;
     public Button skillButton;
     public Button defenceButton;
+
+    public GameObject skillLayout;
+    public Button[] skillButtons;
+    public GameObject skillDesLayout;
+    public GameObject skillDesText;
 
     public bool[] isActive = new bool[10];
 
@@ -51,12 +57,39 @@ public class Controller : MonoBehaviour
               return;
             }
 
-            castSkill(curSkillID, curCharacterID, finalI);
+            //set cool down and mp cost
+            for(int j = 0; j < characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills.Length; j += 1)
+            {
+              if(characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[j].id == curSkillID)
+              {
+                characters[curCharacterID].GetComponent<MyCharacter>().status.skillsCoolDown[j] = characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[j].cooldown;
+                break;
+              }
+            }
+
+            characters[curCharacterID].GetComponent<MyCharacter>().status.curMp -= ((SkillAbility)getSkillInfo(curSkillID)).mpCost;
+
+            //check if wrong target
+            if(((SkillAbility)getSkillInfo(curSkillID)).type == 0)
+            {
+              castSkill(curSkillID, curCharacterID, curCharacterID);
+            }
+            else if(((SkillAbility)getSkillInfo(curSkillID)).type == 1 && finalI >= 5 || ((SkillAbility)getSkillInfo(curSkillID)).type == 2 && finalI < 5)
+            {
+              return;
+            }
+            else
+            {
+              castSkill(curSkillID, curCharacterID, finalI);
+            }
 
             characters[curCharacterID].GetComponent<MyCharacter>().status.curPos = 100;
             characters[curCharacterID].GetComponent<MyCharacter>().findObject("Background").SetActive(false);
 
+            inTargeting = false;
             showCommandLayout(false);
+            skillDesLayout.SetActive(false);
+
             updateTurnPosition();
           }
         );
@@ -72,19 +105,75 @@ public class Controller : MonoBehaviour
         }
       );
 
+      skillButton.onClick.AddListener(
+        delegate
+        {
+          setupSkillList(curCharacterID);
+
+          showCommandLayout(false);
+          skillLayout.SetActive(true);
+        }
+      );
+
+      for(int i = 0; i < 6; i += 1)
+      {
+        int finalI = i;
+
+        skillButtons[i].onClick.AddListener(
+          delegate
+          {
+            skillDesLayout.SetActive(true);
+            skillDesText.GetComponent<TextMeshProUGUI>().text = characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].des;
+
+            if(!characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].isPassive &&
+              characters[curCharacterID].GetComponent<MyCharacter>().status.skillsCoolDown[finalI] == 0 &&
+              characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].mpCost <= characters[curCharacterID].GetComponent<MyCharacter>().status.curMp)
+            {
+              curSkillID = characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].id;
+              inTargeting = true;
+
+              skillLayout.SetActive(false);
+            }
+          }
+        );
+      }
+
+
       startLevel1();
       pauseBetweenTurn();
 
       //run the game
+      parsePassiveBuff();
       updateTurnPosition();
     }
 
     void Update()
     {
-      if(inTargeting && Input.GetMouseButtonDown(1))
+      if(Input.GetMouseButtonDown(1))
       {
-        inTargeting = false;
-        showCommandLayout(true);
+        //skill selecting...
+        if(!inTargeting && (skillLayout.activeSelf || skillDesLayout.activeSelf))
+        {
+          skillDesLayout.SetActive(false);
+          skillLayout.SetActive(false);
+          showCommandLayout(true);
+        }
+
+        if(inTargeting)
+        {
+          inTargeting = false;
+
+          //normal attack targeting
+          if(!skillLayout.activeSelf && !skillDesLayout.activeSelf)
+          {
+            showCommandLayout(true);
+          }
+          //skill targeting
+          else
+          {
+            skillLayout.SetActive(true);
+          }
+        }
       }
 
       //wait between turns
@@ -101,9 +190,42 @@ public class Controller : MonoBehaviour
     }
 
 
-    private void setUpSkillList(int i)
+    private void setupSkillList(int index)
     {
-    //    characters[i].GetComponent<EffectParser>().skillList(i);
+      for(int i = 0; i < 6; i += 1)
+      {
+        if(i >= characters[index].GetComponent<MyCharacter>().parameter.skills.Length)
+        {
+          skillButtons[i].gameObject.SetActive(false);
+          continue;
+        }
+        else
+        {
+          if(characters[index].GetComponent<MyCharacter>().status.skillsCoolDown[i] != 0)
+          {
+            skillButtons[i].gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Can use after " + characters[index].GetComponent<MyCharacter>().status.skillsCoolDown[i] + " Turn";
+          }
+          else if(characters[index].GetComponent<MyCharacter>().parameter.skills[i].mpCost > characters[index].GetComponent<MyCharacter>().status.curMp)
+          {
+            skillButtons[i].gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "No Mp...";
+          }
+          else
+          {
+            skillButtons[i].gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = characters[index].GetComponent<MyCharacter>().parameter.skills[i].name;
+          }
+
+          skillButtons[i].gameObject.SetActive(true);
+
+          if(!characters[index].GetComponent<MyCharacter>().parameter.skills[i].isPassive)
+          {
+            skillButtons[i].GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
+          }
+          else
+          {
+            skillButtons[i].GetComponent<Image>().color = new Color(0.75f, 0.75f, 0.75f, 1f);
+          }
+        }
+      }
     }
 
     private void startLevel1()
@@ -126,13 +248,13 @@ public class Controller : MonoBehaviour
       initParameterInfo(2, "Healer", "char_03", 1200, 150, 125, 50, 35);
       initParameterInfo(5, "BOSS", "char_18", 10000, 500, 300, 25, 80);
 
-      characters[0].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(0), getSkillInfo(3)};
-      characters[0].GetComponent<MyCharacter>().status.skillsCoolDown = new int[]{0, 0};
+      characters[0].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(1), getSkillInfo(2), getSkillInfo(3)};
+      characters[0].GetComponent<MyCharacter>().status.skillsCoolDown = new int[]{0, 0, 0};
 
-      characters[1].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(0), getSkillInfo(3)};
+      characters[1].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(4), getSkillInfo(5)};
       characters[1].GetComponent<MyCharacter>().status.skillsCoolDown = new int[]{0, 0};
 
-      characters[2].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(0), getSkillInfo(3)};
+      characters[2].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(6), getSkillInfo(7)};
       characters[2].GetComponent<MyCharacter>().status.skillsCoolDown = new int[]{0, 0};
 
       characters[5].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(8), getSkillInfo(9)};
@@ -169,6 +291,23 @@ public class Controller : MonoBehaviour
       characters[id].GetComponent<MyCharacter>().status.curSpd = spd;
 
       characters[id].GetComponent<MyCharacter>().status.buff = new ArrayList();
+    }
+
+    private void parsePassiveBuff()
+    {
+      for(int i = 0; i < characters.Length; i += 1)
+      {
+        if(isActive[i])
+        {
+          for(int j = 0; j < characters[i].GetComponent<MyCharacter>().parameter.skills.Length; j += 1)
+          {
+            if(characters[i].GetComponent<MyCharacter>().parameter.skills[j].isPassive)
+            {
+              castSkill(characters[i].GetComponent<MyCharacter>().parameter.skills[j].id, i, getTarget(characters[i].GetComponent<MyCharacter>().parameter.skills[j].type));
+            }
+          }
+        }
+      }
     }
 
     private void initTurnPosition()
@@ -266,6 +405,7 @@ public class Controller : MonoBehaviour
 
       if(minIndex < 5)
       {
+        GetComponent<EffectParser>().parseStartTurnBuff(characters[curCharacterID]);
         showCommandLayout(true);
         characters[minIndex].GetComponent<MyCharacter>().findObject("Background").SetActive(true);
         characters[minIndex].GetComponent<MyCharacter>().findObject("Background").GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
@@ -343,6 +483,19 @@ public class Controller : MonoBehaviour
       waitingTime = 0f;
     }
 
+    private bool containsBuff(int unitID, int buffID)
+    {
+      for(int i = 0; i < characters[unitID].GetComponent<MyCharacter>().status.buff.Count; i += 1)
+      {
+        if(((Buff)characters[unitID].GetComponent<MyCharacter>().status.buff[i]).id == buffID)
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
     /**
      *
      *  choose a target randomly
@@ -406,6 +559,15 @@ public class Controller : MonoBehaviour
         }
       }
 
+      //if in taunt
+      for(int i = 0; i < index.Count; i += 1)
+      {
+        if(containsBuff((int)index[i], 1))
+        {
+          return (int)index[i];
+        }
+      }
+
       return (int)index[Random.Range(0, index.Count)];
     }
 
@@ -413,20 +575,20 @@ public class Controller : MonoBehaviour
     {
       switch(id)
       {
-        case 0: return new SkillAbility(0, "Normal Attack", 0, 0, 2, false);
-        case 1: return new SkillAbility(1, "Taunt", 20, 7, 0, false);
-        case 2: return new SkillAbility(2, "ATK UP", 15, 10, 0, false);
-        case 3: return new SkillAbility(3, "HP Regeneration", 0, 0, 0, true);
-        case 4: return new SkillAbility(4, "Doppelgänger", 50, 10, 0, false);
-        case 5: return new SkillAbility(5, "ATK+", 0, 0, 0, true);
-        case 6: return new SkillAbility(6, "Healing", 30, 2, 1, false);
-        case 7: return new SkillAbility(7, "MP Regeneration", 0, 0, 0, true);
-        case 8: return new SkillAbility(8, "Charge", 80, 5, 0, false);
-        case 9: return new SkillAbility(9, "Bersaka", 0, 0, 0, true);
-        case 10: return new SkillAbility(10, "Effect: ATK UP", 0, 0, 0, false);
-        case 11: return new SkillAbility(11, "Effect: Charge", 0, 0, 0, false);
-        case 12: return new SkillAbility(12, "Effect: Bersaka", 0, 0, 0, false);
-        case 13: return new SkillAbility(13, "Effect: IsCharging", 0, 0, 0, false);
+        case 0: return new SkillAbility(0, "Normal Attack", "Give 100% ATK Damage the enemy", 0, 0, 2, false);
+        case 1: return new SkillAbility(1, "Taunt", "Force the enemy attack this unit and Decrease 40% Damage in 2 turn", 20, 5, 0, false);
+        case 2: return new SkillAbility(2, "ATK UP", "In 5 turns, whenever received damage by enemy, increase 50% ATK for 3 turns", 15, 10, 0, false);
+        case 3: return new SkillAbility(3, "HP Regeneration", "Recovery 5% hp every turn", 0, 0, 0, true);
+        case 4: return new SkillAbility(4, "Doppelgänger", "Give 50% ATK damage in each turn", 50, 5, 2, false);
+        case 5: return new SkillAbility(5, "ATK+", "Increase 3% ATK every turn", 0, 0, 0, true);
+        case 6: return new SkillAbility(6, "Healing", "Recovery 25% Hp\nRecovery 25% Hp in 5 turns", 30, 3, 1, false);
+        case 7: return new SkillAbility(7, "MP Regeneration", "Recovery 3% Mp in each turn", 0, 0, 0, true);
+        case 8: return new SkillAbility(8, "Charge", "Give 400% ATK Damage after 2 turns stand by", 80, 5, 0, false);
+        case 9: return new SkillAbility(9, "Bersaka", "Increase 25% All Parameter when Self Hp below 30%", 0, 0, 0, true);
+        case 10: return new SkillAbility(10, "Effect: ATK UP", "triggers by hit", 0, 0, 0, false);
+        case 11: return new SkillAbility(11, "Effect: Charge", "charge end", 0, 0, 0, false);
+        case 12: return new SkillAbility(12, "Effect: Bersaka", "basaka trigger", 0, 0, 0, false);
+        case 13: return new SkillAbility(13, "Effect: IsCharging", "charge process", 0, 0, 0, false);
       }
 
       return null;

@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class EffectParser : MonoBehaviour
 {
-    public GameObject layout,skillButtons;
-    public GameObject skillS;
+    // public GameObject layout,skillButtons;
+    // public GameObject skillS;
 
     // private void Awake()
     // {
@@ -40,7 +40,7 @@ public class EffectParser : MonoBehaviour
       {
         case 0:
           float damage = getDamage(100, self, target);
-          castEncounterBuff(target);
+          castEncounterBuff(self, target);
 
           target.GetComponent<MyCharacter>().status.curHp -= damage;
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + " damage\n";
@@ -49,7 +49,7 @@ public class EffectParser : MonoBehaviour
 
         //skill 1
         case 1:
-          self.GetComponent<MyCharacter>().status.buff.Add(new Buff(1, 3));
+          self.GetComponent<MyCharacter>().status.buff.Add(new Buff(1, 2));
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " used Taunt\n";
 
           break;
@@ -65,7 +65,8 @@ public class EffectParser : MonoBehaviour
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " used passive skill HP Regeneration\n";
           break;
         case 4:
-
+          target.GetComponent<MyCharacter>().status.buff.Add(new Buff(4, 999, self.GetComponent<MyCharacter>().status.index, getDamage(50, self, target)));
+          skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " used Doppelgänger on " + target.GetComponent<MyCharacter>().parameter.name + "\n";
           break;
 
         case 5:
@@ -101,12 +102,12 @@ public class EffectParser : MonoBehaviour
           break;
         case 10:
           self.GetComponent<MyCharacter>().status.buff.Add(new Buff(10, 3));
-          skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " increased 10% ATK from ATK up\n";
+          skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " increased 50% ATK by receiving damage\n";
 
           break;
         case 11:
           damage = getDamage(400, self, target);
-          castEncounterBuff(target);
+          castEncounterBuff(self, target);
 
           target.GetComponent<MyCharacter>().status.curHp -= damage;
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + " damage\n";
@@ -231,13 +232,26 @@ public class EffectParser : MonoBehaviour
      **/
     public void parseStartTurnBuff(GameObject target)
     {
+      GameObject skillText = GameObject.Find("BattleLogText");
+
       for(int i = 0; i < target.GetComponent<MyCharacter>().status.buff.Count; i += 1)
       {
+        skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().status.index >= 5 ? "<color=#99001c>" : "<color=#009908>";
+
         switch(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id)
         {
           case 3:
             target.GetComponent<MyCharacter>().status.curHp += target.GetComponent<MyCharacter>().status.maxHp * 0.05f;
             normalizeHPMP(target);
+
+            break;
+
+          case 4:
+            target.GetComponent<MyCharacter>().status.curHp -= ((Buff)target.GetComponent<MyCharacter>().status.buff[i]).value;
+            castEncounterBuff(GetComponent<Controller>().characters[((Buff)target.GetComponent<MyCharacter>().status.buff[i]).from], target);
+            normalizeHPMP(target);
+
+            skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " decrease " + ((Buff)target.GetComponent<MyCharacter>().status.buff[i]).value + " HP by Doppelgänger\n";
 
             break;
           case 5:
@@ -247,6 +261,7 @@ public class EffectParser : MonoBehaviour
           case 6:
             target.GetComponent<MyCharacter>().status.curHp += target.GetComponent<MyCharacter>().status.maxHp * 0.05f;
             normalizeHPMP(target);
+
             break;
 
           case 7:
@@ -254,6 +269,8 @@ public class EffectParser : MonoBehaviour
             normalizeHPMP(target);
             break;
         }
+
+        skillText.GetComponent<TextMeshProUGUI>().text += "</color>";
 
         ((Buff)target.GetComponent<MyCharacter>().status.buff[i]).remainingTurn -= 1;
 
@@ -267,7 +284,7 @@ public class EffectParser : MonoBehaviour
 
               break;
             case 10:
-              target.GetComponent<MyCharacter>().status.curAtk -= target.GetComponent<MyCharacter>().parameter.atk * 0.1f;
+              target.GetComponent<MyCharacter>().status.curAtk -= target.GetComponent<MyCharacter>().parameter.atk * 0.5f;
               break;
           }
 
@@ -293,21 +310,21 @@ public class EffectParser : MonoBehaviour
      * Encounter buff, triggers when the target is got hit
      *
      **/
-    public void castEncounterBuff(GameObject target)
+    public void castEncounterBuff(GameObject self, GameObject target)
     {
       for (int i = 0; i < target.GetComponent<MyCharacter>().status.buff.Count; i += 1)
       {
         //ATK UP skill
         if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id == 2)
         {
-          target.GetComponent<MyCharacter>().status.curAtk += target.GetComponent<MyCharacter>().parameter.atk * 0.1f;
+          target.GetComponent<MyCharacter>().status.curAtk += target.GetComponent<MyCharacter>().parameter.atk * 0.5f;
           castSkill(10, target, target);
         }
 
         //bersaka
         if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id == 9)
         {
-          if(target.GetComponent<MyCharacter>().status.curHp / target.GetComponent<MyCharacter>().status.maxHp < 0.25f)
+          if(target.GetComponent<MyCharacter>().status.curHp / target.GetComponent<MyCharacter>().status.maxHp < 0.3f)
           {
             target.GetComponent<MyCharacter>().status.curHp *= 1.25f;
             target.GetComponent<MyCharacter>().status.maxHp *= 1.25f;
@@ -338,7 +355,7 @@ public class EffectParser : MonoBehaviour
         //taunt buff
         if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id == 1)
         {
-          value *= 0.4f;
+          value *= 0.6f;
         }
       }
 
