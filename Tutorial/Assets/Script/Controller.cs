@@ -40,7 +40,7 @@ public class Controller : MonoBehaviour
     private bool isWaiting;
     private float waitingTime;
 
-    private int curTurn = 0;
+    public int curTurn = 0;
     private int maxTurn = 100;
 
     // Start is called before the first frame update
@@ -135,6 +135,22 @@ public class Controller : MonoBehaviour
         }
       );
 
+      defenceButton.onClick.AddListener(
+        delegate
+        {
+          //回合制游戏的经典
+          //防御自己也要选目标
+          showCommandLayout(false);
+
+          curSkillID = 14;
+          inTargeting = true;
+          // castSkill(14, curCharacterID, curCharacterID);
+          // updateTurnPosition();
+          //
+          // showCommandLayout(false);
+        }
+      );
+
       for(int i = 0; i < 6; i += 1)
       {
         int finalI = i;
@@ -168,11 +184,11 @@ public class Controller : MonoBehaviour
       }
       else if(SceneManager.GetActiveScene().name == "SceneB")
       {
-
+        GetComponent<TutorialB>().startOP();
       }
       else
       {
-
+        startGame();
       }
     }
 
@@ -452,6 +468,13 @@ public class Controller : MonoBehaviour
         showCommandLayout(true);
         characters[minIndex].GetComponent<MyCharacter>().findObject("Background").SetActive(true);
         characters[minIndex].GetComponent<MyCharacter>().findObject("Background").GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
+
+        //use in tutorial B
+        if(SceneManager.GetActiveScene().name == "SceneB")
+        {
+          showCommandLayout(false);
+          GetComponent<TutorialB>().showMessage(minIndex);
+        }
       }
       else
       {
@@ -690,7 +713,7 @@ public class Controller : MonoBehaviour
         case 1: return new SkillAbility(1, "Taunt", "Force the enemy attack this unit and Decrease 40% Damage in 2 turn", 20, 5, 0, false);
         case 2: return new SkillAbility(2, "ATK UP", "In 5 turns, whenever received damage by enemy, increase 50% ATK for 3 turns", 15, 10, 0, false);
         case 3: return new SkillAbility(3, "HP Regeneration", "Recovery 5% hp every turn", 0, 0, 0, true);
-        case 4: return new SkillAbility(4, "Doppelgänger", "Give 50% ATK damage in each turn", 50, 5, 2, false);
+        case 4: return new SkillAbility(4, "Doppelgänger", "Give 100% ATK damage in each turn", 40, 5, 2, false);
         case 5: return new SkillAbility(5, "ATK+", "Increase 3% ATK every turn", 0, 0, 0, true);
         case 6: return new SkillAbility(6, "Healing", "Recovery 25% Hp\nRecovery 25% Hp in 5 turns", 30, 3, 1, false);
         case 7: return new SkillAbility(7, "MP Regeneration", "Recovery 3% Mp in each turn", 0, 0, 0, true);
@@ -700,6 +723,7 @@ public class Controller : MonoBehaviour
         case 11: return new SkillAbility(11, "Effect: Charge", "charge end", 0, 0, 0, false);
         case 12: return new SkillAbility(12, "Effect: Bersaka", "basaka trigger", 0, 0, 0, false);
         case 13: return new SkillAbility(13, "Effect: IsCharging", "charge process", 0, 0, 0, false);
+        case 14: return new SkillAbility(14, "Defence", "Increase 50% DEF for 1 turn", 0, 0, 0, false);
       }
 
       return null;
