@@ -76,7 +76,7 @@ public class EffectParser : MonoBehaviour
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " used passive skill HP Regeneration\n";
           break;
         case 4:
-          target.GetComponent<MyCharacter>().status.buff.Add(new Buff(4, 999, self.GetComponent<MyCharacter>().status.index, getDamage(50, self, target)));
+          target.GetComponent<MyCharacter>().status.buff.Add(new Buff(4, 999, self.GetComponent<MyCharacter>().status.index, getDamage(100, self, target)));
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " used Doppelgänger on " + target.GetComponent<MyCharacter>().parameter.name + "\n";
           break;
 
@@ -132,6 +132,11 @@ public class EffectParser : MonoBehaviour
         case 13:
           self.GetComponent<MyCharacter>().status.buff.Add(new Buff(13, 999));
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " is charging...\n";
+
+          break;
+        case 14:
+          self.GetComponent<MyCharacter>().status.buff.Add(new Buff(14, 1));
+          skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " used Defence\n";
 
           break;
       }
@@ -336,13 +341,15 @@ public class EffectParser : MonoBehaviour
         {
           if(target.GetComponent<MyCharacter>().status.curHp / target.GetComponent<MyCharacter>().status.maxHp < 0.3f)
           {
-            target.GetComponent<MyCharacter>().status.curHp *= 1.25f;
-            target.GetComponent<MyCharacter>().status.maxHp *= 1.25f;
-            target.GetComponent<MyCharacter>().status.curMp *= 1.25f;
-            target.GetComponent<MyCharacter>().status.maxMp *= 1.25f;
-            target.GetComponent<MyCharacter>().status.curAtk *= 1.25f;
-            target.GetComponent<MyCharacter>().status.curDef *= 1.25f;
-            target.GetComponent<MyCharacter>().status.curSpd *= 1.25f;
+            castSkill(12, target, target);
+
+            target.GetComponent<MyCharacter>().status.curHp += target.GetComponent<MyCharacter>().parameter.hp * 0.25f;
+            target.GetComponent<MyCharacter>().status.maxHp += target.GetComponent<MyCharacter>().parameter.hp * 0.25f;
+            target.GetComponent<MyCharacter>().status.curMp += target.GetComponent<MyCharacter>().parameter.mp * 0.25f;
+            target.GetComponent<MyCharacter>().status.maxMp += target.GetComponent<MyCharacter>().parameter.mp * 0.25f;
+            target.GetComponent<MyCharacter>().status.curAtk += target.GetComponent<MyCharacter>().parameter.atk * 0.25f;
+            target.GetComponent<MyCharacter>().status.curDef += target.GetComponent<MyCharacter>().parameter.def * 0.25f;
+            target.GetComponent<MyCharacter>().status.curSpd += target.GetComponent<MyCharacter>().parameter.spd * 0.25f;
 
             target.GetComponent<MyCharacter>().status.buff.RemoveAt(i);
             i -= 1;
@@ -366,6 +373,11 @@ public class EffectParser : MonoBehaviour
         if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id == 1)
         {
           value *= 0.6f;
+        }
+        //defence
+        else if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id == 14)
+        {
+          value *= 0.7f;
         }
       }
 

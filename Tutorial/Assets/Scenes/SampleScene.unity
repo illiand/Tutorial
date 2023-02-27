@@ -5192,6 +5192,9 @@ MonoBehaviour:
   - {fileID: 789373424}
   skillDesLayout: {fileID: 1644023283}
   skillDesText: {fileID: 1048564219}
+  nextLevelLayout: {fileID: 0}
+  nextLevelButton: {fileID: 0}
+  nextLevelText: {fileID: 0}
   isActive: 00000000000000000000
 --- !u!114 &963194231
 MonoBehaviour:
