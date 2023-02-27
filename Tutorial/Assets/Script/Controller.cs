@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Controller : MonoBehaviour
 {
+    private GameObject sceneController;
+
     public GameObject[] characters;
     public GameObject[] timeLine;
 
@@ -18,6 +21,10 @@ public class Controller : MonoBehaviour
     public GameObject skillDesLayout;
     public GameObject skillDesText;
 
+    public GameObject nextLevelLayout;
+    public Button nextLevelButton;
+    public GameObject nextLevelText;
+
     public bool[] isActive = new bool[10];
 
     //the unit in movement
@@ -26,6 +33,7 @@ public class Controller : MonoBehaviour
     //the skill player in use
     private int curSkillID;
 
+    private int viewingCharacterID;
     private bool inTargeting;
     private bool isPlayerTurn;
 
@@ -38,6 +46,8 @@ public class Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+      sceneController = GameObject.Find("SceneController");
+
       for(int i = 0; i < 10; i += 1)
       {
         int finalI = i;
@@ -54,6 +64,15 @@ public class Controller : MonoBehaviour
           {
             if(!inTargeting)
             {
+              if(attackButton.gameObject.activeSelf || skillLayout.activeSelf)
+              {
+                viewingCharacterID = finalI;
+                showCommandLayout(false);
+                skillLayout.SetActive(true);
+                skillDesLayout.SetActive(true);
+                setupSkillList(viewingCharacterID);
+              }
+
               return;
             }
 
@@ -66,8 +85,6 @@ public class Controller : MonoBehaviour
                 break;
               }
             }
-
-            characters[curCharacterID].GetComponent<MyCharacter>().status.curMp -= ((SkillAbility)getSkillInfo(curSkillID)).mpCost;
 
             //check if wrong target
             if(((SkillAbility)getSkillInfo(curSkillID)).type == 0)
@@ -82,6 +99,8 @@ public class Controller : MonoBehaviour
             {
               castSkill(curSkillID, curCharacterID, finalI);
             }
+
+            characters[curCharacterID].GetComponent<MyCharacter>().status.curMp -= ((SkillAbility)getSkillInfo(curSkillID)).mpCost;
 
             characters[curCharacterID].GetComponent<MyCharacter>().status.curPos = 100;
             characters[curCharacterID].GetComponent<MyCharacter>().findObject("Background").SetActive(false);
@@ -108,6 +127,7 @@ public class Controller : MonoBehaviour
       skillButton.onClick.AddListener(
         delegate
         {
+          viewingCharacterID = curCharacterID;
           setupSkillList(curCharacterID);
 
           showCommandLayout(false);
@@ -123,9 +143,10 @@ public class Controller : MonoBehaviour
           delegate
           {
             skillDesLayout.SetActive(true);
-            skillDesText.GetComponent<TextMeshProUGUI>().text = characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].des;
+            skillDesText.GetComponent<TextMeshProUGUI>().text = characters[viewingCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].name + "\n" + characters[viewingCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].des;
 
-            if(!characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].isPassive &&
+            if(viewingCharacterID == curCharacterID &&
+              !characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].isPassive &&
               characters[curCharacterID].GetComponent<MyCharacter>().status.skillsCoolDown[finalI] == 0 &&
               characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].mpCost <= characters[curCharacterID].GetComponent<MyCharacter>().status.curMp)
             {
@@ -138,13 +159,21 @@ public class Controller : MonoBehaviour
         );
       }
 
-
       startLevel1();
-      pauseBetweenTurn();
 
-      //run the game
-      parsePassiveBuff();
-      updateTurnPosition();
+      if(SceneManager.GetActiveScene().name == "SceneA")
+      {
+        sceneController.GetComponent<SceneController>().tryCount += 1;
+        GetComponent<TutorialA>().startTutorial(sceneController.GetComponent<SceneController>().tryCount);
+      }
+      else if(SceneManager.GetActiveScene().name == "SceneB")
+      {
+
+      }
+      else
+      {
+
+      }
     }
 
     void Update()
@@ -189,6 +218,12 @@ public class Controller : MonoBehaviour
       }
     }
 
+    public void startGame()
+    {
+      //run the game
+      parsePassiveBuff();
+      updateTurnPosition();
+    }
 
     private void setupSkillList(int index)
     {
@@ -216,7 +251,7 @@ public class Controller : MonoBehaviour
 
           skillButtons[i].gameObject.SetActive(true);
 
-          if(!characters[index].GetComponent<MyCharacter>().parameter.skills[i].isPassive)
+          if(!characters[index].GetComponent<MyCharacter>().parameter.skills[i].isPassive && viewingCharacterID == curCharacterID)
           {
             skillButtons[i].GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
           }
@@ -364,6 +399,14 @@ public class Controller : MonoBehaviour
 
     private void updateTurnPosition()
     {
+      int curGameStatus = checkGameStauts();
+      if(curGameStatus != 0)
+      {
+        gameOver(curGameStatus);
+
+        return;
+      }
+
       //avoid loop
       curTurn += 1;
 
@@ -470,7 +513,7 @@ public class Controller : MonoBehaviour
       }
     }
 
-    private void showCommandLayout(bool isShow)
+    public void showCommandLayout(bool isShow)
     {
       attackButton.gameObject.SetActive(isShow);
       skillButton.gameObject.SetActive(isShow);
@@ -569,6 +612,74 @@ public class Controller : MonoBehaviour
       }
 
       return (int)index[Random.Range(0, index.Count)];
+    }
+
+    private void gameOver(int result)
+    {
+      nextLevelLayout.SetActive(true);
+
+      if(result == -1)
+      {
+        nextLevelText.GetComponent<TextMeshProUGUI>().text = "All dead\nTry Again";
+      }
+      else if(result == 1)
+      {
+        nextLevelText.GetComponent<TextMeshProUGUI>().text = "Win\nNext Level";
+      }
+
+      nextLevelButton.onClick.AddListener(
+        delegate
+        {
+          if(sceneController.GetComponent<SceneController>().level == 0)
+          {
+            if(result == -1)
+            {
+              SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+            else if(result == 1)
+            {
+              SceneManager.LoadScene("Level1");
+            }
+          }
+
+        }
+      );
+    }
+
+    /**
+     *
+     * -1 lose 0 nothing 1 win
+     *
+     **/
+    private int checkGameStauts()
+    {
+      for (int i = 0; i < 5; i += 1)
+      {
+        if(isActive[i])
+        {
+          break;
+        }
+
+        if(i == 4)
+        {
+          return -1;
+        }
+      }
+
+      for (int i = 5; i < 10; i += 1)
+      {
+        if(isActive[i])
+        {
+          break;
+        }
+
+        if(i == 9)
+        {
+          return 1;
+        }
+      }
+
+      return 0;
     }
 
     private SkillAbility getSkillInfo(int id)
