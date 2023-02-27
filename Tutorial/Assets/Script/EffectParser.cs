@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class EffectParser : MonoBehaviour
 {
@@ -30,9 +31,17 @@ public class EffectParser : MonoBehaviour
     //
     //     ) ;
     // }
+
+
+    public GameObject EffectobjectToSpawn;
+    public GameObject BossEffectobjectToSpawn;
+    public GameObject damageText;
+    public Transform mCanvas;
+
     public void castSkill(int id, GameObject self, GameObject target)
     {
-      GameObject skillText = GameObject.Find("BattleLogText");
+        playEffect(id, target);
+        GameObject skillText = GameObject.Find("BattleLogText");
 
       skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().status.index >= 5 ? "<color=#99001c>" : "<color=#009908>";
 
@@ -44,6 +53,8 @@ public class EffectParser : MonoBehaviour
 
           target.GetComponent<MyCharacter>().status.curHp -= damage;
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + " damage\n";
+
+          
 
           break;
 
@@ -145,52 +156,51 @@ public class EffectParser : MonoBehaviour
       GameObject.Find("ViewportContent").GetComponent<RectTransform>().localPosition = new Vector2(0, 9999);
     }
 
+    private void playEffect(int id, GameObject target)
+    {
+        Vector3 pos = new Vector3(target.transform.position.x, target.transform.position.y, 100);
+        switch (id)
+        {
+            case 0://player normal attack
+                Debug.Log("Player Attackm and id is "+ id);
+                Instantiate(EffectobjectToSpawn, pos, Quaternion.identity);
+                break;
+            case 11://boss normal attack
+                //StartCoroutine(BossAttackingCoroutine(pos));
+                Debug.Log("Boss Attack and id is "+ id);
+                Instantiate(BossEffectobjectToSpawn, pos, Quaternion.identity);
 
-    // public void skillList(int id)
-    // {
-    //     switch (id)
-    //     {
-    //         case 0:
-    //             const string V = "increase attack";
-    //
-    //             skillText = layout.transform.GetComponentInChildren<TextMeshProUGUI>();
-    //             skillText.text = V;
-    //             //layout.AddText(self.GetComponent<MyCharacter>().parameter.name + " give  " + target.GetComponent().parameter.name + " " + getDamage(100, self, target) + " damage");
-    //             break;
-    //
-    //         //skill 1
-    //         case 1:
-    //
-    //
-    //             break;
-    //
-    //         case 2:
-    //
-    //
-    //             break;
-    //
-    //         case 3:
-    //
-    //
-    //             break;
-    //         case 4:
-    //
-    //             break;
-    //         case 5:
-    //
-    //
-    //             skillText = layout.transform.GetComponentInChildren<TextMeshProUGUI>();
-    //             skillText.text = "boss skill";
-    //             break;
-    //     }
-    // }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private IEnumerator BossAttackingCoroutine(Vector3 pos)
+    {
+        Debug.Log("Wait 1.5");
+        yield return new WaitForSeconds(1.5f);
+        Instantiate(BossEffectobjectToSpawn, pos, Quaternion.identity);
+    }
 
     private float getDamage(int amount, GameObject self, GameObject target)
     {
-      float atk = self.GetComponent<MyCharacter>().status.curAtk;
+        Vector3 pos = new Vector3(target.transform.position.x, target.transform.position.y, 0);
+        float atk = self.GetComponent<MyCharacter>().status.curAtk;
       float def = target.GetComponent<MyCharacter>().status.curDef;
+      float damage = -(amount / 100f * (atk * atk / (atk + def)) * castDamageResistBuff(target));
+      Debug.Log("The damage is " + damage);
+        GameObject temp = (GameObject)Instantiate(damageText, target.transform.position, target.transform.rotation);
+       // Instantiate(damageText, target.transform.position, target.transform.rotation);
+        Debug.Log("The target pos is " + target.transform.position);
+        damageText.transform.SetParent(mCanvas);
+        damageText.GetComponent<RectTransform>().position = target.GetComponent<RectTransform>().position; 
+        //damageText.transform.position = target.transform.localPosition;
+        //Instantiate(damageText, pos, Quaternion.identity);
 
-      return amount / 100f * (atk * atk / (atk + def)) * castDamageResistBuff(target);
+        
+        damageText.GetComponentInChildren<TextMeshProUGUI>().text = damage.ToString();
+        return amount / 100f * (atk * atk / (atk + def)) * castDamageResistBuff(target);
     }
 
     public void normalizeHPMP(GameObject target)

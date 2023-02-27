@@ -457,7 +457,7 @@ public class Controller : MonoBehaviour
 
     private void castSkill(int skillID, int selfIndex, int targetIndex)
     {
-      Debug.Log(selfIndex + " -> " + targetIndex + " with " + getSkillInfo(skillID).name);
+      //Debug.Log(selfIndex + " -> " + targetIndex + " with " + getSkillInfo(skillID).name);
 
       GetComponent<EffectParser>().castSkill(skillID, characters[selfIndex], characters[targetIndex]);
     }
