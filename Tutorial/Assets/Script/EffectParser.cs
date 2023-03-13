@@ -43,7 +43,7 @@ public class EffectParser : MonoBehaviour
         playEffect(id, target);
         GameObject skillText = GameObject.Find("BattleLogText");
 
-      skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().status.index >= 5 ? "<color=#99001c>" : "<color=#009908>";
+      skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().status.index >= 5 ? "<color=#5A0007>" : "<color=#19251A>";
 
       switch(id)
       {
@@ -251,7 +251,7 @@ public class EffectParser : MonoBehaviour
 
       for(int i = 0; i < target.GetComponent<MyCharacter>().status.buff.Count; i += 1)
       {
-        skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().status.index >= 5 ? "<color=#99001c>" : "<color=#009908>";
+        skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().status.index >= 5 ? "<color=#5A0007>" : "<color=#19251A>";
 
         switch(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id)
         {

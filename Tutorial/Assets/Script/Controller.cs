@@ -98,8 +98,9 @@ public class Controller : MonoBehaviour
             else
             {
               castSkill(curSkillID, curCharacterID, finalI);
-            }
 
+            }
+              pauseBetweenTurn();
             characters[curCharacterID].GetComponent<MyCharacter>().status.curMp -= ((SkillAbility)getSkillInfo(curSkillID)).mpCost;
 
             characters[curCharacterID].GetComponent<MyCharacter>().status.curPos = 100;
@@ -109,7 +110,7 @@ public class Controller : MonoBehaviour
             showCommandLayout(false);
             skillDesLayout.SetActive(false);
 
-            updateTurnPosition();
+            //updateTurnPosition();
           }
         );
       }
