@@ -50,10 +50,10 @@ public class EffectParser : MonoBehaviour
       switch(id)
       {
         case 0:
-          float damage = getDamage(100, self, target);
+          float damage = getDamage(-100, self, target);
           castEncounterBuff(self, target);
 
-          target.GetComponent<MyCharacter>().status.curHp -= damage;
+          target.GetComponent<MyCharacter>().status.curHp += damage;
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + " damage\n";
 
           break;
@@ -76,7 +76,7 @@ public class EffectParser : MonoBehaviour
           skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " used passive skill HP Regeneration\n";
           break;
         case 4:
-          target.GetComponent<MyCharacter>().status.buff.Add(new Buff(4, 999, target.GetComponent<MyCharacter>().status.index, getDamage(100, self, target)));
+          target.GetComponent<MyCharacter>().status.buff.Add(new Buff(4, 999, target.GetComponent<MyCharacter>().status.index, getDebuffDamage(-100, self, target)));
           skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " used Doppelgänger on " + target.GetComponent<MyCharacter>().parameter.name + "\n";
           break;
 
@@ -87,7 +87,7 @@ public class EffectParser : MonoBehaviour
           break;
 
         case 6:
-          target.GetComponent<MyCharacter>().status.curHp += target.GetComponent<MyCharacter>().status.maxHp * 0.25f;
+          target.GetComponent<MyCharacter>().status.curHp += getDamage(target.GetComponent<MyCharacter>().status.maxHp * 0.25f, self, target);
           normalizeHPMP(target);
 
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(6, 5));
@@ -117,10 +117,10 @@ public class EffectParser : MonoBehaviour
 
           break;
         case 11:
-          damage = getDamage(400, self, target);
+          damage = getDamage(-400, self, target);
           castEncounterBuff(self, target);
 
-          target.GetComponent<MyCharacter>().status.curHp -= damage;
+          target.GetComponent<MyCharacter>().status.curHp += damage;
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + " damage\n";
 
           break;
@@ -150,8 +150,8 @@ public class EffectParser : MonoBehaviour
           skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " used passive skill Element Immune\n";
           break;
         case 17:
-          GetComponent<Controller>().summonRandomly(target.GetComponent<MyCharacter>().status.index, "Monster", "char_18", 1000, 200, 50, 25, 80, new int[]{23, 28, 16});
-          GetComponent<Controller>().summonRandomly(target.GetComponent<MyCharacter>().status.index, "Monster", "char_18", 1000, 200, 50, 25, 80, new int[]{23, 28, 16});
+          GetComponent<Trigger_ElementBlend>().change(GetComponent<Controller>().summonRandomly(target.GetComponent<MyCharacter>().status.index, "Monster", "char_18", 1000, 200, 50, 25, 80, new int[]{23, 28, 16}));
+          GetComponent<Trigger_ElementBlend>().change(GetComponent<Controller>().summonRandomly(target.GetComponent<MyCharacter>().status.index, "Monster", "char_18", 1000, 200, 50, 25, 80, new int[]{23, 28, 16}));
 
           break;
         case 18:
@@ -175,10 +175,10 @@ public class EffectParser : MonoBehaviour
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " used Imprison on " + target.GetComponent<MyCharacter>().parameter.name + "\n";
           break;
         case 22:
-          damage = getDamage(250, self, target);
+          damage = getDamage(-250, self, target);
           castEncounterBuff(self, target);
 
-          target.GetComponent<MyCharacter>().status.curHp -= damage;
+          target.GetComponent<MyCharacter>().status.curHp += damage;
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + " damage\n";
           break;
         case 23:
@@ -187,10 +187,10 @@ public class EffectParser : MonoBehaviour
           break;
         case 24:
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(23, 3));
-          damage = getDamage(150, self, target);
+          damage = getDamage(-150, self, target);
           castEncounterBuff(self, target);
 
-          target.GetComponent<MyCharacter>().status.curHp -= damage;
+          target.GetComponent<MyCharacter>().status.curHp += damage;
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + " damage\n";
           break;
         case 25:
@@ -230,25 +230,53 @@ public class EffectParser : MonoBehaviour
       GameObject.Find("ViewportContent").GetComponent<RectTransform>().localPosition = new Vector2(0, 9999);
     }
 
-    private float getDamage(int amount, GameObject self, GameObject target)
+    private float getDamage(float amount, GameObject self, GameObject target)
     {
-      float atk = self.GetComponent<MyCharacter>().status.curAtk;
-      float def = target.GetComponent<MyCharacter>().status.curDef;
-      float damage = -(amount / 100f * (atk * atk / (atk + def)) * castDamageResistBuff(target));
-      Debug.Log("The damage is " + damage);
-        //GameObject temp = (GameObject)Instantiate(damageText, target.transform.position, target.transform.rotation);
-       // Instantiate(damageText, target.transform.position, target.transform.rotation);
-        Debug.Log("The target pos is " + target.transform.position);
+      float damage = 0f;
+
+      //damage
+      if(amount < 0)
+      {
+        float atk = self.GetComponent<MyCharacter>().status.curAtk;
+        float def = target.GetComponent<MyCharacter>().status.curDef;
+        damage = amount / 100f * (atk * atk / (atk + def)) * castDamageResistBuff(target) * castSpecialDamageResistBuff(self, target);
+
         damageText.transform.SetParent(mCanvas);
         damageText.GetComponent<RectTransform>().position = target.GetComponent<RectTransform>().position;
-        //damageText.transform.position = target.transform.localPosition;
-        //Instantiate(damageText, pos, Quaternion.identity);
 
+        showDamageValue(damage, target);
+      }
+      //heal
+      else
+      {
+        damage = amount * castSpecialDamageResistBuff(self, target);
 
-       // damageText.GetComponentInChildren<TextMeshProUGUI>().text = damage.ToString();
-        showDamageValue( damage,target);
+        damageText.transform.SetParent(mCanvas);
+        damageText.GetComponent<RectTransform>().position = target.GetComponent<RectTransform>().position;
 
-        return amount / 100f * (atk * atk / (atk + def)) * castDamageResistBuff(target) * castSpecialDamageResistBuff(self, target);
+        showDamageValue(damage, target);
+      }
+
+      return damage;
+    }
+
+    private float getDebuffDamage(float amount, GameObject self, GameObject target)
+    {
+      float damage = 0f;
+      //damage
+      if(amount < 0)
+      {
+        float atk = self.GetComponent<MyCharacter>().status.curAtk;
+        float def = target.GetComponent<MyCharacter>().status.curDef;
+        damage = amount / 100f * (atk * atk / (atk + def)) * castDamageResistBuff(target);
+      }
+      //heal
+      else
+      {
+        damage = amount;
+      }
+
+      return damage;
     }
 
     public void showDamageValue(float damage, GameObject target)
@@ -256,6 +284,7 @@ public class EffectParser : MonoBehaviour
         startShowingText = true;
 
         //这里偷懒了 ，应该根据技能来播放特效
+        //KE HAI XING
         if (target.GetComponent<MyCharacter>().status.index >= 5)//if target is boss
         {
             Vector3 tempPos = target.transform.position;
@@ -270,9 +299,17 @@ public class EffectParser : MonoBehaviour
             GameObject temp = (GameObject)Instantiate(atkEffect[1], tempPosn, target.transform.rotation);
             temp.transform.SetParent(mCanvas);
         }
-        
-        damageText.GetComponentInChildren<TextMeshProUGUI>().text = damage.ToString();
 
+        if(damage < 0)
+        {
+          damageText.GetComponentInChildren<TextMeshProUGUI>().text = "-" + (int)-damage;
+          damageText.GetComponentInChildren<TextMeshProUGUI>().color = new Color(1f, 0f, 0f);
+        }
+        else
+        {
+          damageText.GetComponentInChildren<TextMeshProUGUI>().text = "+" + (int)damage;
+          damageText.GetComponentInChildren<TextMeshProUGUI>().color = new Color(0f, 1f, 0f);
+        }
     }
 
     private void Update()

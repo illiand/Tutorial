@@ -32,7 +32,7 @@ public class Trigger_ElementBlend : MonoBehaviour
                 if (elementRecorder[i] == 3)
                 {
                     GetComponent<Controller>().characters[i].GetComponent<MyCharacter>().findObject("Ele Image").GetComponent<Image>().color = new Color32(221, 140, 20, 244);//yellow
-                   
+
                 }
 
 
@@ -58,6 +58,11 @@ public class Trigger_ElementBlend : MonoBehaviour
     //change by fixed increaseing 1
     public void change(int index)
     {
+      if(index < 0 || 9 < index)
+      {
+        return;
+      }
+
       elementRecorder[index] = element;
       element = element == 3 ? 1 : element + 1;
     }
@@ -85,17 +90,18 @@ public class Trigger_ElementBlend : MonoBehaviour
       //good
       if(selfElement + 1 == targetElement || selfElement == 3 && targetElement == 1)
       {
-        value = 4;
+        value = 2;
       }
       //bad
-      else if(selfElement + 1 == targetElement || selfElement == 1 && targetElement == 3)
+      else if(selfElement - 1 == targetElement || selfElement == 1 && targetElement == 3)
       {
-        value = -1;
+        value = -2;
       }
 
       int copy = elementRecorder[self.GetComponent<MyCharacter>().status.index];
       elementRecorder[self.GetComponent<MyCharacter>().status.index] = elementRecorder[target.GetComponent<MyCharacter>().status.index];
       elementRecorder[target.GetComponent<MyCharacter>().status.index] = copy;
+
 
       return value;
     }

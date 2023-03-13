@@ -100,7 +100,7 @@ public class Controller : MonoBehaviour
               castSkill(curSkillID, curCharacterID, new int[]{finalI});
             }
 
-            
+
               pauseBetweenTurn();
             characters[curCharacterID].GetComponent<MyCharacter>().status.curMp -= ((SkillAbility)getSkillInfo(curSkillID)).mpCost;
 
@@ -823,7 +823,7 @@ public class Controller : MonoBehaviour
       }
     }
 
-    public void summonRandomly(int curIndex, string name, string picName, int hp, int mp, int atk, int def, int spd, int[] skillsID)
+    public int summonRandomly(int curIndex, string name, string picName, int hp, int mp, int atk, int def, int spd, int[] skillsID)
     {
       if(curIndex < 5)
       {
@@ -833,7 +833,7 @@ public class Controller : MonoBehaviour
           {
             summon(i, name, picName, hp, mp, atk, def, spd, skillsID);
 
-            return;
+            return i;
           }
         }
       }
@@ -845,10 +845,12 @@ public class Controller : MonoBehaviour
           {
             summon(i, name, picName, hp, mp, atk, def, spd, skillsID);
 
-            return;
+            return i;
           }
         }
       }
+
+      return -1;
     }
 
     public void summon(int id, string name, string picName, int hp, int mp, int atk, int def, int spd, int[] skillsID)
