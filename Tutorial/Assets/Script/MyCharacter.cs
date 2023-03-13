@@ -101,16 +101,21 @@ public class SkillAbility
   public int mpCost;
   public int cooldown;
   public int type;
+  public int targetCount;
   public bool isPassive;
 
-  public SkillAbility(int id, string name, string des, int mpCost, int cooldown, int type, bool isPassive)
+  public SkillAbility(int id, string name, string des, int mpCost, int cooldown, int type, int targetCount, bool isPassive)
   {
     this.id = id;
     this.name = name;
     this.des = des;
     this.mpCost = mpCost;
     this.cooldown = cooldown;
+    //0: self 1: ally 2: enemy
     this.type = type;
+    //-1: all allies or enemies depends on type
+    //0~X: count
+    this.targetCount = targetCount;
     this.isPassive = isPassive;
   }
 }
