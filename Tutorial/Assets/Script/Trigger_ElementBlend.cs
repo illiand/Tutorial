@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Trigger_ElementBlend : MonoBehaviour
 {
@@ -20,8 +21,23 @@ public class Trigger_ElementBlend : MonoBehaviour
       {
         if(GetComponent<Controller>().isActive[i])
         {
-          //TODO set element color
-        }
+                if(elementRecorder[i] ==1)
+                {
+                    GetComponent<Controller>().characters[i].GetComponent<MyCharacter>().findObject("Ele Image").GetComponent<Image>().color = new Color32(20, 63, 211, 244);//blue
+                }
+                if (elementRecorder[i] == 2)
+                {
+                    GetComponent<Controller>().characters[i].GetComponent<MyCharacter>().findObject("Ele Image").GetComponent<Image>().color = new Color32(211, 23, 20, 244);//red
+                }
+                if (elementRecorder[i] == 3)
+                {
+                    GetComponent<Controller>().characters[i].GetComponent<MyCharacter>().findObject("Ele Image").GetComponent<Image>().color = new Color32(221, 140, 20, 244);//yellow
+                   
+                }
+
+
+                //TODO set element color
+            }
       }
     }
 

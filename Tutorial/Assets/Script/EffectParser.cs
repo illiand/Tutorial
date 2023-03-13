@@ -35,6 +35,7 @@ public class EffectParser : MonoBehaviour
     public GameObject EffectobjectToSpawn;
     public GameObject BossEffectobjectToSpawn;
     public GameObject damageText;
+    public GameObject[] atkEffect;
     public Transform mCanvas;
 
     private bool startShowingText =false;
@@ -245,14 +246,31 @@ public class EffectParser : MonoBehaviour
 
 
        // damageText.GetComponentInChildren<TextMeshProUGUI>().text = damage.ToString();
-        showDamageValue( damage);
+        showDamageValue( damage,target);
 
         return amount / 100f * (atk * atk / (atk + def)) * castDamageResistBuff(target) * castSpecialDamageResistBuff(self, target);
     }
 
-    public void showDamageValue(float damage)
+    public void showDamageValue(float damage, GameObject target)
     {
         startShowingText = true;
+
+        //这里偷懒了 ，应该根据技能来播放特效
+        if (target.GetComponent<MyCharacter>().status.index >= 5)//if target is boss
+        {
+            Vector3 tempPos = target.transform.position;
+            tempPos.y += 100;
+            GameObject temp = (GameObject)Instantiate(atkEffect[0], tempPos, target.transform.rotation);
+            temp.transform.SetParent(mCanvas);
+        }
+        else
+        {
+            Vector3 tempPosn = target.transform.position;
+            tempPosn.y += 100;
+            GameObject temp = (GameObject)Instantiate(atkEffect[1], tempPosn, target.transform.rotation);
+            temp.transform.SetParent(mCanvas);
+        }
+        
         damageText.GetComponentInChildren<TextMeshProUGUI>().text = damage.ToString();
 
     }
