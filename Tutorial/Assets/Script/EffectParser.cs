@@ -38,6 +38,9 @@ public class EffectParser : MonoBehaviour
     public GameObject damageText;
     public Transform mCanvas;
 
+    private bool startShowingText =false;
+    private float textTimeRemaining = 3f;
+
     public void castSkill(int id, GameObject self, GameObject target)
     {
         playEffect(id, target);
@@ -195,7 +198,7 @@ public class EffectParser : MonoBehaviour
       float def = target.GetComponent<MyCharacter>().status.curDef;
       float damage = -(amount / 100f * (atk * atk / (atk + def)) * castDamageResistBuff(target));
       Debug.Log("The damage is " + damage);
-        GameObject temp = (GameObject)Instantiate(damageText, target.transform.position, target.transform.rotation);
+        //GameObject temp = (GameObject)Instantiate(damageText, target.transform.position, target.transform.rotation);
        // Instantiate(damageText, target.transform.position, target.transform.rotation);
         Debug.Log("The target pos is " + target.transform.position);
         damageText.transform.SetParent(mCanvas);
@@ -204,8 +207,37 @@ public class EffectParser : MonoBehaviour
         //Instantiate(damageText, pos, Quaternion.identity);
 
         
-        damageText.GetComponentInChildren<TextMeshProUGUI>().text = damage.ToString();
+       // damageText.GetComponentInChildren<TextMeshProUGUI>().text = damage.ToString();
+        showDamageValue( damage);
+
         return amount / 100f * (atk * atk / (atk + def)) * castDamageResistBuff(target);
+    }
+
+    public void showDamageValue(float damage)
+    {
+        startShowingText = true;
+        damageText.GetComponentInChildren<TextMeshProUGUI>().text = damage.ToString();
+
+    }
+
+    private void Update()
+    {
+        if (startShowingText)
+        {
+            if (textTimeRemaining > 0)
+            {
+                textTimeRemaining -= Time.deltaTime;
+            }
+            else
+            {
+                startShowingText = false;
+                textTimeRemaining = 3f;
+            }
+        }
+        else
+        {
+            damageText.GetComponentInChildren<TextMeshProUGUI>().text = "";
+        }
     }
 
     public void normalizeHPMP(GameObject target)
