@@ -452,7 +452,7 @@ public class Controller : MonoBehaviour
 
     private void updateTurnPosition()
     {
-      int curGameStatus = checkGameStauts();
+      int curGameStatus = checkGameStatus();
       if(curGameStatus != 0)
       {
         gameOver(curGameStatus);
@@ -714,34 +714,67 @@ public class Controller : MonoBehaviour
 
     private void gameOver(int result)
     {
-      nextLevelLayout.SetActive(true);
-
-      if(result == -1)
+      if(SceneManager.GetActiveScene().name == "SceneA" || SceneManager.GetActiveScene().name == "SceneB")
       {
-        nextLevelText.GetComponent<TextMeshProUGUI>().text = "All dead\nTry Again";
-      }
-      else if(result == 1)
-      {
-        nextLevelText.GetComponent<TextMeshProUGUI>().text = "Win\nNext Level";
-      }
+        nextLevelLayout.SetActive(true);
 
-      nextLevelButton.onClick.AddListener(
-        delegate
+        if(result == -1)
         {
-          if(sceneController.GetComponent<SceneController>().level == 0)
+          nextLevelText.GetComponent<TextMeshProUGUI>().text = "All dead\nTry Again";
+        }
+        else if(result == 1)
+        {
+          nextLevelText.GetComponent<TextMeshProUGUI>().text = "Win\nNext Level";
+        }
+
+        nextLevelButton.onClick.AddListener(
+          delegate
           {
-            if(result == -1)
+            if(sceneController.GetComponent<SceneController>().level == 0)
             {
-              SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+              if(result == -1)
+              {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+              }
+              else if(result == 1)
+              {
+                SceneManager.LoadScene("Level1");
+              }
             }
-            else if(result == 1)
-            {
-              SceneManager.LoadScene("Level1");
-            }
+
+          }
+        );
+      }
+      else if(SceneManager.GetActiveScene().name == "Level1")
+      {
+        nextLevelText.SetActive(true);
+
+        if(result == -1)
+        {
+          float score = characters[6].GetComponent<MyCharacter>().status.curHp / characters[6].GetComponent<MyCharacter>().status.maxHp;
+          string degree = "";
+
+          if(score > 0.8f)
+          {
+            degree = "C";
+          }
+          else if(score > 0.5f)
+          {
+            degree = "B";
+          }
+          else
+          {
+            degree = "A";
           }
 
+          nextLevelText.GetComponent<TextMeshProUGUI>().text += " " + degree;
         }
-      );
+        else if(result == 1)
+        {
+          nextLevelText.GetComponent<TextMeshProUGUI>().text += " S";
+        }
+      }
+
     }
 
     //side: -1: enemy 1: ally
@@ -763,7 +796,10 @@ public class Controller : MonoBehaviour
       {
         for (int i = 5; i < 10; i += 1)
         {
-          count += 1;
+          if(isActive[i])
+          {
+            count += 1;
+          }
         }
       }
 
@@ -775,7 +811,7 @@ public class Controller : MonoBehaviour
      * -1 lose 0 nothing 1 win
      *
      **/
-    private int checkGameStauts()
+    private int checkGameStatus()
     {
       if(getAliveCount(-1) == 0)
       {
@@ -900,7 +936,7 @@ public class Controller : MonoBehaviour
         case 19: return new SkillAbility(19, "Element Change", "Trigger Elementa Mixtio\n Recover 100 AT", 100, 2, 0, 1, false);
         case 20: return new SkillAbility(20, "MP Recover+", "Recover 90% MP\n Recover 50 AT", 0, 0, 0, 1, false);
         case 21: return new SkillAbility(21, "Imprison", "Imprison the enemy for 3 turns", 250, 10, 2, 1, false);
-        case 22: return new SkillAbility(22, "Big AOE", "Give 250%ATK Damage to all enemies", 350, 17, 2, 999, false);
+        case 22: return new SkillAbility(22, "Big AOE", "Give 250%ATK Damage to all enemies", 350, 7, 2, 999, false);
         case 23: return new SkillAbility(23, "Charge Ver2.", "After 1 turns stand by:\n Give 500% Vulnerabitliy to the enemy for 3 turns\nGive 150% Damage to the enemy", 80, 2, 0, 1, false);
         case 24: return new SkillAbility(24, "Effect: Charge Ver2.", "charge end", 0, 0, 2, 1, false);
         case 25: return new SkillAbility(25, "Effect: cant move", "Trigger called when cant move", 0, 0, 0, 1, false);
