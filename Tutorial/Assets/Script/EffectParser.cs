@@ -401,7 +401,7 @@ public class EffectParser : MonoBehaviour
             break;
 
           case 4:
-            unit.GetComponent<MyCharacter>().status.curHp -= ((Buff)unit.GetComponent<MyCharacter>().status.buff[i]).value;
+            unit.GetComponent<MyCharacter>().status.curHp += ((Buff)unit.GetComponent<MyCharacter>().status.buff[i]).value;
             castEncounterBuff(GetComponent<Controller>().characters[((Buff)unit.GetComponent<MyCharacter>().status.buff[i]).from], unit);
             normalizeHPMP(unit);
 
@@ -438,7 +438,7 @@ public class EffectParser : MonoBehaviour
 
               break;
             case 10:
-              unit.GetComponent<MyCharacter>().status.curAtk -= unit.GetComponent<MyCharacter>().parameter.atk * 0.5f;
+              unit.GetComponent<MyCharacter>().status.curAtk -= unit.GetComponent<MyCharacter>().parameter.atk * 2.5f;
               break;
             case 23:
               castSkill(24, unit, GetComponent<Controller>().characters[GetComponent<Controller>().getTarget(unit.GetComponent<MyCharacter>().status.index, 24)[0]]);
@@ -474,7 +474,7 @@ public class EffectParser : MonoBehaviour
         //ATK UP skill
         if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id == 2)
         {
-          target.GetComponent<MyCharacter>().status.curAtk += target.GetComponent<MyCharacter>().parameter.atk * 0.5f;
+          target.GetComponent<MyCharacter>().status.curAtk += target.GetComponent<MyCharacter>().parameter.atk * 2.5f;
           castSkill(10, target, target);
         }
 

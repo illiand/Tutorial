@@ -916,7 +916,7 @@ public class Controller : MonoBehaviour
       {
         case 0: return new SkillAbility(0, "Normal Attack", "Give 100% ATK Damage the enemy", 0, 0, 2, 1, false);
         case 1: return new SkillAbility(1, "Taunt", "Force the enemy attack this unit and Decrease 40% Damage in 2 turn", 20, 5, 0, 1, false);
-        case 2: return new SkillAbility(2, "ATK UP", "In 5 turns, whenever received damage by enemy, increase 50% ATK for 3 turns", 15, 10, 0, 1, false);
+        case 2: return new SkillAbility(2, "ATK UP", "In 5 turns, whenever received damage by enemy, increase 250% ATK for 3 turns", 15, 10, 0, 1, false);
         case 3: return new SkillAbility(3, "HP Regeneration", "Recovery 5% hp every turn", 0, 0, 0, 1, true);
         case 4: return new SkillAbility(4, "Doppelgänger", "Give 100% ATK damage in each turn", 40, 5, 2, 1, false);
         case 5: return new SkillAbility(5, "ATK+", "Increase 3% ATK every turn", 0, 0, 0, 1, true);
