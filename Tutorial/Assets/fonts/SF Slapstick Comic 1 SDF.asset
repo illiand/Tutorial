@@ -1,13 +1,13 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!21 &-6191089247836265166
+--- !u!21 &-8193369995141541412
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SF Slapstick Comic SDF Material
+  m_Name: SF Slapstick Comic 1 SDF Material
   m_Shader: {fileID: 4800000, guid: 68e6db2ebdc24f95958faec2be5558d6, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -33,7 +33,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: -3418727088883409405}
+        m_Texture: {fileID: -447657071293087884}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OutlineTex:
@@ -105,13 +105,13 @@ Material:
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_BuildTextureStacks: []
---- !u!28 &-3418727088883409405
+--- !u!28 &-447657071293087884
 Texture2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SF Slapstick Comic SDF Atlas
+  m_Name: SF Slapstick Comic 1 SDF Atlas
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -162,14 +162,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: SF Slapstick Comic SDF
+  m_Name: SF Slapstick Comic 1 SDF
   m_EditorClassIdentifier: 
-  hashCode: 1703588135
-  material: {fileID: -6191089247836265166}
-  materialHashCode: -1608221273
+  hashCode: -333030794
+  material: {fileID: -8193369995141541412}
+  materialHashCode: 1861628438
   m_Version: 1.1.0
-  m_SourceFontFileGUID: f1653fb6df25af044978b6268e262b9a
-  m_SourceFontFile_EditorRef: {fileID: 12800000, guid: f1653fb6df25af044978b6268e262b9a, type: 3}
+  m_SourceFontFileGUID: d208cf4b098a20c44aaf825c36f77d13
+  m_SourceFontFile_EditorRef: {fileID: 12800000, guid: d208cf4b098a20c44aaf825c36f77d13, type: 3}
   m_SourceFontFile: {fileID: 0}
   m_AtlasPopulationMode: 0
   m_FaceInfo:
@@ -1942,7 +1942,7 @@ MonoBehaviour:
     m_GlyphIndex: 147
     m_Scale: 1
   m_AtlasTextures:
-  - {fileID: -3418727088883409405}
+  - {fileID: -447657071293087884}
   m_AtlasTextureIndex: 0
   m_IsMultiAtlasTexturesEnabled: 0
   m_ClearDynamicDataOnBuild: 0
@@ -2656,7 +2656,7 @@ MonoBehaviour:
   m_FallbackFontAssetTable: []
   m_CreationSettings:
     sourceFontFileName: 
-    sourceFontFileGUID: f1653fb6df25af044978b6268e262b9a
+    sourceFontFileGUID: d208cf4b098a20c44aaf825c36f77d13
     pointSizeSamplingMode: 0
     pointSize: 72
     padding: 5
