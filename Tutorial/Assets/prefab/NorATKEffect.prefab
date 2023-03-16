@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 937418199657159365}
   - component: {fileID: 937418199657159371}
   m_Layer: 5
-  m_Name: bossATKEffect
+  m_Name: NorATKEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

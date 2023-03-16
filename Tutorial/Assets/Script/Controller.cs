@@ -560,7 +560,7 @@ public class Controller : MonoBehaviour
 
     private void castSkill(int skillID, int selfIndex, int[] targetIndex)
     {
-      Debug.Log(selfIndex + " -> " + targetIndex[0] + " with " + getSkillInfo(skillID).name);
+      //Debug.Log(selfIndex + " -> " + targetIndex[0] + " with " + getSkillInfo(skillID).name);
 
       for(int i = 0; i < targetIndex.Length; i += 1)
       {

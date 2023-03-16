@@ -47,14 +47,24 @@ public class EffectParser : MonoBehaviour
 
       skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().status.index >= 5 ? "<color=#5A0007>" : "<color=#19251A>";
 
-      switch(id)
+      Vector3 tempPos = target.transform.position;
+      tempPos.y += 100;
+      GameObject temp;
+
+        switch (id)
       {
-        case 0:
+        case 0://only for characters
           float damage = getDamage(-100, self, target);
           castEncounterBuff(self, target);
 
           target.GetComponent<MyCharacter>().status.curHp += damage;
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + " damage\n";
+          //Debug.Log(self.GetComponent<MyCharacter>().parameter.name + " is atking!");
+
+            //play attacking effect
+                 
+            temp = (GameObject)Instantiate(atkEffect[0], tempPos, target.transform.rotation);
+            temp.transform.SetParent(mCanvas);
 
           break;
 
@@ -78,7 +88,9 @@ public class EffectParser : MonoBehaviour
         case 4:
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(4, 999, target.GetComponent<MyCharacter>().status.index, getDebuffDamage(-100, self, target)));
           skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " used Doppelgänger on " + target.GetComponent<MyCharacter>().parameter.name + "\n";
-          break;
+            temp = (GameObject)Instantiate(atkEffect[3], tempPos, target.transform.rotation);
+            temp.transform.SetParent(mCanvas);
+            break;
 
         case 5:
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(5, 999));
@@ -180,6 +192,10 @@ public class EffectParser : MonoBehaviour
 
           target.GetComponent<MyCharacter>().status.curHp += damage;
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + " damage\n";
+            
+            temp = (GameObject)Instantiate(atkEffect[1], tempPos, target.transform.rotation);
+            temp.transform.SetParent(mCanvas);
+                //Debug.Log("case 22");
           break;
         case 23:
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(23, 2));
@@ -192,7 +208,12 @@ public class EffectParser : MonoBehaviour
 
           target.GetComponent<MyCharacter>().status.curHp += damage;
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + " damage\n";
+
+            temp = (GameObject)Instantiate(atkEffect[2], tempPos, target.transform.rotation);
+            temp.transform.SetParent(mCanvas);
+            Debug.Log("case 24");
           break;
+
         case 25:
           skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " can't move...\n";
           break;
@@ -285,20 +306,20 @@ public class EffectParser : MonoBehaviour
 
         //这里偷懒了 ，应该根据技能来播放特效
         //KE HAI XING
-        if (target.GetComponent<MyCharacter>().status.index >= 5)//if target is boss
-        {
-            Vector3 tempPos = target.transform.position;
-            tempPos.y += 100;
-            GameObject temp = (GameObject)Instantiate(atkEffect[0], tempPos, target.transform.rotation);
-            temp.transform.SetParent(mCanvas);
-        }
-        else
-        {
-            Vector3 tempPosn = target.transform.position;
-            tempPosn.y += 100;
-            GameObject temp = (GameObject)Instantiate(atkEffect[1], tempPosn, target.transform.rotation);
-            temp.transform.SetParent(mCanvas);
-        }
+        //if (target.GetComponent<MyCharacter>().status.index >= 5)//if target is boss
+        //{
+        //    Vector3 tempPos = target.transform.position;
+        //    tempPos.y += 100;
+        //    GameObject temp = (GameObject)Instantiate(atkEffect[0], tempPos, target.transform.rotation);
+        //    temp.transform.SetParent(mCanvas);
+        //}
+        //else
+        //{
+        //    Vector3 tempPosn = target.transform.position;
+        //    tempPosn.y += 100;
+        //    GameObject temp = (GameObject)Instantiate(atkEffect[1], tempPosn, target.transform.rotation);
+        //    temp.transform.SetParent(mCanvas);
+        //}
 
         if(damage < 0)
         {
@@ -335,7 +356,7 @@ public class EffectParser : MonoBehaviour
     public void normalizeHPMP(GameObject target)
     {
       target.GetComponent<MyCharacter>().status.curHp = target.GetComponent<MyCharacter>().status.curHp > target.GetComponent<MyCharacter>().status.maxHp ? target.GetComponent<MyCharacter>().status.maxHp : target.GetComponent<MyCharacter>().status.curHp;
-      target.GetComponent<MyCharacter>().status.curHp = target.GetComponent<MyCharacter>().status.curHp < 0 ? 0 : target.GetComponent<MyCharacter>().status.curHp;
+      target.GetComponent<MyCharacter>().status.curHp = target.GetComponent<MyCharacter>().status.curHp < 0 ? 0 : target.GetComponent<MyCharacter>().status.curHp;// if <0 then =0; else status.curHp
 
       target.GetComponent<MyCharacter>().status.curMp = target.GetComponent<MyCharacter>().status.curMp > target.GetComponent<MyCharacter>().status.maxMp ? target.GetComponent<MyCharacter>().status.maxMp : target.GetComponent<MyCharacter>().status.curMp;
       target.GetComponent<MyCharacter>().status.curMp = target.GetComponent<MyCharacter>().status.curMp < 0 ? 0 : target.GetComponent<MyCharacter>().status.curMp;
