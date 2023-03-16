@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: 5b1236fc1cbac3741aefddf5c7515c0e
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 0
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1346
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c835ba78afc4d34385b6352f9bad4ca
+      internalID: -1078796464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _1
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 1346
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ccd6d82cac89c940a99a3bb22f8c8e2
+      internalID: -833618357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _2
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 1346
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb0086341cb79b949a68bb788fa5a3f4
+      internalID: -596597704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _3
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 1346
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6166cdbeb8bcb2842882a315038ee667
+      internalID: 475107783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _4
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1346
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b72f502fafedc247bce90a0464fb644
+      internalID: 1416830361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1156
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 102bb5bb92ece434c80aa38315255e49
+      internalID: 1321038761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 1156
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab62fd5f64fa1d447ab7a1e379e634ac
+      internalID: -1099711440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _7
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 1156
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b607133fd6def0245a0fd01a2130cc02
+      internalID: -1879343711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _8
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 1156
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7aa79280777912b468b5626b8e1ceb4e
+      internalID: -254940102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _9
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1156
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7aefdcbd76c5912418f96935e7b026f0
+      internalID: 1202757751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 966
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db600097661a9834aa5e6582c82054e6
+      internalID: -401466487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _11
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 966
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea4d71a6d550a3b4b8dffa7a3c1610b1
+      internalID: 1416582647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _12
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 966
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3febc16cc9b2294c83615ad2e05f76d
+      internalID: 1866960244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _13
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 966
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d74198286966a644bc6ba778468b4cc
+      internalID: 597841226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _14
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 966
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e30e4e856ca8f174fbe2da102493dcf5
+      internalID: 1434995089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 776
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2869489cd57f0248a12521a1c476846
+      internalID: -96851913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _16
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 776
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca76fb98098480341b04e7d5b4c67278
+      internalID: 567234530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _17
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 776
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c64b4186e5c83cd49a1d6d732fd40dd9
+      internalID: -248156539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _18
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 776
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df536216daf62ea449368786ab688fea
+      internalID: -652184182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _19
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 776
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6fc98ea44c90f14e9ceb6f22346e04e
+      internalID: -1695530346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 586
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39610914e3610c842a9976004dd3ea74
+      internalID: 759488383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _21
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 586
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1669053e9d3c8af449a7a33f941f9a83
+      internalID: 2108520889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _22
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 586
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56d68245b4ea2ea48a4a542d4d535da4
+      internalID: 1185291798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _23
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 586
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48c9b4809fa6adf44a62f2f77d2c1c3b
+      internalID: 433052222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _24
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 586
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f4e3b89dea220d429f24ef700973b24
+      internalID: 2066779311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _25
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 396
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 247d4939319d4dc48a515c9edfe1eda5
+      internalID: 1820021124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _26
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 396
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 615037a549270784ca845c9b680b08b0
+      internalID: -1169097648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _27
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 396
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71ca9c5890ef1d942adf55cd1724993c
+      internalID: -968393015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _28
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 396
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88374da55d9af6e498f1d6d4c3daf92d
+      internalID: 1992149228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _29
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 396
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86035cec4e202f042a4eea53b636458f
+      internalID: -1188385555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 206
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 792826cae613cde419af866ddd04f03d
+      internalID: -54145651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _31
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 206
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 24e1f257c2306e445adb14c899025bfa
+      internalID: -358612602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _32
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 206
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5408391f02a6ab3479ad9f6f91bd11dc
+      internalID: 781199723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _33
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 206
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88ace6e01986b764884b2481af66e5f6
+      internalID: 1849801267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _34
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 206
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74ee8dd3290bf904a95fc83c133a567d
+      internalID: -760825710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 004 FlashIn2Red _35
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 16
+        width: 192
+        height: 190
+      alignment: 3
+      pivot: {x: 1, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c9654133ac6ce944884ab2223834785
+      internalID: 1815626257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 34181d75582743b429a2f8a052749488
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      004 FlashIn2Red _13: 597841226
+      004 FlashIn2Red _35: 1815626257
+      004 FlashIn2Red _11: 1416582647
+      004 FlashIn2Red _6: -1099711440
+      004 FlashIn2Red _28: 1992149228
+      004 FlashIn2Red _20: 759488383
+      004 FlashIn2Red _16: 567234530
+      004 FlashIn2Red _12: 1866960244
+      004 FlashIn2Red _4: 1416830361
+      004 FlashIn2Red _15: -96851913
+      004 FlashIn2Red _17: -248156539
+      004 FlashIn2Red _24: 2066779311
+      004 FlashIn2Red _34: -760825710
+      004 FlashIn2Red _25: 1820021124
+      004 FlashIn2Red _19: -1695530346
+      004 FlashIn2Red _21: 2108520889
+      004 FlashIn2Red _1: -833618357
+      004 FlashIn2Red _3: 475107783
+      004 FlashIn2Red _7: -1879343711
+      004 FlashIn2Red _18: -652184182
+      004 FlashIn2Red _22: 1185291798
+      004 FlashIn2Red _32: 781199723
+      004 FlashIn2Red _29: -1188385555
+      004 FlashIn2Red _10: -401466487
+      004 FlashIn2Red _2: -596597704
+      004 FlashIn2Red _23: 433052222
+      004 FlashIn2Red _33: 1849801267
+      004 FlashIn2Red _30: -54145651
+      004 FlashIn2Red _8: -254940102
+      004 FlashIn2Red _0: -1078796464
+      004 FlashIn2Red _26: -1169097648
+      004 FlashIn2Red _9: 1202757751
+      004 FlashIn2Red _27: -968393015
+      004 FlashIn2Red _5: 1321038761
+      004 FlashIn2Red _14: 1434995089
+      004 FlashIn2Red _31: -358612602
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
