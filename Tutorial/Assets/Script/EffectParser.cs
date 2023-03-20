@@ -55,6 +55,7 @@ public class EffectParser : MonoBehaviour
       tempPosSword.x -= 40;
       
       GameObject temp;
+        GameObject temp4;
 
         switch (id)
       {
@@ -136,7 +137,7 @@ public class EffectParser : MonoBehaviour
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(10, 3));
           skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " increased 50% ATK by receiving damage\n";
           
-          temp = (GameObject)Instantiate(atkEffect[4], tempPosSword, target.transform.rotation);
+          temp = (GameObject)Instantiate(atkEffect[4], tempPos, target.transform.rotation);
           temp.transform.SetParent(mCanvas);
           Debug.Log("case 10");
 
@@ -168,7 +169,10 @@ public class EffectParser : MonoBehaviour
         case 15:
           GetComponent<Trigger_ElementBlend>().init();
           skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " used Elementa Mixtio\n";
-          break;
+            temp = (GameObject)Instantiate(atkEffect[7], new Vector3(0,0,0), Quaternion.identity);
+            temp.transform.SetParent(mCanvas);
+            temp.transform.localPosition = new Vector3(0,0,0);
+            break;
 
         case 16:
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(16, 999));
@@ -187,7 +191,11 @@ public class EffectParser : MonoBehaviour
           GetComponent<Trigger_ElementBlend>().changeAll();
           target.GetComponent<MyCharacter>().status.curPos -= 100;
           skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " used Element Change\n";
-          break;
+                temp = (GameObject)Instantiate(atkEffect[7], new Vector3(0, 0, 0), Quaternion.identity);
+                temp.transform.SetParent(mCanvas);
+                temp.transform.localPosition = new Vector3(0, 0, 0);
+                //Debug.Log(" used Element Change\n");
+                break;
 
         case 20:
           target.GetComponent<MyCharacter>().status.curMp += target.GetComponent<MyCharacter>().status.maxMp * 0.9f;
