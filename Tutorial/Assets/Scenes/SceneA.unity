@@ -6964,8 +6964,14 @@ MonoBehaviour:
   BossEffectobjectToSpawn: {fileID: 0}
   damageText: {fileID: 1964766636}
   atkEffect:
-  - {fileID: 7812109410048813857, guid: a1585f3799d82df41b74af9041b470d2, type: 3}
   - {fileID: 937418199657159360, guid: 7be909f1961bad94ab7fb65e6708d30f, type: 3}
+  - {fileID: 7812109410048813857, guid: a1585f3799d82df41b74af9041b470d2, type: 3}
+  - {fileID: 3340167342303370150, guid: 5bc08cdee88b4c94abde284a32903c82, type: 3}
+  - {fileID: 3340167342303370150, guid: 2b0f52b2257782945a63438889f92cb5, type: 3}
+  - {fileID: 3340167342303370150, guid: 21d2bd8ef146bc64d8b1a4b5fb82aa39, type: 3}
+  - {fileID: 3340167342303370150, guid: da4f3a8821df4cc4ba2f0bc97b619162, type: 3}
+  - {fileID: 3340167342303370150, guid: 038936d6df2fd614e80d39d69dcf0c49, type: 3}
+  - {fileID: 481320505288940485, guid: f30f3c8f072e48b43bacb38bb55a2840, type: 3}
   mCanvas: {fileID: 1928290539}
 --- !u!114 &963194232
 MonoBehaviour:
