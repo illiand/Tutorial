@@ -179,16 +179,14 @@ public class Controller : MonoBehaviour
 
       if(SceneManager.GetActiveScene().name == "SceneA")
       {
-        startTutorial();
-        sceneController.GetComponent<SceneController>().tryCount += 1;
-        GetComponent<TutorialA>().startTutorial(sceneController.GetComponent<SceneController>().tryCount);
+        startTutorialVersionA();
       }
       else if(SceneManager.GetActiveScene().name == "SceneB")
       {
         startTutorial();
         GetComponent<TutorialB>().startOP();
       }
-      else
+      else if(SceneManager.GetActiveScene().name == "Level1")
       {
         startLevel1();
         startGame();
@@ -244,6 +242,13 @@ public class Controller : MonoBehaviour
       updateTurnPosition();
     }
 
+    public void startTutorialVersionA()
+    {
+      startTutorial();
+      sceneController.GetComponent<SceneController>().tryCount += 1;
+      GetComponent<TutorialA>().startTutorial(sceneController.GetComponent<SceneController>().tryCount);
+    }
+
     private void setupSkillList(int index)
     {
       for(int i = 0; i < 6; i += 1)
@@ -297,9 +302,9 @@ public class Controller : MonoBehaviour
       isActive[2] = true;
       isActive[5] = true;
 
-      initParameterInfo(0, "Tank", "char_01", 2000, 70, 100, 100, 35);
-      initParameterInfo(1, "Dps", "char_02", 1200, 100, 200, 30, 40);
-      initParameterInfo(2, "Healer", "char_03", 1200, 150, 125, 50, 35);
+      initParameterInfo(0, "Tank", "char_01", 20, 70, 100, 100, 35);
+      initParameterInfo(1, "Dps", "char_02", 12, 100, 200, 30, 40);
+      initParameterInfo(2, "Healer", "char_03", 12, 150, 125, 50, 35);
       initParameterInfo(5, "BOSS", "char_18", 10000, 500, 300, 25, 80);
 
       characters[0].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(1), getSkillInfo(2), getSkillInfo(3)};
@@ -349,6 +354,43 @@ public class Controller : MonoBehaviour
       characters[6].GetComponent<MyCharacter>().status.skillsCoolDown = new int[]{0, 0, 0, 0, 0, 0};
 
       initTurnPosition();
+    }
+
+    public void exitBattle()
+    {
+      GetComponent<WorldMapController>().battleLayout.SetActive(false);
+      GetComponent<WorldMapController>().mapLayout.SetActive(true);
+
+      for(int i = 3; i < 10; i += 1)
+      {
+        isActive[i] = false;
+        characters[i].GetComponent<MyCharacter>().parameter = null;
+        characters[i].GetComponent<MyCharacter>().status = null;
+      }
+
+      for(int i = 0; i < 3; i += 1)
+      {
+        isActive[i] = true;
+        characters[i].SetActive(true);
+
+        if(characters[i].GetComponent<MyCharacter>().status.curHp > 0)
+        {
+          characters[i].GetComponent<MyCharacter>().status.curHp = characters[i].GetComponent<MyCharacter>().parameter.hp * (characters[i].GetComponent<MyCharacter>().status.curHp / characters[i].GetComponent<MyCharacter>().status.maxHp);
+        }
+        else
+        {
+          characters[i].GetComponent<MyCharacter>().status.curHp = characters[i].GetComponent<MyCharacter>().parameter.hp * 0.25f;
+        }
+
+        characters[i].GetComponent<MyCharacter>().status.curMp = characters[i].GetComponent<MyCharacter>().parameter.mp * (characters[i].GetComponent<MyCharacter>().status.curMp / characters[i].GetComponent<MyCharacter>().status.maxMp);
+
+        characters[i].GetComponent<MyCharacter>().status.curSpd = characters[i].GetComponent<MyCharacter>().parameter.spd;
+        characters[i].GetComponent<MyCharacter>().status.curDef = characters[i].GetComponent<MyCharacter>().parameter.def;
+        characters[i].GetComponent<MyCharacter>().status.curAtk = characters[i].GetComponent<MyCharacter>().parameter.atk;
+
+        characters[i].GetComponent<MyCharacter>().status.skillsCoolDown = new int[characters[i].GetComponent<MyCharacter>().status.skillsCoolDown.Length];
+        characters[i].GetComponent<MyCharacter>().status.buff = new ArrayList();
+      }
     }
 
     private void initParameterInfo(int id, string name, string picName, int hp, int mp, int atk, int def, int spd)
@@ -773,6 +815,10 @@ public class Controller : MonoBehaviour
         {
           nextLevelText.GetComponent<TextMeshProUGUI>().text += " S";
         }
+      }
+      else
+      {
+        exitBattle();
       }
 
     }

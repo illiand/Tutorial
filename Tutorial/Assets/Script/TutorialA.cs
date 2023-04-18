@@ -40,6 +40,8 @@ public class TutorialA : MonoBehaviour
     {
       initMessage(round);
 
+      nextButton.gameObject.SetActive(true);
+
       if(msgQueue.Length > 0)
       {
         performAction();
