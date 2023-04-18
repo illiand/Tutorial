@@ -89,7 +89,7 @@ public class Controller : MonoBehaviour
             //check if wrong target
             if(((SkillAbility)getSkillInfo(curSkillID)).type == 0)
             {
-              castSkill(curSkillID, curCharacterID, curCharacterID);
+              castSkill(curSkillID, curCharacterID, new int[]{curCharacterID});
             }
             else if(((SkillAbility)getSkillInfo(curSkillID)).type == 1 && finalI >= 5 || ((SkillAbility)getSkillInfo(curSkillID)).type == 2 && finalI < 5)
             {
@@ -97,9 +97,11 @@ public class Controller : MonoBehaviour
             }
             else
             {
-              castSkill(curSkillID, curCharacterID, finalI);
+              castSkill(curSkillID, curCharacterID, new int[]{finalI});
             }
 
+
+              pauseBetweenTurn();
             characters[curCharacterID].GetComponent<MyCharacter>().status.curMp -= ((SkillAbility)getSkillInfo(curSkillID)).mpCost;
 
             characters[curCharacterID].GetComponent<MyCharacter>().status.curPos = 100;
@@ -109,7 +111,7 @@ public class Controller : MonoBehaviour
             showCommandLayout(false);
             skillDesLayout.SetActive(false);
 
-            updateTurnPosition();
+            //updateTurnPosition();
           }
         );
       }
@@ -138,7 +140,7 @@ public class Controller : MonoBehaviour
       defenceButton.onClick.AddListener(
         delegate
         {
-          //回合制游戏的经典
+          //回合制游戏的醍醐味
           //防御自己也要选目标
           showCommandLayout(false);
 
@@ -175,19 +177,20 @@ public class Controller : MonoBehaviour
         );
       }
 
-      startLevel1();
-
       if(SceneManager.GetActiveScene().name == "SceneA")
       {
+        startTutorial();
         sceneController.GetComponent<SceneController>().tryCount += 1;
         GetComponent<TutorialA>().startTutorial(sceneController.GetComponent<SceneController>().tryCount);
       }
       else if(SceneManager.GetActiveScene().name == "SceneB")
       {
+        startTutorial();
         GetComponent<TutorialB>().startOP();
       }
       else
       {
+        startLevel1();
         startGame();
       }
     }
@@ -279,7 +282,7 @@ public class Controller : MonoBehaviour
       }
     }
 
-    private void startLevel1()
+    private void startTutorial()
     {
         // GameObject.Find("SkillSelectionLayout").SetActive(false);
       characters[3].SetActive(false);
@@ -310,6 +313,40 @@ public class Controller : MonoBehaviour
 
       characters[5].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(8), getSkillInfo(9)};
       characters[5].GetComponent<MyCharacter>().status.skillsCoolDown = new int[]{0, 0};
+
+      initTurnPosition();
+    }
+
+    private void startLevel1()
+    {
+      characters[3].SetActive(false);
+      characters[4].SetActive(false);
+      characters[5].SetActive(false);
+      characters[7].SetActive(false);
+      characters[8].SetActive(false);
+      characters[9].SetActive(false);
+
+      isActive[0] = true;
+      isActive[1] = true;
+      isActive[2] = true;
+      isActive[6] = true;
+
+      initParameterInfo(0, "Tank", "char_01", 2000, 70, 100, 100, 35);
+      initParameterInfo(1, "Dps", "char_02", 1200, 100, 200, 30, 40);
+      initParameterInfo(2, "Healer", "char_03", 1200, 150, 125, 50, 35);
+      initParameterInfo(6, "BOSS", "char_47", 10000, 500, 300, 25, 20);
+
+      characters[0].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(1), getSkillInfo(2), getSkillInfo(3)};
+      characters[0].GetComponent<MyCharacter>().status.skillsCoolDown = new int[]{0, 0, 0};
+
+      characters[1].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(4), getSkillInfo(5)};
+      characters[1].GetComponent<MyCharacter>().status.skillsCoolDown = new int[]{0, 0};
+
+      characters[2].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(6), getSkillInfo(7)};
+      characters[2].GetComponent<MyCharacter>().status.skillsCoolDown = new int[]{0, 0};
+
+      characters[6].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[]{getSkillInfo(15), getSkillInfo(22), getSkillInfo(21), getSkillInfo(20), getSkillInfo(16), getSkillInfo(29)};
+      characters[6].GetComponent<MyCharacter>().status.skillsCoolDown = new int[]{0, 0, 0, 0, 0, 0};
 
       initTurnPosition();
     }
@@ -354,7 +391,7 @@ public class Controller : MonoBehaviour
           {
             if(characters[i].GetComponent<MyCharacter>().parameter.skills[j].isPassive)
             {
-              castSkill(characters[i].GetComponent<MyCharacter>().parameter.skills[j].id, i, getTarget(characters[i].GetComponent<MyCharacter>().parameter.skills[j].type));
+              castSkill(characters[i].GetComponent<MyCharacter>().parameter.skills[j].id, i, getTarget(i, characters[i].GetComponent<MyCharacter>().parameter.skills[j].id));
             }
           }
         }
@@ -415,7 +452,7 @@ public class Controller : MonoBehaviour
 
     private void updateTurnPosition()
     {
-      int curGameStatus = checkGameStauts();
+      int curGameStatus = checkGameStatus();
       if(curGameStatus != 0)
       {
         gameOver(curGameStatus);
@@ -511,21 +548,24 @@ public class Controller : MonoBehaviour
           characters[curCharacterID].GetComponent<MyCharacter>().status.curMp -= characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].mpCost;
 
           //use skill
-          castSkill(characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].id, curCharacterID, getTarget(characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].type));
+          castSkill(characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].id, curCharacterID, getTarget(curCharacterID, characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].id));
 
           return;
         }
       }
 
       //if no skill is ready, use normal Attack
-      castSkill(0, curCharacterID, getTarget(2));
+      castSkill(0, curCharacterID, getTarget(curCharacterID, 0));
     }
 
-    private void castSkill(int skillID, int selfIndex, int targetIndex)
+    private void castSkill(int skillID, int selfIndex, int[] targetIndex)
     {
-      Debug.Log(selfIndex + " -> " + targetIndex + " with " + getSkillInfo(skillID).name);
+      //Debug.Log(selfIndex + " -> " + targetIndex[0] + " with " + getSkillInfo(skillID).name);
 
-      GetComponent<EffectParser>().castSkill(skillID, characters[selfIndex], characters[targetIndex]);
+      for(int i = 0; i < targetIndex.Length; i += 1)
+      {
+        GetComponent<EffectParser>().castSkill(skillID, characters[selfIndex], characters[targetIndex[i]]);
+      }
     }
 
     private void decreaseSkillCoolDown(int targetIndex, int amount)
@@ -549,11 +589,12 @@ public class Controller : MonoBehaviour
       waitingTime = 0f;
     }
 
-    private bool containsBuff(int unitID, int buffID)
+    public bool containsBuff(int index, int buffID)
     {
-      for(int i = 0; i < characters[unitID].GetComponent<MyCharacter>().status.buff.Count; i += 1)
+      for(int i = 0; i < characters[index].GetComponent<MyCharacter>().status.buff.Count; i += 1)
       {
-        if(((Buff)characters[unitID].GetComponent<MyCharacter>().status.buff[i]).id == buffID)
+      //  Debug.Log(((Buff)characters[index].GetComponent<MyCharacter>().status.buff[i]).id);
+        if(((Buff)characters[index].GetComponent<MyCharacter>().status.buff[i]).id == buffID)
         {
           return true;
         }
@@ -567,19 +608,23 @@ public class Controller : MonoBehaviour
      *  choose a target randomly
      *
      **/
-    public int getTarget(int type)
+    public int[] getTarget(int id, int skillID)
     {
+      int type = ((SkillAbility)getSkillInfo(skillID)).type;
+      int targetCount = ((SkillAbility)getSkillInfo(skillID)).targetCount;
+
       ArrayList index = new ArrayList();
+      ArrayList target = new ArrayList();
 
       //if target is self
       if(type == 0)
       {
-        index.Add(curCharacterID);
+        index.Add(id);
       }
       //if target is ally, random choose one
-      else if(type == 1)
+      if(type == 1)
       {
-        if(curCharacterID < 5)
+        if(id < 5)
         {
           for(int i = 0; i < 5; i += 1)
           {
@@ -603,7 +648,7 @@ public class Controller : MonoBehaviour
       //if target is enemy, random choose one
       else if(type == 2)
       {
-        if(curCharacterID < 5)
+        if(id < 5)
         {
           for(int i = 5; i < 10; i += 1)
           {
@@ -624,49 +669,141 @@ public class Controller : MonoBehaviour
           }
         }
       }
-
-      //if in taunt
-      for(int i = 0; i < index.Count; i += 1)
+      else if(type == 3)
       {
-        if(containsBuff((int)index[i], 1))
+        for(int i = 0; i < 10; i += 1)
         {
-          return (int)index[i];
+          if(isActive[i])
+          {
+            index.Add(i);
+          }
         }
       }
 
-      return (int)index[Random.Range(0, index.Count)];
+      int maxCount = index.Count;
+
+      do
+      {
+        int curIndex = Random.Range(0, index.Count);
+        //Debug.Log(curIndex + " " + type + " " + target.Count + " " + index.Count);
+
+        //if in taunt
+        for(int i = 0; i < index.Count; i += 1)
+        {
+          if(containsBuff((int)index[i], 1))
+          {
+            curIndex = i;
+            break;
+          }
+        }
+
+        target.Add(index[curIndex]);
+        index.RemoveAt(curIndex);
+      }
+      while(target.Count != maxCount && target.Count < targetCount);
+
+      int[] targetArray = new int[target.Count];
+
+      for(int i = 0; i < target.Count; i += 1)
+      {
+        targetArray[i] = (int)target[i];
+      }
+
+      return targetArray;
     }
 
     private void gameOver(int result)
     {
-      nextLevelLayout.SetActive(true);
-
-      if(result == -1)
+      if(SceneManager.GetActiveScene().name == "SceneA" || SceneManager.GetActiveScene().name == "SceneB")
       {
-        nextLevelText.GetComponent<TextMeshProUGUI>().text = "All dead\nTry Again";
-      }
-      else if(result == 1)
-      {
-        nextLevelText.GetComponent<TextMeshProUGUI>().text = "Win\nNext Level";
-      }
+        nextLevelLayout.SetActive(true);
 
-      nextLevelButton.onClick.AddListener(
-        delegate
+        if(result == -1)
         {
-          if(sceneController.GetComponent<SceneController>().level == 0)
+          nextLevelText.GetComponent<TextMeshProUGUI>().text = "All dead\nTry Again";
+        }
+        else if(result == 1)
+        {
+          nextLevelText.GetComponent<TextMeshProUGUI>().text = "Win\nNext Level";
+        }
+
+        nextLevelButton.onClick.AddListener(
+          delegate
           {
-            if(result == -1)
+            if(sceneController.GetComponent<SceneController>().level == 0)
             {
-              SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+              if(result == -1)
+              {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+              }
+              else if(result == 1)
+              {
+                SceneManager.LoadScene("Level1");
+              }
             }
-            else if(result == 1)
-            {
-              SceneManager.LoadScene("Level1");
-            }
+
+          }
+        );
+      }
+      else if(SceneManager.GetActiveScene().name == "Level1")
+      {
+        nextLevelText.SetActive(true);
+
+        if(result == -1)
+        {
+          float score = characters[6].GetComponent<MyCharacter>().status.curHp / characters[6].GetComponent<MyCharacter>().status.maxHp;
+          string degree = "";
+
+          if(score > 0.8f)
+          {
+            degree = "C";
+          }
+          else if(score > 0.5f)
+          {
+            degree = "B";
+          }
+          else
+          {
+            degree = "A";
           }
 
+          nextLevelText.GetComponent<TextMeshProUGUI>().text += " " + degree;
         }
-      );
+        else if(result == 1)
+        {
+          nextLevelText.GetComponent<TextMeshProUGUI>().text += " S";
+        }
+      }
+
+    }
+
+    //side: -1: enemy 1: ally
+    private int getAliveCount(int side)
+    {
+      int count = 0;
+
+      if(side == 1)
+      {
+        for (int i = 0; i < 5; i += 1)
+        {
+          if(isActive[i])
+          {
+            count += 1;
+          }
+        }
+      }
+      else if(side == -1)
+      {
+        for (int i = 5; i < 10; i += 1)
+        {
+          if(isActive[i])
+          {
+            count += 1;
+          }
+        }
+      }
+
+      return count;
     }
 
     /**
@@ -674,56 +811,140 @@ public class Controller : MonoBehaviour
      * -1 lose 0 nothing 1 win
      *
      **/
-    private int checkGameStauts()
+    private int checkGameStatus()
     {
-      for (int i = 0; i < 5; i += 1)
+      if(getAliveCount(-1) == 0)
       {
-        if(isActive[i])
-        {
-          break;
-        }
-
-        if(i == 4)
-        {
-          return -1;
-        }
+        return 1;
       }
 
-      for (int i = 5; i < 10; i += 1)
+      if(getAliveCount(1) == 0)
       {
-        if(isActive[i])
-        {
-          break;
-        }
-
-        if(i == 9)
-        {
-          return 1;
-        }
+        return -1;
       }
 
       return 0;
+    }
+
+    public void changeSkill(int index, int skillSlotIndex, int skillID)
+    {
+      if(skillID != -1)
+      {
+        characters[index].GetComponent<MyCharacter>().parameter.skills[skillSlotIndex] = getSkillInfo(skillID);
+        characters[index].GetComponent<MyCharacter>().status.skillsCoolDown[skillSlotIndex] = 0;
+
+        if(getSkillInfo(skillID).isPassive)
+        {
+          castSkill(skillID, index, getTarget(index, skillID));
+        }
+      }
+      else
+      {
+        SkillAbility[] copyAbilitiy = characters[index].GetComponent<MyCharacter>().parameter.skills;
+        int[] skillsCoolDown = characters[index].GetComponent<MyCharacter>().status.skillsCoolDown;
+
+        characters[index].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[copyAbilitiy.Length - 1];
+        characters[index].GetComponent<MyCharacter>().status.skillsCoolDown = new int[skillsCoolDown.Length - 1];
+
+        for(int i = 0, j = 0; i < copyAbilitiy.Length; i += 1)
+        {
+          if(i != skillSlotIndex)
+          {
+            characters[index].GetComponent<MyCharacter>().parameter.skills[j] = copyAbilitiy[i];
+            characters[index].GetComponent<MyCharacter>().status.skillsCoolDown[j] = skillsCoolDown[i];
+
+            j += 1;
+          }
+        }
+      }
+    }
+
+    public int summonRandomly(int curIndex, string name, string picName, int hp, int mp, int atk, int def, int spd, int[] skillsID)
+    {
+      if(curIndex < 5)
+      {
+        for(int i = 0; i < 5; i += 1)
+        {
+          if(!isActive[i])
+          {
+            summon(i, name, picName, hp, mp, atk, def, spd, skillsID);
+
+            return i;
+          }
+        }
+      }
+      else if(curIndex >= 5)
+      {
+        for(int i = 5; i < 10; i += 1)
+        {
+          if(!isActive[i])
+          {
+            summon(i, name, picName, hp, mp, atk, def, spd, skillsID);
+
+            return i;
+          }
+        }
+      }
+
+      return -1;
+    }
+
+    public void summon(int id, string name, string picName, int hp, int mp, int atk, int def, int spd, int[] skillsID)
+    {
+      characters[id].SetActive(true);
+      isActive[id] = true;
+
+      initParameterInfo(id, name, picName, hp, mp, atk, def, spd);
+
+      characters[id].GetComponent<MyCharacter>().parameter.skills = new SkillAbility[skillsID.Length];
+      characters[id].GetComponent<MyCharacter>().status.skillsCoolDown = new int[skillsID.Length];
+
+      for(int i = 0; i < skillsID.Length; i += 1)
+      {
+        characters[id].GetComponent<MyCharacter>().parameter.skills[i] = getSkillInfo(skillsID[i]);
+
+        if(getSkillInfo(skillsID[i]).isPassive)
+        {
+          castSkill(skillsID[i], id, getTarget(id, skillsID[i]));
+        }
+      }
     }
 
     private SkillAbility getSkillInfo(int id)
     {
       switch(id)
       {
-        case 0: return new SkillAbility(0, "Normal Attack", "Give 100% ATK Damage the enemy", 0, 0, 2, false);
-        case 1: return new SkillAbility(1, "Taunt", "Force the enemy attack this unit and Decrease 40% Damage in 2 turn", 20, 5, 0, false);
-        case 2: return new SkillAbility(2, "ATK UP", "In 5 turns, whenever received damage by enemy, increase 50% ATK for 3 turns", 15, 10, 0, false);
-        case 3: return new SkillAbility(3, "HP Regeneration", "Recovery 5% hp every turn", 0, 0, 0, true);
-        case 4: return new SkillAbility(4, "Doppelgänger", "Give 100% ATK damage in each turn", 40, 5, 2, false);
-        case 5: return new SkillAbility(5, "ATK+", "Increase 3% ATK every turn", 0, 0, 0, true);
-        case 6: return new SkillAbility(6, "Healing", "Recovery 25% Hp\nRecovery 25% Hp in 5 turns", 30, 3, 1, false);
-        case 7: return new SkillAbility(7, "MP Regeneration", "Recovery 3% Mp in each turn", 0, 0, 0, true);
-        case 8: return new SkillAbility(8, "Charge", "Give 400% ATK Damage after 2 turns stand by", 80, 5, 0, false);
-        case 9: return new SkillAbility(9, "Bersaka", "Increase 25% All Parameter when Self Hp below 30%", 0, 0, 0, true);
-        case 10: return new SkillAbility(10, "Effect: ATK UP", "triggers by hit", 0, 0, 0, false);
-        case 11: return new SkillAbility(11, "Effect: Charge", "charge end", 0, 0, 0, false);
-        case 12: return new SkillAbility(12, "Effect: Bersaka", "basaka trigger", 0, 0, 0, false);
-        case 13: return new SkillAbility(13, "Effect: IsCharging", "charge process", 0, 0, 0, false);
-        case 14: return new SkillAbility(14, "Defence", "Increase 50% DEF for 1 turn", 0, 0, 0, false);
+        case 0: return new SkillAbility(0, "Normal Attack", "Give 100% ATK Damage the enemy", 0, 0, 2, 1, false);
+        case 1: return new SkillAbility(1, "Taunt", "Force the enemy attack this unit and Decrease 40% Damage in 2 turn", 20, 5, 0, 1, false);
+        case 2: return new SkillAbility(2, "ATK UP", "In 5 turns, whenever received damage by enemy, increase 250% ATK for 3 turns", 15, 10, 0, 1, false);
+        case 3: return new SkillAbility(3, "HP Regeneration", "Recovery 5% hp every turn", 0, 0, 0, 1, true);
+        case 4: return new SkillAbility(4, "Doppelgänger", "Give 100% ATK damage in each turn", 40, 5, 2, 1, false);
+        case 5: return new SkillAbility(5, "ATK+", "Increase 3% ATK every turn", 0, 0, 0, 1, true);
+        case 6: return new SkillAbility(6, "Healing", "Recovery 25% Hp\nRecovery 25% Hp in 5 turns", 30, 3, 1, 1, false);
+        case 7: return new SkillAbility(7, "MP Regeneration", "Recovery 3% Mp in each turn", 0, 0, 0, 1, true);
+        case 8: return new SkillAbility(8, "Charge", "Give 400% ATK Damage after 2 turns stand by", 80, 5, 0, 1, false);
+        case 9: return new SkillAbility(9, "Bersaka", "Increase 25% All Parameter when Self Hp below 30%", 0, 0, 0, 1, true);
+        case 10: return new SkillAbility(10, "Effect: ATK UP", "triggers by hit", 0, 0, 0, 1, false);
+        case 11: return new SkillAbility(11, "Effect: Charge", "charge end", 0, 0, 2, 1, false);
+        case 12: return new SkillAbility(12, "Effect: Bersaka", "basaka trigger", 0, 0, 0, 1, false);
+        case 13: return new SkillAbility(13, "Effect: IsCharging", "charge process", 0, 0, 0, 1, false);
+        case 14: return new SkillAbility(14, "Defence", "Increase 50% DEF for 1 turn", 0, 0, 0, 1, false);
+        case 15: return new SkillAbility(15, "Elementa Mixtio", "Give Element Blend Debuff to All Units\n Element Blend: The skill effect enhances/inverts on the target with following/opposite element\nThe element will exchange after receiving effect", 400, 999, 0, 1, false);
+        case 16: return new SkillAbility(16, "Element Immune", "The skill effect has no effect by Elementa Mixtio", 0, 0, 0, 1, true);
+        case 17: return new SkillAbility(17, "Summon", "Summon two units with Elementa Mixtio", 0, 999, 0, 1, false);
+        case 18: return new SkillAbility(18, "Effect: summon with Elementa Mixtio", "triggers when respawn", 0, 0, 0, 1, true);
+        case 19: return new SkillAbility(19, "Element Change", "Trigger Elementa Mixtio\n Recover 100 AT", 100, 2, 0, 1, false);
+        case 20: return new SkillAbility(20, "MP Recover+", "Recover 90% MP\n Recover 50 AT", 0, 0, 0, 1, false);
+        case 21: return new SkillAbility(21, "Imprison", "Imprison the enemy for 3 turns", 250, 10, 2, 1, false);
+        case 22: return new SkillAbility(22, "Big AOE", "Give 250%ATK Damage to all enemies", 350, 7, 2, 999, false);
+        case 23: return new SkillAbility(23, "Charge Ver2.", "After 1 turns stand by:\n Give 500% Vulnerabitliy to the enemy for 3 turns\nGive 150% Damage to the enemy", 80, 2, 0, 1, false);
+        case 24: return new SkillAbility(24, "Effect: Charge Ver2.", "charge end", 0, 0, 2, 1, false);
+        case 25: return new SkillAbility(25, "Effect: cant move", "Trigger called when cant move", 0, 0, 0, 1, false);
+        case 26: return new SkillAbility(26, "Effect: Summon Phase", "phase switch", 0, 0, 0, 1, false);
+        case 27: return new SkillAbility(27, "Effect: Element change Phase", "phase switch", 0, 0, 0, 1, false);
+        case 28: return new SkillAbility(28, "MP Recover", "Recover 90% MP", 0, 0, 0, 1, false);
+        case 29: return new SkillAbility(29, "Summoner", "Switch to Summon Phase when Self Hp below 80%", 0, 0, 0, 1, true);
+        case 30: return new SkillAbility(30, "Blast", "Switch to Blast Phase when Self Hp below 50%", 0, 0, 0, 1, true);
       }
 
       return null;
