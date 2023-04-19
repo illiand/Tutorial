@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28cf05531615a904d9abc3891a0ecd37, type: 3}
+  m_Name: hungry
+  m_EditorClassIdentifier: 
+  sentences:
+  - text: I am hungry
+    speaker: {fileID: 11400000, guid: 529a05b2e618a6c40940c9c038231412, type: 2}
+  - text: Could you give some food please?
+    speaker: {fileID: 11400000, guid: 529a05b2e618a6c40940c9c038231412, type: 2}
+  background: {fileID: 21300000, guid: 829fd87b9004b194d8f4c1296ca44d5a, type: 3}
+  nextScene: {fileID: 0}
