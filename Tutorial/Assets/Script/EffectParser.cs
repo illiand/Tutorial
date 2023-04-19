@@ -53,7 +53,7 @@ public class EffectParser : MonoBehaviour
       Vector3 tempPosSword = target.transform.position;
       tempPosSword.y += 175;
       tempPosSword.x -= 40;
-      
+
       GameObject temp;
         GameObject temp4;
 
@@ -68,7 +68,7 @@ public class EffectParser : MonoBehaviour
           //Debug.Log(self.GetComponent<MyCharacter>().parameter.name + " is atking!");
 
             //play attacking effect
-                 
+
             temp = (GameObject)Instantiate(atkEffect[0], tempPos, target.transform.rotation);
             temp.transform.SetParent(mCanvas);
 
@@ -101,7 +101,7 @@ public class EffectParser : MonoBehaviour
         case 5:
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(5, 999));
           skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " used passive skill ATK+\n";
-    
+
           //temp = (GameObject)Instantiate(atkEffect[4], tempPosSword, target.transform.rotation);
           //temp.transform.SetParent(mCanvas);
 
@@ -136,7 +136,7 @@ public class EffectParser : MonoBehaviour
         case 10:
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(10, 3));
           skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " increased 50% ATK by receiving damage\n";
-          
+
           temp = (GameObject)Instantiate(atkEffect[4], tempPos, target.transform.rotation);
           temp.transform.SetParent(mCanvas);
           Debug.Log("case 10");
@@ -202,10 +202,10 @@ public class EffectParser : MonoBehaviour
           normalizeHPMP(target);
           target.GetComponent<MyCharacter>().status.curPos -= 50;
           skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " used MP Recover+\n";
-          
+
           temp = (GameObject)Instantiate(atkEffect[6], tempPos, target.transform.rotation);
           temp.transform.SetParent(mCanvas);
-          
+
           break;
         case 21:
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(21, 3));
@@ -217,7 +217,7 @@ public class EffectParser : MonoBehaviour
 
           target.GetComponent<MyCharacter>().status.curHp += damage;
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + " damage\n";
-            
+
             temp = (GameObject)Instantiate(atkEffect[1], tempPos, target.transform.rotation);
             temp.transform.SetParent(mCanvas);
                 //Debug.Log("case 22");
@@ -250,13 +250,25 @@ public class EffectParser : MonoBehaviour
 
             temp = (GameObject)Instantiate(atkEffect[6], tempPos, target.transform.rotation);
             temp.transform.SetParent(mCanvas);
-                
+
           break;
         case 29:
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(26, 999));
           break;
         case 30:
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(27, 999));
+          break;
+
+        case 1000:
+          target.GetComponent<MyCharacter>().status.curHp += getDamage(target.GetComponent<MyCharacter>().status.maxHp * 0.5f, self, target);
+          skillText.GetComponent<TextMeshProUGUI>().text += "HP Portion recoveried " + target.GetComponent<MyCharacter>().parameter.name + " 50% HP\n";
+
+          normalizeHPMP(target);
+          break;
+        case 1001:
+          target.GetComponent<MyCharacter>().status.curMp += getDamage(target.GetComponent<MyCharacter>().status.maxMp * 0.5f, self, target);
+          skillText.GetComponent<TextMeshProUGUI>().text += "HP Portion recoveried " + target.GetComponent<MyCharacter>().parameter.name + " 50% MP\n";
+          normalizeHPMP(target);
           break;
       }
 

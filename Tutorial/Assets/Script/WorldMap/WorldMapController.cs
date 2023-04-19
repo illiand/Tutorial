@@ -22,6 +22,16 @@ public class WorldMapController : MonoBehaviour
       initNextSpotHint();
     }
 
+    public Map getMap()
+    {
+      return map;
+    }
+
+    public PlayerStatus getPlayerStatus()
+    {
+      return playerStatus;
+    }
+
     //move player from @param curID to @param nextID
     private void playerMoveTo(int curId, int nextID)
     {
@@ -90,7 +100,16 @@ public class WorldMapController : MonoBehaviour
     //set arraw animation whenever move
     private void initNextSpotHint()
     {
+      for(int i = 0; i < map.spots.Length; i += 1)
+      {
+        map.spots[i].obj.transform.GetChild(1).gameObject.SetActive(false);
+      }
 
+      for(int i = 0; i < map.spots[playerStatus.currentSpotID].nextSpotIDs.Length; i += 1)
+      {
+        int nextID = map.spots[playerStatus.currentSpotID].nextSpotIDs[i];
+        map.spots[nextID].obj.transform.GetChild(1).gameObject.SetActive(true);
+      }
     }
 
     private void initMap()
@@ -183,7 +202,7 @@ public class PlayerStatus
   public int monsterEventLeft;
   public int foodEventLeft;
 
-  public int[] remaining;
+  public int[] itemRemaining;
 
   public float O;
   public float C;
@@ -194,6 +213,6 @@ public class PlayerStatus
   public PlayerStatus()
   {
     //一上来3血药 1蓝药
-    remaining = new int[]{3, 1};
+    itemRemaining = new int[]{3, 1};
   }
 }

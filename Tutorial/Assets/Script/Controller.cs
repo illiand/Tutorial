@@ -15,6 +15,7 @@ public class Controller : MonoBehaviour
     public Button attackButton;
     public Button skillButton;
     public Button defenceButton;
+    public Button itemButton;
 
     public GameObject skillLayout;
     public Button[] skillButtons;
@@ -42,6 +43,8 @@ public class Controller : MonoBehaviour
 
     public int curTurn = 0;
     private int maxTurn = 100;
+
+    private bool isUsingItem;
 
     // Start is called before the first frame update
     void Start()
@@ -87,17 +90,22 @@ public class Controller : MonoBehaviour
             }
 
             //check if wrong target
-            if(((SkillAbility)getSkillInfo(curSkillID)).type == 0)
+            if(getSkillInfo(curSkillID).type == 0)
             {
               castSkill(curSkillID, curCharacterID, new int[]{curCharacterID});
             }
-            else if(((SkillAbility)getSkillInfo(curSkillID)).type == 1 && finalI >= 5 || ((SkillAbility)getSkillInfo(curSkillID)).type == 2 && finalI < 5)
+            else if(getSkillInfo(curSkillID).type == 1 && finalI >= 5 || getSkillInfo(curSkillID).type == 2 && finalI < 5)
             {
               return;
             }
             else
             {
               castSkill(curSkillID, curCharacterID, new int[]{finalI});
+            }
+
+            if(isUsingItem)
+            {
+              GetComponent<WorldMapController>().getPlayerStatus().itemRemaining[curSkillID - 1000] -= 1;
             }
 
 
@@ -134,6 +142,21 @@ public class Controller : MonoBehaviour
 
           showCommandLayout(false);
           skillLayout.SetActive(true);
+
+          isUsingItem = false;
+        }
+      );
+
+      itemButton.onClick.AddListener(
+        delegate
+        {
+          viewingCharacterID = curCharacterID;
+          setupItemList();
+
+          showCommandLayout(false);
+          skillLayout.SetActive(true);
+
+          isUsingItem = true;
         }
       );
 
@@ -161,17 +184,33 @@ public class Controller : MonoBehaviour
           delegate
           {
             skillDesLayout.SetActive(true);
-            skillDesText.GetComponent<TextMeshProUGUI>().text = characters[viewingCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].name + "\n" + characters[viewingCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].des;
 
-            if(viewingCharacterID == curCharacterID &&
-              !characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].isPassive &&
-              characters[curCharacterID].GetComponent<MyCharacter>().status.skillsCoolDown[finalI] == 0 &&
-              characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].mpCost <= characters[curCharacterID].GetComponent<MyCharacter>().status.curMp)
+            if(!isUsingItem)
             {
-              curSkillID = characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].id;
-              inTargeting = true;
+              skillDesText.GetComponent<TextMeshProUGUI>().text = characters[viewingCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].name + "\n" + characters[viewingCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].des;
 
-              skillLayout.SetActive(false);
+              if(viewingCharacterID == curCharacterID &&
+                !characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].isPassive &&
+                characters[curCharacterID].GetComponent<MyCharacter>().status.skillsCoolDown[finalI] == 0 &&
+                characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].mpCost <= characters[curCharacterID].GetComponent<MyCharacter>().status.curMp)
+              {
+                curSkillID = characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].id;
+                inTargeting = true;
+
+                skillLayout.SetActive(false);
+              }
+            }
+            else
+            {
+              skillDesText.GetComponent<TextMeshProUGUI>().text = getSkillInfo(1000 + finalI).name + "\n" + getSkillInfo(1000 + finalI).des;
+
+              if(GetComponent<WorldMapController>().getPlayerStatus().itemRemaining[finalI] > 0)
+              {
+                curSkillID = 1000 + finalI;
+                inTargeting = true;
+
+                skillLayout.SetActive(false);
+              }
             }
           }
         );
@@ -276,6 +315,32 @@ public class Controller : MonoBehaviour
           skillButtons[i].gameObject.SetActive(true);
 
           if(!characters[index].GetComponent<MyCharacter>().parameter.skills[i].isPassive && viewingCharacterID == curCharacterID)
+          {
+            skillButtons[i].GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
+          }
+          else
+          {
+            skillButtons[i].GetComponent<Image>().color = new Color(0.75f, 0.75f, 0.75f, 1f);
+          }
+        }
+      }
+    }
+
+    private void setupItemList()
+    {
+      for(int i = 0; i < 6; i += 1)
+      {
+        if(i >= GetComponent<WorldMapController>().getPlayerStatus().itemRemaining.Length)
+        {
+          skillButtons[i].gameObject.SetActive(false);
+          continue;
+        }
+        else
+        {
+          skillButtons[i].gameObject.SetActive(true);
+          skillButtons[i].gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = getSkillInfo(1000 + i).name + ": " + GetComponent<WorldMapController>().getPlayerStatus().itemRemaining[i];
+
+          if(GetComponent<WorldMapController>().getPlayerStatus().itemRemaining[i] > 0)
           {
             skillButtons[i].GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
           }
@@ -623,6 +688,7 @@ public class Controller : MonoBehaviour
       attackButton.gameObject.SetActive(isShow);
       skillButton.gameObject.SetActive(isShow);
       defenceButton.gameObject.SetActive(isShow);
+      itemButton.gameObject.SetActive(isShow);
     }
 
     private void pauseBetweenTurn()
@@ -991,6 +1057,12 @@ public class Controller : MonoBehaviour
         case 28: return new SkillAbility(28, "MP Recover", "Recover 90% MP", 0, 0, 0, 1, false);
         case 29: return new SkillAbility(29, "Summoner", "Switch to Summon Phase when Self Hp below 80%", 0, 0, 0, 1, true);
         case 30: return new SkillAbility(30, "Blast", "Switch to Blast Phase when Self Hp below 50%", 0, 0, 0, 1, true);
+
+
+
+        //item:
+        case 1000: return new SkillAbility(1000, "HP portion", "Recover 50% HP for the ally", 0, 0, 1, 1, false);
+        case 1001: return new SkillAbility(1001, "MP portion", "Recover 50% MP for the ally", 0, 0, 1, 1, false);
       }
 
       return null;
