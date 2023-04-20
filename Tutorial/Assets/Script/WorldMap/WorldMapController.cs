@@ -56,6 +56,18 @@ public class WorldMapController : MonoBehaviour
     //triggers after moving
     private void triggerEvent()
     {
+      if(checkVisitedSpots() == 15)
+      {
+        setFamiliesPositon();
+      }
+
+      if(map.spots[playerStatus.currentSpotID].type == 1)
+      {
+        //找到家人了
+
+        map.spots[playerStatus.currentSpotID].type = 0;
+      }
+
       if(playerStatus.movingCount == 3)
       {
         map.obj.SetActive(false);
@@ -238,6 +250,41 @@ public class WorldMapController : MonoBehaviour
         map.spots[i].nextSpotIDs = nextSpotIDsList[i];
       }
     }
+
+    private int checkVisitedSpots()
+    {
+      int visited = 0;
+
+      for(int i = 0; i < map.spots.Length; i += 1)
+      {
+        if(map.spots[i].isTriggered)
+        {
+          visited += 1;
+        }
+      }
+
+      return visited;
+    }
+
+    private void setFamiliesPositon()
+    {
+      ArrayList unVisited = new ArrayList();
+
+      for(int i = 0; i < map.spots.Length; i += 1)
+      {
+        if(!map.spots[i].isTriggered && map.spots[i].id < 20)
+        {
+          unVisited.Add(map.spots[i].id);
+        }
+      }
+
+      for(int i = 0; i < 3; i += 1)
+      {
+        int posIndex = Random.Range(0, unVisited.Count - 1);
+        map.spots[(int)unVisited[posIndex]].type = 1;
+        unVisited.RemoveAt(posIndex);
+      }
+    }
 }
 
 public class Map
@@ -250,6 +297,7 @@ public class Spot
 {
   public int id;
   public GameObject obj;
+  public int type;
 
   //if visited
   public bool isTriggered;
