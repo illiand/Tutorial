@@ -18,12 +18,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        if (currentScene is StoryScene)
-        {
-            StoryScene storyScene = currentScene as StoryScene;
-            bottomBar.PlayScene(storyScene);
-            backgroundController.SetImage(storyScene.background);
-        }
+
     }
 
     void Update()
@@ -49,6 +44,18 @@ public class GameController : MonoBehaviour
         StartCoroutine(SwitchScene(scene));
     }
 
+    public void PlaySceneNow()
+    {
+      if (currentScene is StoryScene)
+      {
+          gameObject.SetActive(true);
+
+          StoryScene storyScene = currentScene as StoryScene;
+          bottomBar.PlayScene(storyScene);
+          backgroundController.SetImage(storyScene.background);
+      }
+    }
+
     private IEnumerator SwitchScene(GameScene scene)
     {
         state = State.ANIMATE;
@@ -70,6 +77,10 @@ public class GameController : MonoBehaviour
         {
             state = State.CHOOSE;
             chooseController.SetupChoose(scene as ChooseScene);
+        }
+        else
+        {
+          gameObject.SetActive(false);
         }
     }
 }
