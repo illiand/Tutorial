@@ -46,6 +46,7 @@ public class EffectParser : MonoBehaviour
       GameObject skillText = GameObject.Find("BattleLogText");
 
       skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().status.index >= 5 ? "<color=#5A0007>" : "<color=#19251A>";
+      skillText.GetComponent<TextMeshProUGUI>().text += "  * ";
 
       Vector3 tempPos = target.transform.position;
       tempPos.y += 100;
@@ -62,6 +63,7 @@ public class EffectParser : MonoBehaviour
         case 0://only for characters
           float damage = getDamage(-100, self, target);
           castEncounterBuff(self, target);
+          normalizeHPMP(target);
 
           target.GetComponent<MyCharacter>().status.curHp += damage;
           skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + " damage\n";
@@ -94,7 +96,7 @@ public class EffectParser : MonoBehaviour
           break;
         case 4:
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(4, 999, target.GetComponent<MyCharacter>().status.index, getDebuffDamage(-100, self, target)));
-          skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " used Doppelgänger on " + target.GetComponent<MyCharacter>().parameter.name + "\n";
+          skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " used Doppelgänger on " + target.GetComponent<MyCharacter>().parameter.name + "\n";
 
           break;
 
@@ -135,7 +137,7 @@ public class EffectParser : MonoBehaviour
           break;
         case 10:
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(10, 3));
-          skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " increased 50% ATK by receiving damage\n";
+          skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " increased 125% ATK by receiving damage\n";
 
           temp = (GameObject)Instantiate(atkEffect[4], tempPos, target.transform.rotation);
           temp.transform.SetParent(mCanvas);
@@ -227,7 +229,7 @@ public class EffectParser : MonoBehaviour
           skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " used Charge Ver2.\n";
           break;
         case 24:
-          target.GetComponent<MyCharacter>().status.buff.Add(new Buff(23, 3));
+          target.GetComponent<MyCharacter>().status.buff.Add(new Buff(24, 3));
           damage = getDamage(-150, self, target);
           castEncounterBuff(self, target);
 
@@ -258,10 +260,134 @@ public class EffectParser : MonoBehaviour
         case 30:
           target.GetComponent<MyCharacter>().status.buff.Add(new Buff(27, 999));
           break;
+        case 31:
+          int[] skills = new int[target.GetComponent<MyCharacter>().parameter.skills.Length];
+          for(int i = 0; i < skills.Length; i += 1)
+          {
+            skills[i] = target.GetComponent<MyCharacter>().parameter.skills[i].id;
+          }
 
+          int summonIndex = GetComponent<Controller>().summonRandomly(
+            target.GetComponent<MyCharacter>().status.index,
+            target.GetComponent<MyCharacter>().parameter.name,
+            target.GetComponent<MyCharacter>().parameter.name,
+            (int)target.GetComponent<MyCharacter>().parameter.hp,
+            (int)target.GetComponent<MyCharacter>().parameter.mp,
+            (int)target.GetComponent<MyCharacter>().parameter.atk,
+            (int)target.GetComponent<MyCharacter>().parameter.def,
+            (int)target.GetComponent<MyCharacter>().parameter.spd,
+            skills);
+
+          if(summonIndex == -1)
+          {
+            return;
+          }
+
+          GetComponent<Controller>().characters[summonIndex].GetComponent<MyCharacter>().status.curHp = target.GetComponent<MyCharacter>().status.curHp;
+          GetComponent<Controller>().characters[summonIndex].GetComponent<MyCharacter>().status.curMp = target.GetComponent<MyCharacter>().status.curMp;
+          GetComponent<Controller>().characters[summonIndex].GetComponent<MyCharacter>().status.curAtk = target.GetComponent<MyCharacter>().status.curAtk;
+          GetComponent<Controller>().characters[summonIndex].GetComponent<MyCharacter>().status.curDef = target.GetComponent<MyCharacter>().status.curDef;
+          GetComponent<Controller>().characters[summonIndex].GetComponent<MyCharacter>().status.curSpd = target.GetComponent<MyCharacter>().status.curSpd;
+
+          for(int i = 0; i < target.GetComponent<MyCharacter>().status.skillsCoolDown.Length; i += 1)
+          {
+            GetComponent<Controller>().characters[summonIndex].GetComponent<MyCharacter>().status.skillsCoolDown[i] = target.GetComponent<MyCharacter>().status.skillsCoolDown[i];
+          }
+
+          for(int i = 0; i < target.GetComponent<MyCharacter>().status.buff.Count; i += 1)
+          {
+            Buff curBuff = (Buff) target.GetComponent<MyCharacter>().status.buff[i];
+            Buff newBuff = new Buff(curBuff.id, curBuff.remainingTurn);
+            newBuff.from = curBuff.from;
+            newBuff.value = curBuff.value;
+
+            if(curBuff.opt != null)
+            {
+              newBuff.opt = new int[curBuff.opt.Length];
+
+              for(int j = 0; j < curBuff.opt.Length; j += 1)
+              {
+                newBuff.opt[j] = curBuff.opt[j];
+              }
+            }
+
+            GetComponent<Controller>().characters[summonIndex].GetComponent<MyCharacter>().status.buff.Add(newBuff);
+          }
+
+          skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " used Split\n";
+
+          break;
+
+        case 32:
+          damage = getDamage(-150, self, target);
+          castEncounterBuff(self, target);
+          target.GetComponent<MyCharacter>().status.buff.Add(new Buff(32, 5));
+
+          target.GetComponent<MyCharacter>().status.curHp += damage;
+          skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + " damage with 25% Vulnerabitliy\n";
+
+          temp = (GameObject)Instantiate(atkEffect[1], tempPos, target.transform.rotation);
+          temp.transform.SetParent(mCanvas);
+          break;
+        case 33:
+          target.GetComponent<MyCharacter>().status.buff.Add(new Buff(33, 5));
+          target.GetComponent<MyCharacter>().status.curSpd += target.GetComponent<MyCharacter>().parameter.spd * 0.5f;
+
+          GetComponent<Controller>().decreaseSkillCoolDown(target.GetComponent<MyCharacter>().status.index, 1);
+          skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " decrease skill cooldown and increased 50% speed\n";
+          break;
+        case 34:
+          damage = getDamage(-250, self, target);
+          castEncounterBuff(self, target);
+
+          target.GetComponent<MyCharacter>().status.curHp += damage;
+          skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " give " + target.GetComponent<MyCharacter>().parameter.name + " " + damage + "damage\n";
+
+          temp = (GameObject)Instantiate(atkEffect[1], tempPos, target.transform.rotation);
+          temp.transform.SetParent(mCanvas);
+          break;
+        case 35:
+          target.GetComponent<MyCharacter>().status.buff.Add(new Buff(35, 10));
+          target.GetComponent<MyCharacter>().status.curAtk += target.GetComponent<MyCharacter>().parameter.atk * 0.5f;
+          skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " received 10 turns ATK buff\n";
+
+
+          temp = (GameObject)Instantiate(atkEffect[4], tempPos, target.transform.rotation);
+          temp.transform.SetParent(mCanvas);
+          break;
+        case 36:
+          target.GetComponent<MyCharacter>().status.buff.Add(new Buff(36, 10));
+          skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " received 10 turns DEF buff\n";
+
+          temp = (GameObject)Instantiate(atkEffect[4], tempPos, target.transform.rotation);
+          temp.transform.SetParent(mCanvas);
+          break;
+        case 37:
+          target.GetComponent<MyCharacter>().status.curHp += getDamage(target.GetComponent<MyCharacter>().status.maxHp * 0.25f, self, target);
+          normalizeHPMP(target);
+
+          skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " recoveried 25% HP\n";
+          temp = (GameObject)Instantiate(atkEffect[5], tempPos, target.transform.rotation);
+          temp.transform.SetParent(mCanvas);
+          break;
+        case 38:
+          target.GetComponent<MyCharacter>().status.buff.Add(new Buff(38, 5));
+          skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " used Break AT\n";
+          break;
+        case 39:
+          target.GetComponent<MyCharacter>().status.buff.Add(new Buff(39, 999));
+          skillText.GetComponent<TextMeshProUGUI>().text += self.GetComponent<MyCharacter>().parameter.name + " used Passive skill Erosive Aura AT\n";
+          break;
+        case 40:
+          target.GetComponent<MyCharacter>().status.curPos += 300;
+          skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " increase 300 AT by Break AT\n";
+
+          temp = (GameObject)Instantiate(atkEffect[1], tempPos, target.transform.rotation);
+          temp.transform.SetParent(mCanvas);
+          break;
         case 1000:
-          target.GetComponent<MyCharacter>().status.curHp += getDamage(target.GetComponent<MyCharacter>().status.maxHp * 0.5f, self, target);
-          skillText.GetComponent<TextMeshProUGUI>().text += "HP Portion recoveried " + target.GetComponent<MyCharacter>().parameter.name + " 50% HP\n";
+          target.GetComponent<MyCharacter>().status.curHp += getDamage(target.GetComponent<MyCharacter>().status.maxHp * 0.8f, self, target);
+          skillText.GetComponent<TextMeshProUGUI>().text += "HP Portion recoveried " + target.GetComponent<MyCharacter>().parameter.name + " 80% HP\n";
 
           normalizeHPMP(target);
           break;
@@ -415,7 +541,7 @@ public class EffectParser : MonoBehaviour
         int id = ((Buff)unit.GetComponent<MyCharacter>().status.buff[i]).id;
         int remainingTurn = ((Buff)unit.GetComponent<MyCharacter>().status.buff[i]).remainingTurn;
 
-        if((id == 8 || id == 23) && remainingTurn >= 1)
+        if((id == 8 || id == 23 || id == 38) && remainingTurn >= 1)
         {
           if(remainingTurn >= 2)
           {
@@ -484,6 +610,31 @@ public class EffectParser : MonoBehaviour
             unit.GetComponent<MyCharacter>().status.curMp += unit.GetComponent<MyCharacter>().status.maxMp * 0.05f;
             normalizeHPMP(unit);
             break;
+          case 39:
+            if(unit.GetComponent<MyCharacter>().status.index < 5)
+            {
+              for(int j = 5; j < 10; j += 1)
+              {
+                if(GetComponent<Controller>().isActive[j])
+                {
+                  skillText.GetComponent<TextMeshProUGUI>().text += GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().parameter.name + " decreased " + (int)(GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().status.curHp * 0.02f) + " HP by Erosive Aura\n";
+                  GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().status.curHp *= 0.98f;
+                }
+              }
+            }
+            else
+            {
+              for(int j = 0; j < 5; j += 1)
+              {
+                if(GetComponent<Controller>().isActive[j])
+                {
+                  skillText.GetComponent<TextMeshProUGUI>().text += GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().parameter.name + " decreased " + (int)(GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().status.curHp * 0.02f) + " HP by Erosive Aura\n";
+                  GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().status.curHp *= 0.98f;
+                }
+              }
+            }
+
+            break;
         }
 
         skillText.GetComponent<TextMeshProUGUI>().text += "</color>";
@@ -500,10 +651,25 @@ public class EffectParser : MonoBehaviour
 
               break;
             case 10:
-              unit.GetComponent<MyCharacter>().status.curAtk -= unit.GetComponent<MyCharacter>().parameter.atk * 2.5f;
+              unit.GetComponent<MyCharacter>().status.curAtk -= unit.GetComponent<MyCharacter>().parameter.atk * 1.25f;
               break;
             case 23:
               castSkill(24, unit, GetComponent<Controller>().characters[GetComponent<Controller>().getTarget(unit.GetComponent<MyCharacter>().status.index, 24)[0]]);
+              break;
+            case 33:
+              unit.GetComponent<MyCharacter>().status.curSpd -= unit.GetComponent<MyCharacter>().parameter.spd * 0.5f;
+              break;
+            case 35:
+              unit.GetComponent<MyCharacter>().status.curAtk -= unit.GetComponent<MyCharacter>().parameter.atk * 0.5f;
+              break;
+            case 38:
+              int[] targets = GetComponent<Controller>().getTarget(unit.GetComponent<MyCharacter>().status.index, 40);
+
+              for(int j = 0; j < targets.Length; j += 1)
+              {
+                castSkill(40, unit, GetComponent<Controller>().characters[targets[j]]);
+              }
+
               break;
           }
 
@@ -536,7 +702,7 @@ public class EffectParser : MonoBehaviour
         //ATK UP skill
         if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id == 2)
         {
-          target.GetComponent<MyCharacter>().status.curAtk += target.GetComponent<MyCharacter>().parameter.atk * 2.5f;
+          target.GetComponent<MyCharacter>().status.curAtk += target.GetComponent<MyCharacter>().parameter.atk * 1.25f;
           castSkill(10, target, target);
         }
 
@@ -617,9 +783,19 @@ public class EffectParser : MonoBehaviour
           value *= 0.7f;
         }
         //Charge Ver2.
-        else if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id == 23)
+        else if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id == 24)
         {
           value *= 5f;
+        }
+        //Erosion
+        else if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id == 32)
+        {
+          value *= 1.25f;
+        }
+        //Enhance: def
+        else if(((Buff)target.GetComponent<MyCharacter>().status.buff[i]).id == 36)
+        {
+          value *= 0.75f;
         }
       }
 

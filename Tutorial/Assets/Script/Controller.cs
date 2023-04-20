@@ -187,7 +187,7 @@ public class Controller : MonoBehaviour
 
             if(!isUsingItem)
             {
-              skillDesText.GetComponent<TextMeshProUGUI>().text = characters[viewingCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].name + "\n" + characters[viewingCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].des;
+              skillDesText.GetComponent<TextMeshProUGUI>().text = characters[viewingCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].name + "\n\n" + characters[viewingCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].des;
 
               if(viewingCharacterID == curCharacterID &&
                 !characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[finalI].isPassive &&
@@ -278,6 +278,11 @@ public class Controller : MonoBehaviour
     {
       //run the game
       parsePassiveBuff();
+      updateTurnPosition();
+    }
+
+    public void startExistingGame()
+    {
       updateTurnPosition();
     }
 
@@ -647,7 +652,7 @@ public class Controller : MonoBehaviour
         //need MP
         //not passive
         if(characters[curCharacterID].GetComponent<MyCharacter>().status.skillsCoolDown[i] == 0 &&
-          characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].mpCost < characters[curCharacterID].GetComponent<MyCharacter>().status.curMp &&
+          characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].mpCost <= characters[curCharacterID].GetComponent<MyCharacter>().status.curMp &&
           !characters[curCharacterID].GetComponent<MyCharacter>().parameter.skills[i].isPassive)
         {
           //set cool down, decrease current mp
@@ -675,7 +680,7 @@ public class Controller : MonoBehaviour
       }
     }
 
-    private void decreaseSkillCoolDown(int targetIndex, int amount)
+    public void decreaseSkillCoolDown(int targetIndex, int amount)
     {
       for(int i = 0; i < characters[targetIndex].GetComponent<MyCharacter>().status.skillsCoolDown.Length; i += 1)
       {
@@ -1022,17 +1027,47 @@ public class Controller : MonoBehaviour
       }
     }
 
+    public void summonMonster(int id)
+    {
+      switch(id)
+      {
+        case 0: summonRandomly(6, "Shi Lai Mu", "Shi Lai Mu", 500, 100, 100, 40, 25, new int[]{31, 32}); break;
+        case 1: summonRandomly(6, "Can Speed Up", "Can SpeedUp", 300, 50, 75, 30, 40, new int[]{33, 20}); break;
+        case 2: summonRandomly(6, "Can Fire Magic", "Can Fire Magic", 750, 300, 150, 30, 50, new int[]{34}); break;
+        case 3: summonRandomly(6, "Can Buff", "Can Buff", 500, 100, 100, 40, 25, new int[]{35, 36, 37}); break;
+        case 4: summonRandomly(6, "Hi", "Hi", 500, 0, 0, 200, 50, new int[]{38, 39}); break;
+      }
+    }
+
+    public int[] getRandomMonsterPair()
+    {
+      int[][] pairs = new int[9][]
+      {
+        new int[]{0, 2, 1},
+        new int[]{2, 2},
+        new int[]{3, 2, 3},
+        new int[]{0, 4},
+        new int[]{4, 4},
+        new int[]{3, 1, 2},
+        new int[]{0, 0},
+        new int[]{3, 4, 1},
+        new int[]{0, 3}
+      };
+
+      return pairs[Random.Range(0, 9)];
+    }
+
     private SkillAbility getSkillInfo(int id)
     {
       switch(id)
       {
         case 0: return new SkillAbility(0, "Normal Attack", "Give 100% ATK Damage the enemy", 0, 0, 2, 1, false);
-        case 1: return new SkillAbility(1, "Taunt", "Force the enemy attack this unit and Decrease 40% Damage in 2 turn", 20, 5, 0, 1, false);
-        case 2: return new SkillAbility(2, "ATK UP", "In 5 turns, whenever received damage by enemy, increase 250% ATK for 3 turns", 15, 10, 0, 1, false);
+        case 1: return new SkillAbility(1, "Taunt", "Force the enemy attack this unit and Decrease 40% Damage in 2 turn", 10, 5, 0, 1, false);
+        case 2: return new SkillAbility(2, "ATK UP", "In 5 turns, whenever received damage by enemy, increase 125% ATK for 3 turns", 5, 10, 0, 1, false);
         case 3: return new SkillAbility(3, "HP Regeneration", "Recovery 5% hp every turn", 0, 0, 0, 1, true);
-        case 4: return new SkillAbility(4, "Doppelgänger", "Give 100% ATK damage in each turn", 40, 5, 2, 1, false);
+        case 4: return new SkillAbility(4, "Doppelgänger", "Give 100% ATK damage in each turn", 15, 0, 2, 1, false);
         case 5: return new SkillAbility(5, "ATK+", "Increase 3% ATK every turn", 0, 0, 0, 1, true);
-        case 6: return new SkillAbility(6, "Healing", "Recovery 25% Hp\nRecovery 25% Hp in 5 turns", 30, 3, 1, 1, false);
+        case 6: return new SkillAbility(6, "Healing", "Recovery 25% Hp\nRecovery 25% Hp in 5 turns", 30, 2, 1, 1, false);
         case 7: return new SkillAbility(7, "MP Regeneration", "Recovery 3% Mp in each turn", 0, 0, 0, 1, true);
         case 8: return new SkillAbility(8, "Charge", "Give 400% ATK Damage after 2 turns stand by", 80, 5, 0, 1, false);
         case 9: return new SkillAbility(9, "Bersaka", "Increase 25% All Parameter when Self Hp below 30%", 0, 0, 0, 1, true);
@@ -1049,7 +1084,7 @@ public class Controller : MonoBehaviour
         case 20: return new SkillAbility(20, "MP Recover+", "Recover 90% MP\n Recover 50 AT", 0, 0, 0, 1, false);
         case 21: return new SkillAbility(21, "Imprison", "Imprison the enemy for 3 turns", 250, 10, 2, 1, false);
         case 22: return new SkillAbility(22, "Big AOE", "Give 250%ATK Damage to all enemies", 350, 7, 2, 999, false);
-        case 23: return new SkillAbility(23, "Charge Ver2.", "After 1 turns stand by:\n Give 500% Vulnerabitliy to the enemy for 3 turns\nGive 150% Damage to the enemy", 80, 2, 0, 1, false);
+        case 23: return new SkillAbility(23, "Charge Ver2.", "After 1 turns stand by:\n Increase 500% Vulnerabitliy to the enemy for 3 turns\nGive 150% Damage to the enemy", 80, 2, 0, 1, false);
         case 24: return new SkillAbility(24, "Effect: Charge Ver2.", "charge end", 0, 0, 2, 1, false);
         case 25: return new SkillAbility(25, "Effect: cant move", "Trigger called when cant move", 0, 0, 0, 1, false);
         case 26: return new SkillAbility(26, "Effect: Summon Phase", "phase switch", 0, 0, 0, 1, false);
@@ -1058,11 +1093,20 @@ public class Controller : MonoBehaviour
         case 29: return new SkillAbility(29, "Summoner", "Switch to Summon Phase when Self Hp below 80%", 0, 0, 0, 1, true);
         case 30: return new SkillAbility(30, "Blast", "Switch to Blast Phase when Self Hp below 50%", 0, 0, 0, 1, true);
 
-
-
+        case 31: return new SkillAbility(31, "Split", "Create a perfect clone of self", 10, 5, 0, 1, false);
+        case 32: return new SkillAbility(32, "Erosion", "Give 150%ATK Damage to the enmey\nIncrease 25% Vulnerabitliy to the enemy for 5 turns", 5, 2, 2, 1, false);
+        case 33: return new SkillAbility(33, "SpeedUp", "Decrease 1 turns Skill Cooldown for all allies\nIncrease 50% Speed for all allies for 5 turns", 20, 4, 1, 999, false);
+        case 34: return new SkillAbility(34, "Fire Magic", "Give 250%ATK Damage to all enemies", 60, 0, 2, 999, false);
+        case 35: return new SkillAbility(35, "Enhance: ATK", "Increase 50% ATK for all allies for 10 turns", 15, 5, 1, 999, false);
+        case 36: return new SkillAbility(36, "Enhance: DEF", "Decrease 25% Vulnerabitliy for all allies for 10 turns", 15, 10, 1, 999, false);
+        case 37: return new SkillAbility(37, "Group HP Recover", "Recover 25% HP for all allies", 10, 3, 1, 999, false);
+        case 38: return new SkillAbility(38, "Break AT", "Increase 300 AT to all enemies after 5 turns stand by", 0, 0, 0, 1, false);
+        case 39: return new SkillAbility(39, "Erosive Aura", "Aura: All enemies decrease 2% Current HP for each turn", 0, 0, 0, 1, true);
+        case 40: return new SkillAbility(40, "Effect: Break AT End", "-AT", 0, 0, 2, 999, false);
+        //public SkillAbility(int id, string name, string des, int mpCost, int cooldown, int type, int targetCount, bool isPassive)
         //item:
-        case 1000: return new SkillAbility(1000, "HP portion", "Recover 50% HP for the ally", 0, 0, 1, 1, false);
-        case 1001: return new SkillAbility(1001, "MP portion", "Recover 50% MP for the ally", 0, 0, 1, 1, false);
+        case 1000: return new SkillAbility(1000, "Bread", "Recover 80% HP for the ally", 0, 0, 1, 1, false);
+        case 1001: return new SkillAbility(1001, "Pineapple", "Recover 50% MP for the ally", 0, 0, 1, 1, false);
       }
 
       return null;

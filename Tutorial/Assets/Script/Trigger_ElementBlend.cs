@@ -95,7 +95,7 @@ public class Trigger_ElementBlend : MonoBehaviour
       //bad
       else if(selfElement - 1 == targetElement || selfElement == 1 && targetElement == 3)
       {
-        value = -2;
+        value = -1;
       }
 
       int copy = elementRecorder[self.GetComponent<MyCharacter>().status.index];

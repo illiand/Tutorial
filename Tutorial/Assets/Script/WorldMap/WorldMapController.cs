@@ -61,7 +61,22 @@ public class WorldMapController : MonoBehaviour
         map.obj.SetActive(false);
         battleLayout.SetActive(true);
 
-        GetComponent<Controller>().startTutorialVersionA();
+        for(int i = 0; i < 10; i += 1)
+        {
+          GetComponent<Controller>().characters[i].SetActive(false);
+        }
+
+        GetComponent<Controller>().summon(0, "Tank", "char_01", 2000, 70, 100, 100, 35, new int[]{1, 2, 3});
+        GetComponent<Controller>().summon(1, "Dps", "char_02", 1200, 100, 200, 30, 40, new int[]{4, 5});
+        GetComponent<Controller>().summon(2, "Healer", "char_03", 1200, 150, 125, 50, 35, new int[]{6, 7});
+        summonMonsterNow();
+        GetComponent<Controller>().startExistingGame();
+      }
+
+      if(playerStatus.movingCount == 4)
+      {
+        //food event
+        playerStatus.foodEventLeft = Random.Range(2, 4);
       }
 
       if(playerStatus.movingCount == 5)
@@ -69,13 +84,61 @@ public class WorldMapController : MonoBehaviour
         map.obj.SetActive(false);
         battleLayout.SetActive(true);
 
-        GetComponent<Controller>().summon(5, "Monster", "char_18", 1000, 200, 50, 25, 80, new int[]{23, 28, 16});
-        GetComponent<Controller>().summon(6, "Monster", "char_18", 1000, 200, 50, 25, 80, new int[]{23, 28, 16});
-        GetComponent<Controller>().summon(7, "Monster", "char_18", 1000, 200, 50, 25, 80, new int[]{23, 28, 16});
-        GetComponent<Controller>().summon(8, "Monster", "char_18", 1000, 200, 50, 25, 80, new int[]{23, 28, 16});
-        GetComponent<Controller>().summon(9, "Monster", "char_18", 1000, 200, 50, 25, 80, new int[]{23, 28, 16});
+        summonMonsterNow();
+        GetComponent<Controller>().startExistingGame();
 
-        GetComponent<Controller>().startGame();
+        playerStatus.monsterEventLeft = Random.Range(2, 4);
+      }
+
+      if(playerStatus.movingCount > 5)
+      {
+        //BOSS BATTLE
+        if(playerStatus.currentSpotID == 20)
+        {
+          map.obj.SetActive(false);
+          battleLayout.SetActive(true);
+
+          GetComponent<Controller>().summon(6, "BOSS", "char_47", 10000, 500, 300, 25, 20, new int[]{15, 22, 21, 20, 16, 29});
+          GetComponent<Controller>().startExistingGame();
+
+
+          return;
+        }
+
+        if(playerStatus.currentSpotID == 21)
+        {
+          //ENDING
+        }
+
+        if(playerStatus.foodEventLeft <= 0)
+        {
+          //food event
+          playerStatus.foodEventLeft = Random.Range(2, 4);
+        }
+        else if(playerStatus.monsterEventLeft <= 0)
+        {
+          map.obj.SetActive(false);
+          battleLayout.SetActive(true);
+
+          summonMonsterNow();
+          GetComponent<Controller>().startExistingGame();
+
+          playerStatus.monsterEventLeft = Random.Range(2, 4);
+        }
+      }
+
+      playerStatus.foodEventLeft -= 1;
+      playerStatus.monsterEventLeft -= 1;
+    }
+
+    //summon monster for enemies
+    private void summonMonsterNow()
+    {
+      int[] monstersToSummon = GetComponent<Controller>().getRandomMonsterPair();
+
+      for(int i = 0; i < monstersToSummon.Length; i += 1)
+      {
+        GetComponent<Controller>().summonMonster(monstersToSummon[i]);
       }
     }
 
@@ -214,5 +277,6 @@ public class PlayerStatus
   {
     //一上来3血药 1蓝药
     itemRemaining = new int[]{3, 1};
+    currentSpotID = 0;
   }
 }
