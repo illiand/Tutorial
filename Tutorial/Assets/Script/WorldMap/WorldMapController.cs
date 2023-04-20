@@ -68,6 +68,12 @@ public class WorldMapController : MonoBehaviour
         map.spots[playerStatus.currentSpotID].type = 0;
       }
 
+      if(playerStatus.movingCount == 1)
+      {
+        //GetComponent<Talk>().startEvent(0);
+        GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow();
+      }
+
       if(playerStatus.movingCount == 3)
       {
         map.obj.SetActive(false);
