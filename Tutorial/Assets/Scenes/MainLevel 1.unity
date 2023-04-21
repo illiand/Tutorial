@@ -8830,6 +8830,8 @@ MonoBehaviour:
   bottomBar: {fileID: 1336128414}
   backgroundController: {fileID: 2143468818}
   chooseController: {fileID: 395693060}
+  InMap: 0
+  InBattle: 0
 --- !u!114 &627291472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15922,6 +15924,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   barText: {fileID: 2076551257}
   personNameText: {fileID: 1183746872}
+  potrait: {fileID: 0}
 --- !u!95 &1336128415
 Animator:
   serializedVersion: 4
@@ -23875,8 +23878,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSwitched: 0
   background1: {fileID: 1008803452}
-  background2: {fileID: 2002339300}
-  animator: {fileID: 2143468819}
 --- !u!95 &2143468819
 Animator:
   serializedVersion: 4
