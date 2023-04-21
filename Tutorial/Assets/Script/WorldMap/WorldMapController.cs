@@ -52,7 +52,7 @@ public class WorldMapController : MonoBehaviour
 
           initColorOnSpot();
           initNextSpotHint();
-                
+
 
                 triggerEvent();
 
@@ -100,6 +100,8 @@ public class WorldMapController : MonoBehaviour
             GetComponent<Controller>().summon(2, "Amy", "Amy", 1200, 150, 125, 50, 35, new int[] { 6, 7 });
             summonMonsterNow();
             GetComponent<Controller>().startExistingGame();
+
+            playerStatus.monsterEventLeft = Random.Range(3, 5);
         }
 
         if (playerStatus.movingCount == 4 && (playerStatus.itemRemaining[0] > 0 || (playerStatus.itemRemaining[1] > 0)))
@@ -109,16 +111,6 @@ public class WorldMapController : MonoBehaviour
             playerStatus.foodEventLeft = Random.Range(2, 4);
         }
 
-        if (playerStatus.movingCount == 5)
-        {
-            map.obj.SetActive(false);
-            battleLayout.SetActive(true);
-
-            summonMonsterNow();
-            GetComponent<Controller>().startExistingGame();
-
-            playerStatus.monsterEventLeft = Random.Range(2, 4);
-        }
 
         if (playerStatus.movingCount > 5)
         {
@@ -179,7 +171,7 @@ public class WorldMapController : MonoBehaviour
         {
             playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
             playerSpot.transform.GetChild(0).GetComponent<Button>().enabled = false;
-            
+
             Debug.Log("playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);");
         }
 
@@ -238,9 +230,9 @@ public class WorldMapController : MonoBehaviour
       map.obj = mapLayout;
       map.spots = new Spot[22];
 
-        
-        
-       
+
+
+
 
         for (int i = 0; i < spotsCollection.transform.childCount; i += 1)
       {
@@ -380,7 +372,7 @@ public class WorldMapController : MonoBehaviour
 
     private string getFinalResult()
     {
-      float OResult = playerStatus.O / (float)playerStatus.battleCount;
+      float OResult = playerStatus.O / (float)playerStatus.battleTotalHp;
       float CResult = playerStatus.C / (float)playerStatus.treasureCount;
       float EResult = playerStatus.E / 3f;
       float AResult = playerStatus.A / 8753f;
@@ -436,7 +428,7 @@ public class PlayerStatus
   public int[] itemRemaining;
 
   public bool[] flag;
-  public int battleCount;
+  public float battleTotalHp;
   public int treasureCount;
   public int talkCount;
   public int foodCount;
@@ -447,7 +439,7 @@ public class PlayerStatus
   public float E;
   public float N;
 
-  
+
 
   public PlayerStatus()
   {

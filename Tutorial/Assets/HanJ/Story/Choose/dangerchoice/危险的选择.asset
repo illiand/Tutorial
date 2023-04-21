@@ -16,4 +16,4 @@ MonoBehaviour:
   - text: I felt something different......in front of us
     speaker: {fileID: 11400000, guid: 8e8a464fd077d054f957f55216fe6bfa, type: 2}
   background: {fileID: 21300000, guid: b0b42ce09c0029240a91618183f44bfc, type: 3}
-  nextScene: {fileID: 11400000, guid: d29026833013fd64bb6ca9c8f9f5d825, type: 2}
+  nextScene: {fileID: 11400000, guid: fad19d8fa4d4e8049a828cf7e99fc9c8, type: 2}

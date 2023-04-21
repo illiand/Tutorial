@@ -429,8 +429,6 @@ public class Controller : MonoBehaviour
 
     public void exitBattle()
     {
-      GetComponent<WorldMapController>().getPlayerStatus().battleCount += 1;
-
       GetComponent<WorldMapController>().battleLayout.SetActive(false);
       GetComponent<WorldMapController>().mapLayout.SetActive(true);
 
@@ -447,7 +445,8 @@ public class Controller : MonoBehaviour
         }
       }
 
-      GetComponent<WorldMapController>().getPlayerStatus().O += 1f - curHp / maxHp;
+      GetComponent<WorldMapController>().getPlayerStatus().battleTotalHp += maxHp;
+      GetComponent<WorldMapController>().getPlayerStatus().O += curHp;
 
       for(int i = 3; i < 10; i += 1)
       {
@@ -1085,7 +1084,7 @@ public class Controller : MonoBehaviour
         case 1: return new SkillAbility(1, "Taunt", "Force the enemy attack this unit and Decrease 40% Damage in 2 turn", 10, 5, 0, 1, false);
         case 2: return new SkillAbility(2, "ATK UP", "In 5 turns, whenever received damage by enemy, increase 125% ATK for 3 turns", 5, 10, 0, 1, false);
         case 3: return new SkillAbility(3, "HP Regeneration", "Recovery 5% hp every turn", 0, 0, 0, 1, true);
-        case 4: return new SkillAbility(4, "Doppelgänger", "Give 100% ATK damage in each turn", 15, 0, 2, 1, false);
+        case 4: return new SkillAbility(4, "Doppelgänger", "Give 100% ATK damage in each turn", 15, 3, 2, 1, false);
         case 5: return new SkillAbility(5, "ATK+", "Increase 3% ATK every turn", 0, 0, 0, 1, true);
         case 6: return new SkillAbility(6, "Healing", "Recovery 25% Hp\nRecovery 25% Hp in 5 turns", 30, 2, 1, 1, false);
         case 7: return new SkillAbility(7, "MP Regeneration", "Recovery 3% Mp in each turn", 0, 0, 0, 1, true);
