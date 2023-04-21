@@ -14,6 +14,8 @@ public class GameController : MonoBehaviour
     public bool InMap;
     public bool InBattle;
 
+    public GameObject worldController;
+
     private enum State
     {
         IDLE, ANIMATE, CHOOSE
@@ -47,8 +49,22 @@ public class GameController : MonoBehaviour
                 {
                     if (bottomBar.IsLastSentence())
                     {
-                        Debug.Log("here!");
-                        PlayScene((currentScene as StoryScene).nextScene);
+                        if(bottomBar.barText.text ==  "Treasure?")
+                        {
+                          if(worldController.GetComponent<WorldMapController>().getPlayerStatus().flag[0])
+                          {
+                            PlaySceneNow(4);
+                          }
+                          else
+                          {
+                            PlaySceneNow(5);
+                          }
+                        }
+
+                        else
+                        {
+                          PlayScene((currentScene as StoryScene).nextScene);
+                        }
                     }
                     else
                     {
@@ -66,15 +82,12 @@ public class GameController : MonoBehaviour
 
     public void PlaySceneNow(int index)
     {
-      if (currentScene is StoryScene)
-      {
-          gameObject.SetActive(true);
+      gameObject.SetActive(true);
 
-          currentScene = scenes[index];
-          StoryScene storyScene = currentScene as StoryScene;
-          bottomBar.PlayScene(storyScene);
-          backgroundController.SetImage(storyScene.background);
-      }
+      currentScene = scenes[index];
+      StoryScene storyScene = currentScene as StoryScene;
+      bottomBar.PlayScene(storyScene);
+      backgroundController.SetImage(storyScene.background);
     }
 
     private IEnumerator SwitchScene(GameScene scene)

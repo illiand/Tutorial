@@ -71,7 +71,7 @@ public class WorldMapController : MonoBehaviour
       if(playerStatus.movingCount == 1)
       {
             //GetComponent<Talk>().startEvent(0);
-            GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(0);
+            GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(3);
 
         }
 

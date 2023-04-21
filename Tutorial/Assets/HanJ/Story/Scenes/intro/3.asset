@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 3
   m_EditorClassIdentifier: 
   sentences:
-  - text: HAHAHA
-    speaker: {fileID: 11400000, guid: ce9780afd8130734099813c4bf516bbf, type: 2}
+  - text: We need start moving or we will deade
+    speaker: {fileID: 11400000, guid: 6438af083789ade4c8d7f8f9f2c25d1a, type: 2}
   background: {fileID: 21300000, guid: bbf65241398ff5e4e93d04372f35ac85, type: 3}
-  nextScene: {fileID: 11400000, guid: 43b1a69c21395424cbdaa6e9cd158370, type: 2}
+  nextScene: {fileID: 0}

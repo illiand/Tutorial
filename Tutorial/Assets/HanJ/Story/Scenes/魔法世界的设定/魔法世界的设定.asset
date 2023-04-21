@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: "\u9B54\u6CD5\u4E16\u754C\u7684\u8BBE\u5B9A"
   m_EditorClassIdentifier: 
   sentences:
-  - text: "\u4F60\u4EEC\u597D\u5389\u5BB3\u8036\uFF0C\u6253\u8D25\u4E86\u602A\u7269\u4E86"
+  - text: You are so strong that beat the monster
     speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
-  - text: "\u662F\u5427"
+  - text: Yeah
     speaker: {fileID: 11400000, guid: 6438af083789ade4c8d7f8f9f2c25d1a, type: 2}
-  - text: "\u9B54\u6CD5\u5C11\u5973A\u67D0\u79CD\u610F\u4E49\u4E0A\u662F\u6211\u89C1\u8FC7\u6700\u5389\u5BB3\u7684\u4E86"
+  - text: 'Alice is the most powerful magical girl in same ways '
     speaker: {fileID: 11400000, guid: 8e8a464fd077d054f957f55216fe6bfa, type: 2}
-  - text: "\u5979\u7684\u9B54\u6CD5\u80FD\u591F\u5438\u5F15\u4EBA\u5462"
+  - text: Her magic can attrack people
     speaker: {fileID: 11400000, guid: 8e8a464fd077d054f957f55216fe6bfa, type: 2}
-  - text: "\u5438\u5F15\u4EBA\uFF1F"
+  - text: Attrack......people?
     speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
-  - text: "\u8FD9\u5DF2\u7ECF\u4E0D\u80FD\u7B97\u662F\u9B54\u6CD5\u4E86\u5427"
+  - text: It's not the magic...
     speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
   background: {fileID: 21300000, guid: bbf65241398ff5e4e93d04372f35ac85, type: 3}
   nextScene: {fileID: 0}

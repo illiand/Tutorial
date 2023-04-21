@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: "\u548C\u5BB6\u4EBA\u7684\u5173\u7CFB"
   m_EditorClassIdentifier: 
   sentences:
-  - text: "\u3002\u3002\u3002"
+  - text: Why your family took you to this dangerous place?
+    speaker: {fileID: 11400000, guid: ce9780afd8130734099813c4bf516bbf, type: 2}
+  - text: ......
     speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
-  - text: "\u5F88\u60F3\u89C1\u5230\u4F60\u7684\u5BB6\u4EBA\u5417\uFF1F"
-    speaker: {fileID: 0}
   background: {fileID: 21300000, guid: bbf65241398ff5e4e93d04372f35ac85, type: 3}
   nextScene: {fileID: 11400000, guid: fd73aeff2490d2a4c929b84036c2e323, type: 2}

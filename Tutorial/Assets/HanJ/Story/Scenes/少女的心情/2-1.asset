@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 2-1
   m_EditorClassIdentifier: 
   sentences:
-  - text: "\u8BE5\u6B7B\u7684\u5978\u5546\u3002\u3002"
+  - text: Fucking merchant......
     speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
-  - text: "\u8BE5\u6B7B\u7684\u5978\u5546\u3002\u3002"
+  - text: Fucking merchant......
     speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
   background: {fileID: 21300000, guid: bbf65241398ff5e4e93d04372f35ac85, type: 3}
   nextScene: {fileID: 0}

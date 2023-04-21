@@ -10,22 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51fb4c6070f247e48b4377b5728b8182, type: 3}
-  m_Name: girlTalks
+  m_Name: "\u5C11\u5973\u7684\u8EAB\u4E16"
   m_EditorClassIdentifier: 
   sentences:
-  - text: . . . map
+  - text: Why you come here?
+    speaker: {fileID: 11400000, guid: 6438af083789ade4c8d7f8f9f2c25d1a, type: 2}
+  - text: My familiy brought me here
     speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
-  - text: Map?
+  - text: Your parents?
     speaker: {fileID: 11400000, guid: 8e8a464fd077d054f957f55216fe6bfa, type: 2}
-  - text: A map bought from a merchant. . . ! ! !
+  - text: Yes
     speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
-  - text: Let me see. . .
+  - text: Why did your parents bring you to this kind of place?
     speaker: {fileID: 11400000, guid: ce9780afd8130734099813c4bf516bbf, type: 2}
-  - text: Hahaha
+  - text: We have to take care of ourselves and our elderly grandpa, and often have
+      to eat leftovers or pick up trash ourselves. . .
+    speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
+  - text: . . . So you came to pick up the trash?
     speaker: {fileID: 11400000, guid: ce9780afd8130734099813c4bf516bbf, type: 2}
-  - text: She was deceived
-    speaker: {fileID: 11400000, guid: ce9780afd8130734099813c4bf516bbf, type: 2}
-  - text: Aren't we the same = =
-    speaker: {fileID: 11400000, guid: 8e8a464fd077d054f957f55216fe6bfa, type: 2}
+  - text: Not all of them. . .
+    speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
   background: {fileID: 21300000, guid: b0b42ce09c0029240a91618183f44bfc, type: 3}
-  nextScene: {fileID: 0}
+  nextScene: {fileID: 11400000, guid: ace39d0b0a70f304cad86b5c36e573f2, type: 2}

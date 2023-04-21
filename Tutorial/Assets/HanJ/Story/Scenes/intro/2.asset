@@ -23,4 +23,4 @@ MonoBehaviour:
   - text: I still wanna say thank you
     speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
   background: {fileID: 21300000, guid: bbf65241398ff5e4e93d04372f35ac85, type: 3}
-  nextScene: {fileID: 11400000, guid: 322cc1a5845dec844a3dab162f68e0ff, type: 2}
+  nextScene: {fileID: 11400000, guid: 2444a4d10140cee43ae1a17af33c2068, type: 2}

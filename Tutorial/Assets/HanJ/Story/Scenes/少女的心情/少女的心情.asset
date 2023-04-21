@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: "\u5C11\u5973\u7684\u5FC3\u60C5"
   m_EditorClassIdentifier: 
   sentences:
-  - text: "\u4E0D\u7528\u592A\u7740\u6025\u4E86\uFF0C\u6211\u4EEC\u8FD8\u662F\u80FD\u591F\u51FA\u53BB\u7684"
+  - text: No need to be worried, we can go out
     speaker: {fileID: 11400000, guid: 6438af083789ade4c8d7f8f9f2c25d1a, type: 2}
-  - text: "\u3002\u3002\u3002"
+  - text: .......
     speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
-  - text: "\u5F88\u60F3\u89C1\u5230\u4F60\u7684\u5BB6\u4EBA\u5417\uFF1F"
+  - text: Want to see your family?
     speaker: {fileID: 11400000, guid: ce9780afd8130734099813c4bf516bbf, type: 2}
-  - text: "\u6069\u3002\u3002\u3002"
+  - text: Yea....
     speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
   background: {fileID: 21300000, guid: bbf65241398ff5e4e93d04372f35ac85, type: 3}
   nextScene: {fileID: 11400000, guid: 14ff3cfedfbc69c41a85211decc13499, type: 2}

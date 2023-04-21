@@ -8831,12 +8831,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f9e3a4781f3766c4696641973500c30b, type: 2}
   - {fileID: 11400000, guid: 8157eee26ed449e4180b2df48a5f5257, type: 2}
   - {fileID: 11400000, guid: b3b6fff04b9b00c48b5cc0241513fdf3, type: 2}
+  - {fileID: 11400000, guid: 85557d7b473743443b68a21f1cb26ea8, type: 2}
+  - {fileID: 11400000, guid: efa74e8311b7b20469117e23ffe71d31, type: 2}
+  - {fileID: 11400000, guid: 43b1a69c21395424cbdaa6e9cd158370, type: 2}
+  - {fileID: 11400000, guid: 497d3a76de6481349b7a99d74b7d5107, type: 2}
+  - {fileID: 11400000, guid: b662e65dc9c16c343a00aae2f656a206, type: 2}
   currentScene: {fileID: 11400000, guid: 8157eee26ed449e4180b2df48a5f5257, type: 2}
   bottomBar: {fileID: 1336128414}
   backgroundController: {fileID: 2143468818}
   chooseController: {fileID: 395693060}
   InMap: 0
   InBattle: 0
+  worldController: {fileID: 963194225}
 --- !u!114 &627291472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23192,7 +23198,7 @@ MonoBehaviour:
   m_text: Hello there!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cdb14e655160d57438362b2450031739, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -5459410016884986833, guid: cdb14e655160d57438362b2450031739, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -23255,7 +23261,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &2076551258

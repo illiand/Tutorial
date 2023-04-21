@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 2
   m_EditorClassIdentifier: 
   labels:
-  - text: "\u4F60\u4EEC\u4E3A\u4EC0\u4E48\u8D70\u6563\u4E86"
+  - text: Why you got lost?
     nextScene: {fileID: 11400000, guid: 1570737fad6733e4ca3a7ae00778a38c, type: 2}
-  - text: "\u4F60\u4EEC\u53D1\u751F\u4E86\u4EC0\u4E48\u4E8B\u4E86"
+  - text: What had happened?
     nextScene: {fileID: 11400000, guid: 1570737fad6733e4ca3a7ae00778a38c, type: 2}

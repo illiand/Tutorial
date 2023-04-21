@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 2-1
   m_EditorClassIdentifier: 
   sentences:
-  - text: "\u6211\u4E0D\u77E5\u9053\uFF0C\u4ED6\u4EEC\u8BF4\u8981\u5BFB\u627E\u4E00\u4EF6\u5B9D\u7269\uFF0C\u6765\u8FD9\u91CC\u3002\u3002\u3002\u7ED3\u679C\u3002\u3002\u3002"
+  - text: I don't know, they said they come here to find...the treasure...but...
     speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
-  - text: "\u5B9D\u7269\uFF1F"
+  - text: Treasure?
     speaker: {fileID: 11400000, guid: 6438af083789ade4c8d7f8f9f2c25d1a, type: 2}
   background: {fileID: 21300000, guid: bbf65241398ff5e4e93d04372f35ac85, type: 3}
   nextScene: {fileID: 0}
