@@ -35,6 +35,28 @@ public class ChooseLabelController : MonoBehaviour, IPointerClickHandler, IPoint
     public void OnPointerClick(PointerEventData eventData)
     {
         controller.PerformChoose(scene);
+
+        //choose to find food in the danger zone
+        if(textMesh.text == "")
+        {
+          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().C += 1f;
+
+          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().treasureCount += 1;
+        }
+
+        //talk with trash with good choice
+        if(textMesh.text == "")
+        {
+          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().A += 1f;
+        }
+
+        //give food
+        if(textMesh.text == "")
+        {
+          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().N += 1f;
+
+          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().foodCount += 1;
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)

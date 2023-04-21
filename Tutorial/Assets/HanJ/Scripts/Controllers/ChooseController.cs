@@ -11,6 +11,8 @@ public class ChooseController : MonoBehaviour
     private Animator animator;
     private float labelHeight = -1;
 
+    public GameObject worldController;
+
     void Start()
     {
         animator = GetComponent<Animator>();

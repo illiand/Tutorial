@@ -428,8 +428,28 @@ public class Controller : MonoBehaviour
 
     public void exitBattle()
     {
+      GetComponent<WorldMapController>().getPlayerStatus().battleCount += 1;
+
       GetComponent<WorldMapController>().battleLayout.SetActive(false);
       GetComponent<WorldMapController>().mapLayout.SetActive(true);
+
+      //score
+      int result = checkGameStatus();
+      float score = 0;
+
+      float curHp = 0;
+      float maxHp = 0;
+
+      for(int i = 5; i < 10; i += 1)
+      {
+        if(characters[i].GetComponent<MyCharacter>().status != null)
+        {
+          curHp = characters[i].GetComponent<MyCharacter>().status.curHp;
+          maxHp = characters[i].GetComponent<MyCharacter>().status.maxHp;
+        }
+      }
+
+      GetComponent<WorldMapController>().getPlayerStatus().O += 1f - curHp / maxHp;
 
       for(int i = 3; i < 10; i += 1)
       {

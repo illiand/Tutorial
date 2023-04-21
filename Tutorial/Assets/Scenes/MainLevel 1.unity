@@ -5524,6 +5524,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: {fileID: 8857755540797146672, guid: 69ad3d5f5553ad646b6b5b186fd800e4, type: 3}
   gameController: {fileID: 627291471}
+  worldController: {fileID: 963194225}
 --- !u!95 &395693061
 Animator:
   serializedVersion: 4
@@ -8789,7 +8790,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &627291470
 RectTransform:
   m_ObjectHideFlags: 0

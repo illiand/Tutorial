@@ -64,7 +64,7 @@ public class WorldMapController : MonoBehaviour
       if(map.spots[playerStatus.currentSpotID].type == 1)
       {
         //找到家人了
-
+        playerStatus.E += 1;
         map.spots[playerStatus.currentSpotID].type = 0;
       }
 
@@ -150,7 +150,7 @@ public class WorldMapController : MonoBehaviour
     }
 
     //summon monster for enemies
-    private void summonMonsterNow()
+    public void summonMonsterNow()
     {
       int[] monstersToSummon = GetComponent<Controller>().getRandomMonsterPair();
 
@@ -320,6 +320,11 @@ public class PlayerStatus
   public int foodEventLeft;
 
   public int[] itemRemaining;
+
+  public int battleCount;
+  public int treasureCount;
+  public int talkCount;
+  public int foodCount;
 
   public float O;
   public float C;
