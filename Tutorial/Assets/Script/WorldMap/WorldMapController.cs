@@ -95,9 +95,9 @@ public class WorldMapController : MonoBehaviour
                 GetComponent<Controller>().characters[i].SetActive(false);
             }
 
-            GetComponent<Controller>().summon(0, "Tank", "char_01", 2000, 70, 100, 100, 35, new int[] { 1, 2, 3 });
-            GetComponent<Controller>().summon(1, "Dps", "char_02", 1200, 100, 200, 30, 40, new int[] { 4, 5 });
-            GetComponent<Controller>().summon(2, "Healer", "char_03", 1200, 150, 125, 50, 35, new int[] { 6, 7 });
+            GetComponent<Controller>().summon(0, "Alice", "Alice", 2000, 70, 100, 100, 35, new int[] { 1, 2, 3 });
+            GetComponent<Controller>().summon(1, "Ada", "Ada", 1200, 100, 200, 30, 40, new int[] { 4, 5 });
+            GetComponent<Controller>().summon(2, "Amy", "Amy", 1200, 150, 125, 50, 35, new int[] { 6, 7 });
             summonMonsterNow();
             GetComponent<Controller>().startExistingGame();
         }
