@@ -45,7 +45,7 @@ public class ChooseController : MonoBehaviour
         gameController.PlayScene(scene);
         animator.SetTrigger("Hide");
     }
-
+    
     private float CalculateLabelPosition(int labelIndex, int labelCount)
     {
         if(labelCount %2 == 0)

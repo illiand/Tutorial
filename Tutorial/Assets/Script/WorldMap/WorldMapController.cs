@@ -12,6 +12,8 @@ public class WorldMapController : MonoBehaviour
 
     public GameObject playerSpot;
 
+    public GameObject finalResultText;
+
     private Map map = new Map();
     private PlayerStatus playerStatus = new PlayerStatus();
 
@@ -65,15 +67,15 @@ public class WorldMapController : MonoBehaviour
 
       if(map.spots[playerStatus.currentSpotID].type == 1)
       {
-        //找到家人了
-        playerStatus.E += 1;
-        map.spots[playerStatus.currentSpotID].type = 0;
+        //找家人
+        GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(10);
+        return;
       }
 
       if(playerStatus.movingCount == 1)
       {
             //GetComponent<Talk>().startEvent(0);
-            GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(3);
+            GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(2);
 
         }
 
@@ -94,9 +96,10 @@ public class WorldMapController : MonoBehaviour
         GetComponent<Controller>().startExistingGame();
       }
 
-      if(playerStatus.movingCount == 4)
+      if(playerStatus.movingCount == 4 && (playerStatus.itemRemaining[0] > 0 || (playerStatus.itemRemaining[1] > 0)))
       {
         //food event
+        GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(9);
         playerStatus.foodEventLeft = Random.Range(2, 4);
       }
 
@@ -129,12 +132,16 @@ public class WorldMapController : MonoBehaviour
         if(playerStatus.currentSpotID == 21)
         {
           //ENDING
+          finalResultText.SetActive(true);
+          finalResultText.GetComponent<TextMeshProUGUI>().text = getFinalResult();
+          return;
         }
 
         if(playerStatus.foodEventLeft <= 0)
         {
           //food event
           playerStatus.foodEventLeft = Random.Range(2, 4);
+          GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(9);
         }
         else if(playerStatus.monsterEventLeft <= 0)
         {
@@ -293,6 +300,33 @@ public class WorldMapController : MonoBehaviour
         int posIndex = Random.Range(0, unVisited.Count - 1);
         map.spots[(int)unVisited[posIndex]].type = 1;
         unVisited.RemoveAt(posIndex);
+      }
+    }
+
+    private string getFinalResult()
+    {
+      float OResult = playerStatus.O / (float)playerStatus.battleCount;
+      float CResult = playerStatus.C / (float)playerStatus.treasureCount;
+      float EResult = playerStatus.E / 3f;
+      float AResult = playerStatus.A / 8753f;
+      float NResult = playerStatus.N / (float)playerStatus.foodCount;
+
+      return "O: " + getDegree(OResult) + " C: " + getDegree(CResult) + " E: " + getDegree(CResult) + " A: " + getDegree(CResult) + " N: " + getDegree(CResult);
+    }
+
+    private string getDegree(float v)
+    {
+      if(v > 0.667f)
+      {
+        return "high";
+      }
+      else if(v > 0.333f)
+      {
+        return "medium";
+      }
+      else
+      {
+        return "low";
       }
     }
 }
