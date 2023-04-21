@@ -17,6 +17,8 @@ public class WorldMapController : MonoBehaviour
     private Map map = new Map();
     private PlayerStatus playerStatus = new PlayerStatus();
 
+    private int talkProgress = 0;//记录闲聊进度
+
     void Start()
     {
       initMap();
@@ -227,6 +229,34 @@ public class WorldMapController : MonoBehaviour
       }
 
       map.spots[0].isTriggered = true;
+
+      playerSpot.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(
+            delegate
+            {
+                Debug.Log("talkprogress: " + talkProgress);
+                if (talkProgress == 0)
+                {
+                    
+                    talkProgress++;
+                    GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(0);
+                }
+                else if (talkProgress == 1)
+                {
+                    talkProgress++;
+                    GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(1);
+                }
+                else if(talkProgress == 2)
+                {
+                    talkProgress++;
+                    GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(3);
+                }
+                else
+                {
+                    GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(4);
+                }
+                
+            }
+          );
     }
 
     //init possible move for each spot
