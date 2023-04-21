@@ -42,7 +42,7 @@ public class Controller : MonoBehaviour
     private float waitingTime;
 
     public int curTurn = 0;
-    private int maxTurn = 100;
+    private int maxTurn = 99999;
 
     private bool isUsingItem;
 
