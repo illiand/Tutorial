@@ -137,7 +137,12 @@ public class WorldMapController : MonoBehaviour
           return;
         }
 
-        if(playerStatus.foodEventLeft <= 0)
+        if(playerStatus.treasureEventLeft <= 0)
+        {
+          playerStatus.treasureEventLeft = Random.Range(2, 4);
+          GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(17);
+        }
+        else if(playerStatus.foodEventLeft <= 0)
         {
           //food event
           playerStatus.foodEventLeft = Random.Range(2, 4);
@@ -157,6 +162,7 @@ public class WorldMapController : MonoBehaviour
 
       playerStatus.foodEventLeft -= 1;
       playerStatus.monsterEventLeft -= 1;
+      playerStatus.treasureEventLeft -= 1;
     }
 
     //summon monster for enemies
@@ -310,8 +316,8 @@ public class WorldMapController : MonoBehaviour
       float EResult = playerStatus.E / 3f;
       float AResult = playerStatus.A / 8753f;
       float NResult = playerStatus.N / (float)playerStatus.foodCount;
-
-      return "O: " + getDegree(OResult) + " C: " + getDegree(CResult) + " E: " + getDegree(CResult) + " A: " + getDegree(CResult) + " N: " + getDegree(CResult);
+Debug.Log(OResult + " " + CResult + " " + EResult + " " + AResult + " " + NResult);
+      return "O: " + getDegree(OResult) + " C: " + getDegree(CResult) + " E: " + getDegree(EResult) + " A: " + getDegree(AResult) + " N: " + getDegree(NResult);
     }
 
     private string getDegree(float v)
@@ -356,6 +362,7 @@ public class PlayerStatus
 
   public int monsterEventLeft;
   public int foodEventLeft;
+  public int treasureEventLeft;
 
   public int[] itemRemaining;
 

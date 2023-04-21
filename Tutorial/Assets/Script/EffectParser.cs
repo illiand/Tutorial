@@ -337,7 +337,7 @@ public class EffectParser : MonoBehaviour
           skillText.GetComponent<TextMeshProUGUI>().text += target.GetComponent<MyCharacter>().parameter.name + " decrease skill cooldown and increased 50% speed\n";
           break;
         case 34:
-          damage = getDamage(-250, self, target);
+          damage = getDamage(-150, self, target);
           castEncounterBuff(self, target);
 
           target.GetComponent<MyCharacter>().status.curHp += damage;
@@ -387,13 +387,13 @@ public class EffectParser : MonoBehaviour
           break;
         case 1000:
           target.GetComponent<MyCharacter>().status.curHp += getDamage(target.GetComponent<MyCharacter>().status.maxHp * 0.8f, self, target);
-          skillText.GetComponent<TextMeshProUGUI>().text += "HP Portion recoveried " + target.GetComponent<MyCharacter>().parameter.name + " 80% HP\n";
+          skillText.GetComponent<TextMeshProUGUI>().text += "Bread recoveried " + target.GetComponent<MyCharacter>().parameter.name + " 80% HP\n";
 
           normalizeHPMP(target);
           break;
         case 1001:
           target.GetComponent<MyCharacter>().status.curMp += getDamage(target.GetComponent<MyCharacter>().status.maxMp * 0.5f, self, target);
-          skillText.GetComponent<TextMeshProUGUI>().text += "HP Portion recoveried " + target.GetComponent<MyCharacter>().parameter.name + " 50% MP\n";
+          skillText.GetComponent<TextMeshProUGUI>().text += "Pineapple recoveried " + target.GetComponent<MyCharacter>().parameter.name + " 50% MP\n";
           normalizeHPMP(target);
           break;
       }
@@ -617,8 +617,8 @@ public class EffectParser : MonoBehaviour
               {
                 if(GetComponent<Controller>().isActive[j])
                 {
-                  skillText.GetComponent<TextMeshProUGUI>().text += GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().parameter.name + " decreased " + (int)(GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().status.curHp * 0.02f) + " HP by Erosive Aura\n";
-                  GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().status.curHp *= 0.98f;
+                  skillText.GetComponent<TextMeshProUGUI>().text += GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().parameter.name + " decreased " + (int)(GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().status.curHp * 0.05f) + " HP by Erosive Aura\n";
+                  GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().status.curHp *= 0.95f;
                 }
               }
             }
@@ -628,8 +628,8 @@ public class EffectParser : MonoBehaviour
               {
                 if(GetComponent<Controller>().isActive[j])
                 {
-                  skillText.GetComponent<TextMeshProUGUI>().text += GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().parameter.name + " decreased " + (int)(GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().status.curHp * 0.02f) + " HP by Erosive Aura\n";
-                  GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().status.curHp *= 0.98f;
+                  skillText.GetComponent<TextMeshProUGUI>().text += GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().parameter.name + " decreased " + (int)(GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().status.curHp * 0.05f) + " HP by Erosive Aura\n";
+                  GetComponent<Controller>().characters[j].GetComponent<MyCharacter>().status.curHp *= 0.95f;
                 }
               }
             }

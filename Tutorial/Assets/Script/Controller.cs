@@ -106,6 +106,7 @@ public class Controller : MonoBehaviour
             if(isUsingItem)
             {
               GetComponent<WorldMapController>().getPlayerStatus().itemRemaining[curSkillID - 1000] -= 1;
+              isUsingItem = false;
             }
 
 
@@ -434,9 +435,6 @@ public class Controller : MonoBehaviour
       GetComponent<WorldMapController>().mapLayout.SetActive(true);
 
       //score
-      int result = checkGameStatus();
-      float score = 0;
-
       float curHp = 0;
       float maxHp = 0;
 
@@ -454,6 +452,7 @@ public class Controller : MonoBehaviour
       for(int i = 3; i < 10; i += 1)
       {
         isActive[i] = false;
+        characters[i].SetActive(false);
         characters[i].GetComponent<MyCharacter>().parameter = null;
         characters[i].GetComponent<MyCharacter>().status = null;
       }
@@ -466,10 +465,11 @@ public class Controller : MonoBehaviour
         if(characters[i].GetComponent<MyCharacter>().status.curHp > 0)
         {
           characters[i].GetComponent<MyCharacter>().status.curHp = characters[i].GetComponent<MyCharacter>().parameter.hp * (characters[i].GetComponent<MyCharacter>().status.curHp / characters[i].GetComponent<MyCharacter>().status.maxHp);
+          characters[i].GetComponent<MyCharacter>().status.curHp = Mathf.Min(characters[i].GetComponent<MyCharacter>().status.curHp + 0.25f * characters[i].GetComponent<MyCharacter>().parameter.hp, characters[i].GetComponent<MyCharacter>().parameter.hp);
         }
         else
         {
-          characters[i].GetComponent<MyCharacter>().status.curHp = characters[i].GetComponent<MyCharacter>().parameter.hp * 0.25f;
+          characters[i].GetComponent<MyCharacter>().status.curHp = characters[i].GetComponent<MyCharacter>().parameter.hp * 0.5f;
         }
 
         characters[i].GetComponent<MyCharacter>().status.curMp = characters[i].GetComponent<MyCharacter>().parameter.mp * (characters[i].GetComponent<MyCharacter>().status.curMp / characters[i].GetComponent<MyCharacter>().status.maxMp);
@@ -1053,7 +1053,7 @@ public class Controller : MonoBehaviour
       {
         case 0: summonRandomly(6, "Shi Lai Mu", "Shi Lai Mu", 500, 100, 100, 40, 25, new int[]{31, 32}); break;
         case 1: summonRandomly(6, "Can Speed Up", "Can SpeedUp", 300, 50, 75, 30, 40, new int[]{33, 20}); break;
-        case 2: summonRandomly(6, "Can Fire Magic", "Can Fire Magic", 750, 300, 150, 30, 50, new int[]{34}); break;
+        case 2: summonRandomly(6, "Can Fire Magic", "Can Fire Magic", 750, 300, 125, 30, 50, new int[]{34}); break;
         case 3: summonRandomly(6, "Can Buff", "Can Buff", 500, 100, 100, 40, 25, new int[]{35, 36, 37}); break;
         case 4: summonRandomly(6, "Hi", "Hi", 500, 0, 0, 200, 50, new int[]{38, 39}); break;
       }
@@ -1116,12 +1116,12 @@ public class Controller : MonoBehaviour
         case 31: return new SkillAbility(31, "Split", "Create a perfect clone of self", 10, 5, 0, 1, false);
         case 32: return new SkillAbility(32, "Erosion", "Give 150%ATK Damage to the enmey\nIncrease 25% Vulnerabitliy to the enemy for 5 turns", 5, 2, 2, 1, false);
         case 33: return new SkillAbility(33, "SpeedUp", "Decrease 1 turns Skill Cooldown for all allies\nIncrease 50% Speed for all allies for 5 turns", 20, 4, 1, 999, false);
-        case 34: return new SkillAbility(34, "Fire Magic", "Give 250%ATK Damage to all enemies", 60, 0, 2, 999, false);
+        case 34: return new SkillAbility(34, "Fire Magic", "Give 150%ATK Damage to all enemies", 60, 0, 2, 999, false);
         case 35: return new SkillAbility(35, "Enhance: ATK", "Increase 50% ATK for all allies for 10 turns", 15, 5, 1, 999, false);
         case 36: return new SkillAbility(36, "Enhance: DEF", "Decrease 25% Vulnerabitliy for all allies for 10 turns", 15, 10, 1, 999, false);
         case 37: return new SkillAbility(37, "Group HP Recover", "Recover 25% HP for all allies", 10, 3, 1, 999, false);
         case 38: return new SkillAbility(38, "Break AT", "Increase 300 AT to all enemies after 5 turns stand by", 0, 0, 0, 1, false);
-        case 39: return new SkillAbility(39, "Erosive Aura", "Aura: All enemies decrease 2% Current HP for each turn", 0, 0, 0, 1, true);
+        case 39: return new SkillAbility(39, "Erosive Aura", "Aura: All enemies decrease 5% Current HP for each turn", 0, 0, 0, 1, true);
         case 40: return new SkillAbility(40, "Effect: Break AT End", "-AT", 0, 0, 2, 999, false);
         //public SkillAbility(int id, string name, string des, int mpCost, int cooldown, int type, int targetCount, bool isPassive)
         //item:
