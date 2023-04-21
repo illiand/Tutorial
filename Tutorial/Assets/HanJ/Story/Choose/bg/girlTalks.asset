@@ -21,11 +21,9 @@ MonoBehaviour:
     speaker: {fileID: 11400000, guid: 9f9c45316db2fcf429af2d154f206fa4, type: 2}
   - text: Let me see. . .
     speaker: {fileID: 11400000, guid: ce9780afd8130734099813c4bf516bbf, type: 2}
-  - text: Hahaha
+  - text: Hahaha, you was deceived!!!!!
     speaker: {fileID: 11400000, guid: ce9780afd8130734099813c4bf516bbf, type: 2}
-  - text: She was deceived
-    speaker: {fileID: 11400000, guid: ce9780afd8130734099813c4bf516bbf, type: 2}
-  - text: Aren't we the same = =
+  - text: Quiet, aren't we the same = =
     speaker: {fileID: 11400000, guid: 8e8a464fd077d054f957f55216fe6bfa, type: 2}
   background: {fileID: 21300000, guid: b0b42ce09c0029240a91618183f44bfc, type: 3}
   nextScene: {fileID: 0}

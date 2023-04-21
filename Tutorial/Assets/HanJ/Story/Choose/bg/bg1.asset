@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: bg1
   m_EditorClassIdentifier: 
   labels:
-  - text: so you pick up the trash?
+  - text: So you come here to pick up the trash?
     nextScene: {fileID: 11400000, guid: 728df65b98d7c5d4fae40da2e69a035a, type: 2}
-  - text: so what you do for here?
-    nextScene: {fileID: 11400000, guid: 728df65b98d7c5d4fae40da2e69a035a, type: 2}
+  - text: So what you do for here?
+    nextScene: {fileID: 11400000, guid: f6ed478f1839bd84fa528a0de2938e67, type: 2}
