@@ -34,14 +34,6 @@ public class ChooseLabelController : MonoBehaviour, IPointerClickHandler, IPoint
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        //choose to find food in the danger zone
-        if(textMesh.text == "")
-        {
-          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().C += 1f;
-
-          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().treasureCount += 1;
-        }
-
         //talk with trash with good choice
         if(textMesh.text == "")
         {
@@ -93,6 +85,35 @@ public class ChooseLabelController : MonoBehaviour, IPointerClickHandler, IPoint
 
             scene = (StoryScene) controller.gameController.scenes[11];
           }
+        }
+
+        if(textMesh.text == "Continue to explore this place")
+        {
+          if(Random.Range(0f, 1f) < 0.5f)
+          {
+            if(Random.Range(0f, 1f) < 0.5f)
+            {
+              scene = (StoryScene) controller.gameController.scenes[14];
+              controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().itemRemaining[0] += 2;
+            }
+            else
+            {
+              scene = (StoryScene) controller.gameController.scenes[15];
+              controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().itemRemaining[1] += 1;
+            }
+          }
+          else
+          {
+            scene = (StoryScene) controller.gameController.scenes[16];
+          }
+
+          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().C += 1f;
+
+          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().treasureCount += 1;
+        }
+        else if(textMesh.text == "Leave this place")
+        {
+          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().treasureCount += 1;
         }
 
         controller.PerformChoose(scene);

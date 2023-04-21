@@ -73,6 +73,15 @@ public class GameController : MonoBehaviour
                         }
                         else
                         {
+                          if(bottomBar.barText.text == "It's monster! Be awared!")
+                          {
+                            worldController.GetComponent<WorldMapController>().getMap().obj.SetActive(false);
+                            worldController.GetComponent<WorldMapController>().battleLayout.SetActive(true);
+
+                            worldController.GetComponent<WorldMapController>().summonMonsterNow();
+                            worldController.GetComponent<Controller>().startExistingGame();
+                          }
+
                           PlayScene((currentScene as StoryScene).nextScene);
                         }
                     }
@@ -104,7 +113,7 @@ public class GameController : MonoBehaviour
     {
         state = State.ANIMATE;
         currentScene = scene;
-        bottomBar.Hide();
+      //  bottomBar.Hide();
         yield return new WaitForSeconds(1f);
         if (scene is StoryScene)
         {
