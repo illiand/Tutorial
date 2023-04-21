@@ -10,6 +10,8 @@ public class WorldMapController : MonoBehaviour
     public GameObject mapLayout;
     public GameObject battleLayout;
 
+    public GameObject playerSpot;
+
     private Map map = new Map();
     private PlayerStatus playerStatus = new PlayerStatus();
 
@@ -177,6 +179,7 @@ public class WorldMapController : MonoBehaviour
       }
 
       map.spots[playerStatus.currentSpotID].obj.GetComponent<Image>().color = new Color(0, 0, 1);
+        playerSpot.transform.position = map.spots[playerStatus.currentSpotID].obj.transform.position;
     }
 
     //set arraw animation whenever move
