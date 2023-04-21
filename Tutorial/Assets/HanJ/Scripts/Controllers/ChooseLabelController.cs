@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
 
@@ -37,7 +37,7 @@ public class ChooseLabelController : MonoBehaviour, IPointerClickHandler, IPoint
         //talk with trash with good choice
         if(textMesh.text == "")
         {
-          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().A += 1f;
+          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().A += 1f;//A跟着talkprogress更新
         }
 
         //give food
