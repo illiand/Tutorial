@@ -272,28 +272,28 @@ public class WorldMapController : MonoBehaviour
                 {
 
                     talkProgress++;
-                    A = talkProgress;
+                    getPlayerStatus().A = talkProgress;
                     GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(0);
                     playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 }
                 else if (talkProgress == 1 && playerStatus.movingCount >= 4)
                 {
                     talkProgress++;
-                    A = talkProgress;
+                    getPlayerStatus().A = talkProgress;
                     GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(1);
                     playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 }
                 else if (talkProgress == 2 && playerStatus.movingCount >= 6)
                 {
                     talkProgress++;
-                    A = talkProgress;
+                    getPlayerStatus().A = talkProgress;
                     GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(3);
                     playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 }
                 else if(talkProgress == 3 && playerStatus.movingCount >= 8)
                 {
                     talkProgress++;
-                    A = talkProgress;
+                    getPlayerStatus().A = talkProgress;
                     GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(4);
                     playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 }
