@@ -10,30 +10,49 @@ public class GameController : MonoBehaviour
     public ChooseController chooseController;
 
     private State state = State.IDLE;
+    public bool InMap;
+    public bool InBattle;
 
     private enum State
     {
         IDLE, ANIMATE, CHOOSE
     }
 
+    private void Awake()
+    {
+        InMap = false;
+        InBattle = false;
+    }
+
     void Start()
     {
-
+        //InMap = false;
+        //InBattle = false;
+        //if (currentScene is StoryScene)
+        //{
+        //    StoryScene storyScene = currentScene as StoryScene;
+        //    bottomBar.PlayScene(storyScene);
+        //    backgroundController.SetImage(storyScene.background);
+        //}
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+        if (InMap == false && InBattle == false)
         {
-            if (state == State.IDLE && bottomBar.IsCompleted())
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
             {
-                if (bottomBar.IsLastSentence())
+                if (state == State.IDLE && bottomBar.IsCompleted())
                 {
-                    PlayScene((currentScene as StoryScene).nextScene);
-                }
-                else
-                {
-                    bottomBar.PlayNextSentence();
+                    if (bottomBar.IsLastSentence())
+                    {
+                        Debug.Log("here!");
+                        PlayScene((currentScene as StoryScene).nextScene);
+                    }
+                    else
+                    {
+                        bottomBar.PlayNextSentence();
+                    }
                 }
             }
         }

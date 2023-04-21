@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class BottomBarController : MonoBehaviour
 {
     public TextMeshProUGUI barText;
     public TextMeshProUGUI personNameText;
+    public Image potrait;
 
     private int sentenceIndex = -1;
     private StoryScene currentScene;
@@ -28,15 +30,20 @@ public class BottomBarController : MonoBehaviour
     {
         if (!isHidden)
         {
+            //potrait.enabled = false;
+            //potrait.sprite = null;
             animator.SetTrigger("Hide");
+            //potrait.color.a = 0f;
+            potrait.color = new Color(potrait.color.r, potrait.color.g, potrait.color.b, 0f);
             isHidden = true;
         }
     }
 
     public void Show()
     {
+
         animator.SetTrigger("Show");
-        isHidden = false;
+
     }
 
     public void ClearText()
@@ -56,6 +63,8 @@ public class BottomBarController : MonoBehaviour
         StartCoroutine(TypeText(currentScene.sentences[++sentenceIndex].text));
         personNameText.text = currentScene.sentences[sentenceIndex].speaker.speakerName;
         personNameText.color = currentScene.sentences[sentenceIndex].speaker.textColor;
+        potrait.sprite = currentScene.sentences[sentenceIndex].speaker.chaPotrait;
+        potrait.color = new Color(potrait.color.r, potrait.color.g, potrait.color.b, 1f);
     }
 
     public bool IsCompleted()
