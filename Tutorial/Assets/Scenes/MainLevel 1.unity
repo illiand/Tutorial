@@ -8790,7 +8790,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &627291470
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8826,6 +8826,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a431f3b83ce874d9c5174365f51876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scenes:
+  - {fileID: 11400000, guid: a4202a2435cb23d419e3ba54c2f720d8, type: 2}
+  - {fileID: 11400000, guid: f9e3a4781f3766c4696641973500c30b, type: 2}
+  - {fileID: 11400000, guid: 8157eee26ed449e4180b2df48a5f5257, type: 2}
+  - {fileID: 11400000, guid: b3b6fff04b9b00c48b5cc0241513fdf3, type: 2}
   currentScene: {fileID: 11400000, guid: 8157eee26ed449e4180b2df48a5f5257, type: 2}
   bottomBar: {fileID: 1336128414}
   backgroundController: {fileID: 2143468818}
@@ -23185,7 +23190,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Hello there!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: cdb14e655160d57438362b2450031739, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -23249,7 +23254,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &2076551258

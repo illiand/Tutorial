@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public GameScene[] scenes;
     public GameScene currentScene;
     public BottomBarController bottomBar;
     public BackgroundController backgroundController;
@@ -63,12 +64,13 @@ public class GameController : MonoBehaviour
         StartCoroutine(SwitchScene(scene));
     }
 
-    public void PlaySceneNow()
+    public void PlaySceneNow(int index)
     {
       if (currentScene is StoryScene)
       {
           gameObject.SetActive(true);
 
+          currentScene = scenes[index];
           StoryScene storyScene = currentScene as StoryScene;
           bottomBar.PlayScene(storyScene);
           backgroundController.SetImage(storyScene.background);

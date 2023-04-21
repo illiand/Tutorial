@@ -71,8 +71,8 @@ public class WorldMapController : MonoBehaviour
       if(playerStatus.movingCount == 1)
       {
             //GetComponent<Talk>().startEvent(0);
-            GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow();
-           
+            GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(0);
+
         }
 
       if(playerStatus.movingCount == 3)
@@ -322,6 +322,7 @@ public class PlayerStatus
 
   public int[] itemRemaining;
 
+  public bool[] flag;
   public int battleCount;
   public int treasureCount;
   public int talkCount;
@@ -338,5 +339,7 @@ public class PlayerStatus
     //一上来3血药 1蓝药
     itemRemaining = new int[]{3, 1};
     currentSpotID = 0;
+
+    flag = new bool[]{false};
   }
 }
