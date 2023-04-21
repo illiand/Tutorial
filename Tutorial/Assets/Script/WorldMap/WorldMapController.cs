@@ -18,6 +18,7 @@ public class WorldMapController : MonoBehaviour
     private PlayerStatus playerStatus = new PlayerStatus();
 
     private int talkProgress = 0;//记录闲聊进度
+    private GameObject girl;
 
     void Start()
     {
@@ -51,8 +52,9 @@ public class WorldMapController : MonoBehaviour
 
           initColorOnSpot();
           initNextSpotHint();
+                
 
-          triggerEvent();
+                triggerEvent();
 
           return;
         }
@@ -62,103 +64,123 @@ public class WorldMapController : MonoBehaviour
     //triggers after moving
     private void triggerEvent()
     {
-      if(checkVisitedSpots() == 15)
-      {
-        setFamiliesPositon();
-      }
+        if (checkVisitedSpots() == 15)
+        {
+            setFamiliesPositon();
+        }
 
-      if(map.spots[playerStatus.currentSpotID].type == 1)
-      {
-        //找家人
-        GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(10);
-        return;
-      }
+        if (map.spots[playerStatus.currentSpotID].type == 1)
+        {
+            //找家人
+            GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(10);
+            return;
+        }
 
-      if(playerStatus.movingCount == 1)
-      {
+        if (playerStatus.movingCount == 1)
+        {
             //GetComponent<Talk>().startEvent(0);
             GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(2);
+            //少女登场跟随主角
+            girl.SetActive(true);
 
         }
 
-      if(playerStatus.movingCount == 3)
-      {
-        map.obj.SetActive(false);
-        battleLayout.SetActive(true);
-
-        for(int i = 0; i < 10; i += 1)
+        if (playerStatus.movingCount == 3)
         {
-          GetComponent<Controller>().characters[i].SetActive(false);
+            map.obj.SetActive(false);
+            battleLayout.SetActive(true);
+
+            for (int i = 0; i < 10; i += 1)
+            {
+                GetComponent<Controller>().characters[i].SetActive(false);
+            }
+
+            GetComponent<Controller>().summon(0, "Tank", "char_01", 2000, 70, 100, 100, 35, new int[] { 1, 2, 3 });
+            GetComponent<Controller>().summon(1, "Dps", "char_02", 1200, 100, 200, 30, 40, new int[] { 4, 5 });
+            GetComponent<Controller>().summon(2, "Healer", "char_03", 1200, 150, 125, 50, 35, new int[] { 6, 7 });
+            summonMonsterNow();
+            GetComponent<Controller>().startExistingGame();
         }
 
-        GetComponent<Controller>().summon(0, "Tank", "char_01", 2000, 70, 100, 100, 35, new int[]{1, 2, 3});
-        GetComponent<Controller>().summon(1, "Dps", "char_02", 1200, 100, 200, 30, 40, new int[]{4, 5});
-        GetComponent<Controller>().summon(2, "Healer", "char_03", 1200, 150, 125, 50, 35, new int[]{6, 7});
-        summonMonsterNow();
-        GetComponent<Controller>().startExistingGame();
-      }
-
-      if(playerStatus.movingCount == 4 && (playerStatus.itemRemaining[0] > 0 || (playerStatus.itemRemaining[1] > 0)))
-      {
-        //food event
-        GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(9);
-        playerStatus.foodEventLeft = Random.Range(2, 4);
-      }
-
-      if(playerStatus.movingCount == 5)
-      {
-        map.obj.SetActive(false);
-        battleLayout.SetActive(true);
-
-        summonMonsterNow();
-        GetComponent<Controller>().startExistingGame();
-
-        playerStatus.monsterEventLeft = Random.Range(2, 4);
-      }
-
-      if(playerStatus.movingCount > 5)
-      {
-        //BOSS BATTLE
-        if(playerStatus.currentSpotID == 20)
+        if (playerStatus.movingCount == 4 && (playerStatus.itemRemaining[0] > 0 || (playerStatus.itemRemaining[1] > 0)))
         {
-          map.obj.SetActive(false);
-          battleLayout.SetActive(true);
-
-          GetComponent<Controller>().summon(6, "BOSS", "char_47", 10000, 500, 300, 25, 20, new int[]{15, 22, 21, 20, 16, 29});
-          GetComponent<Controller>().startExistingGame();
-
-
-          return;
+            //food event
+            GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(9);
+            playerStatus.foodEventLeft = Random.Range(2, 4);
         }
 
-        if(playerStatus.currentSpotID == 21)
+        if (playerStatus.movingCount == 5)
         {
-          //ENDING
-          finalResultText.SetActive(true);
-          finalResultText.GetComponent<TextMeshProUGUI>().text = getFinalResult();
-          return;
+            map.obj.SetActive(false);
+            battleLayout.SetActive(true);
+
+            summonMonsterNow();
+            GetComponent<Controller>().startExistingGame();
+
+            playerStatus.monsterEventLeft = Random.Range(2, 4);
         }
 
-        if(playerStatus.foodEventLeft <= 0)
+        if (playerStatus.movingCount > 5)
         {
-          //food event
-          playerStatus.foodEventLeft = Random.Range(2, 4);
-          GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(9);
+            //BOSS BATTLE
+            if (playerStatus.currentSpotID == 20)
+            {
+                map.obj.SetActive(false);
+                battleLayout.SetActive(true);
+
+                GetComponent<Controller>().summon(6, "BOSS", "char_47", 10000, 500, 300, 25, 20, new int[] { 15, 22, 21, 20, 16, 29 });
+                GetComponent<Controller>().startExistingGame();
+
+
+                return;
+            }
+
+            if (playerStatus.currentSpotID == 21)
+            {
+                //ENDING
+                finalResultText.SetActive(true);
+                finalResultText.GetComponent<TextMeshProUGUI>().text = getFinalResult();
+                return;
+            }
+
+            if (playerStatus.foodEventLeft <= 0)
+            {
+                //food event
+                playerStatus.foodEventLeft = Random.Range(2, 4);
+                GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(9);
+            }
+            else if (playerStatus.monsterEventLeft <= 0)
+            {
+                map.obj.SetActive(false);
+                battleLayout.SetActive(true);
+
+                summonMonsterNow();
+                GetComponent<Controller>().startExistingGame();
+
+                playerStatus.monsterEventLeft = Random.Range(2, 4);
+            }
         }
-        else if(playerStatus.monsterEventLeft <= 0)
+
+        //少女只在2,4,6步出现 可以看后期怎么改
+        if (playerStatus.movingCount%2 == 0)
         {
-          map.obj.SetActive(false);
-          battleLayout.SetActive(true);
+            playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+            playerSpot.transform.GetChild(0).GetComponent<Button>().enabled = true;
+            Debug.Log("playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(Ture);");
 
-          summonMonsterNow();
-          GetComponent<Controller>().startExistingGame();
 
-          playerStatus.monsterEventLeft = Random.Range(2, 4);
         }
-      }
+        else
+        {
+            playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+            playerSpot.transform.GetChild(0).GetComponent<Button>().enabled = false;
+            
+            Debug.Log("playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);");
+        }
 
-      playerStatus.foodEventLeft -= 1;
-      playerStatus.monsterEventLeft -= 1;
+        playerStatus.foodEventLeft -= 1;
+        playerStatus.monsterEventLeft -= 1;
+   
     }
 
     //summon monster for enemies
@@ -211,7 +233,11 @@ public class WorldMapController : MonoBehaviour
       map.obj = mapLayout;
       map.spots = new Spot[22];
 
-      for(int i = 0; i < spotsCollection.transform.childCount; i += 1)
+        
+        
+       
+
+        for (int i = 0; i < spotsCollection.transform.childCount; i += 1)
       {
         Spot curSpot = new Spot();
         curSpot.id = i;
@@ -230,33 +256,47 @@ public class WorldMapController : MonoBehaviour
 
       map.spots[0].isTriggered = true;
 
-      playerSpot.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(
+
+        //开场白结束前少女没出现
+        girl = playerSpot.transform.GetChild(0).gameObject;
+        girl.GetComponent<Button>().onClick.AddListener(
             delegate
             {
                 Debug.Log("talkprogress: " + talkProgress);
-                if (talkProgress == 0)
+                if (talkProgress == 0 && playerStatus.movingCount == 2)
                 {
-                    
+
                     talkProgress++;
+                    A = talkProgress;
                     GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(0);
+                    playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 }
-                else if (talkProgress == 1)
+                else if (talkProgress == 1 && playerStatus.movingCount >= 4)
                 {
                     talkProgress++;
+                    A = talkProgress;
                     GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(1);
+                    playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 }
-                else if(talkProgress == 2)
+                else if (talkProgress == 2 && playerStatus.movingCount >= 6)
                 {
                     talkProgress++;
+                    A = talkProgress;
                     GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(3);
+                    playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 }
-                else
+                else if(talkProgress == 3 && playerStatus.movingCount >= 8)
                 {
+                    talkProgress++;
+                    A = talkProgress;
                     GetComponent<TalkController>().layout.GetComponent<GameController>().PlaySceneNow(4);
+                    playerSpot.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                 }
-                
+
             }
           );
+        girl.SetActive(false);
+
     }
 
     //init possible move for each spot
@@ -400,6 +440,8 @@ public class PlayerStatus
   public float A;
   public float E;
   public float N;
+
+  
 
   public PlayerStatus()
   {
