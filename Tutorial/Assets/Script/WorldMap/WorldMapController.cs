@@ -12,6 +12,8 @@ public class WorldMapController : MonoBehaviour
 
     public GameObject playerSpot;
 
+    public GameObject finalResultText;
+
     private Map map = new Map();
     private PlayerStatus playerStatus = new PlayerStatus();
 
@@ -130,6 +132,9 @@ public class WorldMapController : MonoBehaviour
         if(playerStatus.currentSpotID == 21)
         {
           //ENDING
+          finalResultText.SetActive(true);
+          finalResultText.GetComponent<TextMeshProUGUI>().text = getFinalResult();
+          return;
         }
 
         if(playerStatus.foodEventLeft <= 0)
