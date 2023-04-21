@@ -81,6 +81,10 @@ public class GameController : MonoBehaviour
                             worldController.GetComponent<WorldMapController>().summonMonsterNow();
                             worldController.GetComponent<Controller>().startExistingGame();
                           }
+                          else if(bottomBar.barText.text == "Quiet, aren't we the same = =")
+                          {
+                            worldController.GetComponent<WorldMapController>().getPlayerStatus().flag[0] = true;
+                          }
 
                           PlayScene((currentScene as StoryScene).nextScene);
                         }

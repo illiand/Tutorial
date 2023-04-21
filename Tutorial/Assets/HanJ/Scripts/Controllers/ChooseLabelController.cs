@@ -59,11 +59,6 @@ public class ChooseLabelController : MonoBehaviour, IPointerClickHandler, IPoint
           controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().foodCount += 1;
         }
 
-        if(textMesh.text == "Aren't we the same = =")
-        {
-          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().flag[0] = true;
-        }
-
         if(textMesh.text == "The monster are all over the forest, your family may deade" || textMesh.text == "We have been a long time, you family may already deade")
         {
           if(controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().flag[0])

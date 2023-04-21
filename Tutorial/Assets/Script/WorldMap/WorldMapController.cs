@@ -259,8 +259,7 @@ public class WorldMapController : MonoBehaviour
         girl.GetComponent<Button>().onClick.AddListener(
             delegate
             {
-                Debug.Log("talkprogress: " + talkProgress);
-                if (talkProgress == 0 && playerStatus.movingCount == 2)
+                if (talkProgress == 0 && playerStatus.movingCount >= 2)
                 {
 
                     talkProgress++;
@@ -378,7 +377,7 @@ public class WorldMapController : MonoBehaviour
       float AResult = playerStatus.A / 8753f;
       float NResult = playerStatus.N / (float)playerStatus.foodCount;
 Debug.Log(OResult + " " + CResult + " " + EResult + " " + AResult + " " + NResult);
-      return "O: " + getDegree(OResult) + " C: " + getDegree(CResult) + " E: " + getDegree(EResult) + " A: " + getDegree(AResult) + " N: " + getDegree(NResult);
+      return "Your Results is: O: " + getDegree(OResult) + " C: " + getDegree(CResult) + " E: " + getDegree(EResult) + " A: " + getDegree(AResult) + " N: " + getDegree(NResult);
     }
 
     private string getDegree(float v)
