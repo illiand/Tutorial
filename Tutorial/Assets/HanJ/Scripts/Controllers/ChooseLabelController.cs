@@ -49,9 +49,20 @@ public class ChooseLabelController : MonoBehaviour, IPointerClickHandler, IPoint
         }
 
         //give food
-        if(textMesh.text == "")
+        if(textMesh.text == "Sure, we are magical girl [-1 Pineapple]" || textMesh.text == "Sure, we are magical girl [-1 Bread]" || textMesh.text == "We have been trapped a long time, we don't have enough food...")
         {
-          controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().N += 1f;
+          if(textMesh.text == "Sure, we are magical girl [-1 Pineapple]")
+          {
+            controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().itemRemaining[1] -= 1;
+
+            controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().N += 1f;
+          }
+          else if(textMesh.text == "Sure, we are magical girl [-1 Bread]")
+          {
+            controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().itemRemaining[0] -= 1;
+
+            controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().N += 1f;
+          }
 
           controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().foodCount += 1;
         }
@@ -65,11 +76,22 @@ public class ChooseLabelController : MonoBehaviour, IPointerClickHandler, IPoint
         {
           if(controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().flag[0])
           {
-            scene = (StoryScene) controller.gameController.scenes[6];
+            scene = (StoryScene) controller.gameController.scenes[7];
           }
           else
           {
-            scene = (StoryScene) controller.gameController.scenes[7];
+            scene = (StoryScene) controller.gameController.scenes[8];
+          }
+        }
+
+        if(textMesh.text == "Find")
+        {
+          if(Random.Range(0f, 1f) < 0.1f)
+          {
+            controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().E += 1;
+            controller.worldController.GetComponent<WorldMapController>().getMap().spots[controller.worldController.GetComponent<WorldMapController>().getPlayerStatus().currentSpotID].type = 0;
+
+            scene = (StoryScene) controller.gameController.scenes[11];
           }
         }
 

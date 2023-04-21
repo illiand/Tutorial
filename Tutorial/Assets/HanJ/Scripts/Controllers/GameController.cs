@@ -53,14 +53,24 @@ public class GameController : MonoBehaviour
                         {
                           if(worldController.GetComponent<WorldMapController>().getPlayerStatus().flag[0])
                           {
-                            PlaySceneNow(4);
+                            PlaySceneNow(5);
                           }
                           else
                           {
-                            PlaySceneNow(5);
+                            PlaySceneNow(6);
                           }
                         }
-
+                        else if(bottomBar.barText.text ==  "I am hungry, could you give some food?")
+                        {
+                          if(worldController.GetComponent<WorldMapController>().getPlayerStatus().itemRemaining[0] > 0)
+                          {
+;                           PlayScene(scenes[13]);
+                          }
+                          else
+                          {
+                            PlayScene(scenes[12]);
+                          }
+                        }
                         else
                         {
                           PlayScene((currentScene as StoryScene).nextScene);
@@ -115,6 +125,7 @@ public class GameController : MonoBehaviour
         else
         {
           gameObject.SetActive(false);
+          state = State.IDLE;
         }
     }
 }

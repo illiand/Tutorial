@@ -9045,6 +9045,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 43b1a69c21395424cbdaa6e9cd158370, type: 2}
   - {fileID: 11400000, guid: 497d3a76de6481349b7a99d74b7d5107, type: 2}
   - {fileID: 11400000, guid: b662e65dc9c16c343a00aae2f656a206, type: 2}
+  - {fileID: 11400000, guid: 322cc1a5845dec844a3dab162f68e0ff, type: 2}
+  - {fileID: 11400000, guid: 4d0243c20816d7b459d269175c88b0bd, type: 2}
+  - {fileID: 11400000, guid: 00931fd23de79a04c8bd353c96bca51d, type: 2}
+  - {fileID: 11400000, guid: 7adac91576fdf9e4d868a4143cc4581a, type: 2}
+  - {fileID: 11400000, guid: 1c4568aec2cd6dc43a233941db37d75e, type: 2}
   currentScene: {fileID: 11400000, guid: 8157eee26ed449e4180b2df48a5f5257, type: 2}
   bottomBar: {fileID: 1336128414}
   backgroundController: {fileID: 2143468818}
